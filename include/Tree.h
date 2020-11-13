@@ -1,10 +1,11 @@
+#ifndef _TREE_H
+#define _TREE_H
 #include<stdint.h>
 #include<stdbool.h>
 #include<stddef.h>
 #include<stdlib.h>
 #include<assert.h>
-#ifndef _TREE_H
-#define _TREE_H
+
 
 #define NODE_SWAP(a,b){node_t *t;t=a;a=b;b=t;}
 
