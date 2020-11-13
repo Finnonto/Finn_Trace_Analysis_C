@@ -2,7 +2,15 @@
 #define _CAL_METHOD_H
 
 #include <stdio.h>
-#include <Tree.h>
+#include <math.h>
+#include <stdint.h>
+#include <string.h>
+#include "Tree.h"
+
+#ifndef PI
+    #define PI acos(-1)
+#endif
+
 
 typedef struct Trace_info
 {
@@ -17,4 +25,5 @@ uint8_t K_Value;
 
 trace_info_t *exact(tree_t *item,uint32_t k_value);
 
+trace_info_t *Clifford_est(tree_t *item,uint32_t k_value);
 #endif

@@ -29,7 +29,7 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 .PHONY:clean
 
 run:
-	./bin/Finn_trace_analysis  ~/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test 30	
+	./bin/Finn_trace_analysis  ~/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test_Clifford 30	
 
 clean:
 	rm -f all $(DIR_OBJ)/*.o
