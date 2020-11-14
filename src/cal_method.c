@@ -27,14 +27,14 @@ trace_info_t *exact(tree_t *item,uint32_t k_value){
         distinct++;
         current_node = current_node->right;
     }
-                              
+    
     if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
 										
     entropy -= (total_item_cnt * log(total_item_cnt));
 									
     entropy = -entropy/total_item_cnt;
 
-
+    
     // set info member
     info->entropy = entropy;
     info->total_count = total_item_cnt;

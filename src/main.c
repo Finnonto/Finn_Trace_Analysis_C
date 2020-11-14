@@ -15,14 +15,14 @@
 int main(int argc, char *argv[])
 {
         
-
+        
         libtrace_t *trace = NULL;
         libtrace_packet_t *packet = NULL;
         strcpy(Ouput_FileName,"./output/");
         
 
         if (argc < 4) {
-                //printf(stderr, "Usage: %s inputURI\n", argv[0]);
+                fprintf(stderr, "Usage: %s inputURI\n", argv[0]);
                 return 1;
         }
 
@@ -49,19 +49,20 @@ int main(int argc, char *argv[])
         }
 
         invalTime = strtoul(argv[3],NULL,10);
-
+        
         if(invalTime<=0)
         {
                 invalTime = 1;
         }
 
         strcat(Ouput_FileName,argv[2]);
-
-
+       
         Output_Init();
-        //printf("check 1\n");
+        
         while (trace_read_packet(trace,packet)>0) {
+                
                 per_packet(packet);
+                
         }
         Items_Processing();     
         Close_Output_File();

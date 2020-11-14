@@ -1,58 +1,87 @@
 #include "Tree.h"
 #include <stdio.h>
-
-
+#include <inttypes.h>
 
 
 static void _tree_delete(node_t *node);
 static size_t _tree_height(const node_t *node);
-static node_t* _tree_insert(node_t **node,uint32_t value);
+static uint32_t _tree_insert(node_t **node,uint32_t value);
 static bool _tree_return_all(const node_t * node);
-static node_t* tree_LL(node_t *node);
-static node_t* tree_RR(node_t *node);
-static node_t* tree_LR(node_t *node);
-static node_t* tree_RL(node_t *node);
-static node_t* right_side(node_t *node);
-static bool _tree_to_list(node_t* node);
 static bool _tree_flatten_check(node_t *node);
+static void tree_LL(node_t **node);
+static void tree_RR(node_t **node);
+static void tree_LR(node_t **node);
+static void tree_RL(node_t **node);
 
 
 
-static node_t * tree_LL(node_t *node)
+static void tree_LL(node_t **node)
 {
-    node_t *node_tmp = node->left;
-    node->left = node_tmp->right;
-    node_tmp->right = node;
-    node_tmp->bf = 0;
-    return node_tmp;
+    
+
+    if((*node)->left->right && (*node)->right)
+    {
+        (*node)->bf =0;
+    }
+    else if(!((*node)->left->right) && (*node)->right)
+    {
+        (*node)->bf = -1;
+    }
+    else if(!(*node)->right)
+    {
+        (*node)->bf =0;
+    }
+
+    (*node)->height-=2;
+    
+    node_t *node_tmp = (*node)->left;
+    (*node)->left = node_tmp->right;
+    node_tmp->right =(*node);
+    node_tmp->bf =0;
+    (*node)= node_tmp;
 }
 
-static node_t* tree_RR(node_t *node)
+static void tree_RR(node_t **node)
 {
-    node_t *node_tmp = node->right;
-    node->right = node_tmp->left;
-    node_tmp->left = node;
-    node_tmp->bf = 0;
-    return node_tmp;
+    if((*node)->right->left && (*node)->left)
+    {
+        (*node)->bf =0;
+    }
+    else if(!((*node)->right->left) && (*node)->left)
+    {
+        (*node)->bf =1;
+    }
+    else if(!(*node)->left)
+    {
+        (*node)->bf =0;
+    }
+
+
+    (*node)->height-=2;
+    node_t *node_tmp = (*node)->right;
+    (*node)->right = node_tmp->left;
+    node_tmp->left =(*node);
+    node_tmp->bf =0;
+    (*node)= node_tmp;
     
 }
 
-static node_t* tree_LR(node_t *node)
+static void tree_LR(node_t **node)
 {
-    node->left = tree_RR(node->left);
-    node_t *node_tmp = tree_LL(node);
-    node_tmp->bf = 0 ;
-    return node_tmp;
-
+        
+    tree_RR(&((*node)->left));
+    (*node)->left->left->height+=1;
+    (*node)->left->height+=1;
+    tree_LL(node);
 }
 
-static node_t* tree_RL(node_t *node)
+static void tree_RL(node_t **node)
 {
-    node->right = tree_LL(node->right);
     
-    node_t *node_tmp = tree_RR(node);
-    node_tmp->bf = 0 ;
-    return node_tmp;
+    tree_LL(&((*node)->right));
+    (*node)->right->right->height+=1;
+    (*node)->right->height+=1;
+    tree_RR(node);
 }
 
 
@@ -67,6 +96,7 @@ node_t *node_create(uint32_t value)
     if(!nd)return nd;
     nd->data = value;
     nd->cnt = 1;
+    nd->height = 1;
     nd->bf = 0;
     nd->left =NULL;
     nd->right =NULL;
@@ -134,66 +164,89 @@ size_t tree_height(tree_t *self)
     return _tree_height(self->root);
 }
 
-static node_t * _tree_insert(node_t **node,uint32_t value)
+static uint32_t _tree_insert(node_t **node,uint32_t value)
 {
     size_t lh = 0;
     size_t rh = 0;
     
-    
-
     if(!(*node))
-    {
-        *node = node_create(value);
+    {   
         
-        if(!(*node))return NULL;
-        else return (*node);
+        *node = node_create(value);
+        if(!(*node))return true;
+        else return 1;
     }
 
     if((*node)->data == value)
     {
+        
         (*node)->cnt += 1;
-        return  (*node);
+        return  0;
     }
     else
     {
+        
         if((*node)->data < value)
         {
-            (*node)->right =  _tree_insert(&((*node)->right),value);    
+            
+            rh = _tree_insert(&((*node)->right),value);
+            lh = (*node)->left?(*node)->left->height:0;
+            if(rh>0)
+            {
+                (*node)->height = rh>lh?rh+1:lh+1;  
+            }
+            else
+            {
+                rh = (*node)->right->height;
+            }
+            
         }    
         if((*node)->data > value)
         {
-            (*node)->left = _tree_insert(&((*node)->left),value);    
+            
+            lh = _tree_insert(&((*node)->left),value);
+            rh = (*node)->right?(*node)->right->height:0; 
+            if(lh>0)
+            {
+                (*node)->height = lh>rh?lh+1:rh+1;     
+            }
+            else
+            {
+                lh = (*node)->left->height;
+            }
+            
         }
-        if(!(*node)->left){lh = 0;}else{lh = _tree_height((*node)->left);}
-        if(!(*node)->right){rh = 0;}else{rh = _tree_height((*node)->right);}
         
-        (*node)->bf = lh-rh;
+        
+        (*node)->bf = lh -rh;
+        
         
         if((*node)->bf == 2) 
         {
             if ((*node)->left->bf==1)
             {
-                return tree_LL((*node));
+                tree_LL(node);
             }
-            else return tree_LR( (*node) );
+            else tree_LR( node );
         }
         if((*node)->bf == -2)
         {
+           
             if ((*node)->right->bf == 1)
             {
-             
-                return tree_RL((*node));
+                tree_RL(node);
             }
-            else return tree_RR((*node));
+            else  tree_RR(node);
         }
         
-        return *node;
+        
+        return (*node)->height;
     }
     
     
 }
 
-node_t* tree_insert(tree_t *self,uint32_t value)
+uint32_t tree_insert(tree_t *self,uint32_t value)
 {
     assert(self);
 
@@ -203,12 +256,9 @@ node_t* tree_insert(tree_t *self,uint32_t value)
 static bool _tree_return_all(const node_t * node)
 {
     if(!node)return true;
-/*
-    printf("data = %d , cnt = %d ,bf =%d \n",
-    node->data,
-    node->cnt,
-    node->bf);
-*/
+    
+    printf("data = %u , height = %zu ,bf =%zu \n",node->data,node->height,node->bf);
+    
 
     _tree_return_all(node->left);
     
@@ -234,56 +284,75 @@ static node_t* right_side(node_t *node)
 
 static bool _tree_to_list(node_t* node)
 {
+    if(!(node->left) && !(node->right))
+    {
+        return false;
+    }
+    printf("node = %"PRIu32" \n",node->data);
     if(node->left)
     {
+        printf("node->left = %"PRIu32"\n",node->left->data);
+        
+        printf("check1\n");
         node_t *node_tmp;
         if(node->left->right)
-        {
+        {   
+            printf("node->left->right = %"PRIu32"\n",node->left->right->data);
+            printf("check2-1\n");
             node_tmp = right_side(node->left);
+            printf("node_tmp = %"PRIu32"\n",node_tmp->data);
         }
         else 
         {
+            printf("check2-2\n");
             node_tmp = node->left;
+            printf("node_tmp = %"PRIu32"\n",node_tmp->data);
         }
-        node_tmp->right = node->right;
+        if(node->right)
+        {
+            printf("node->right = %"PRIu32"\n",node->right->data);
+            printf("check3\n");
+            node_tmp->right = node->right;    
+        }
+        printf("check4\n");
         node->right = node->left;
         node->left = NULL;
-        right_side(node);
+        
     }
-    if(!node->left)
+    printf("check5\n");
+    if(node->right)
     {
-        if(node->right)_tree_to_list(node->right);
-        return false;
+        printf("node->right = %"PRIu32"\n",node->right->data);
+        if(node->right->right)printf("node->right->right = %"PRIu32"\n",node->right->right->data);
+        printf("check6\n");
+        _tree_to_list(node->right);
     }
-    return true;
-    
-
+    printf("check7\n");
+    return false;
 }
 
 bool tree_to_list(tree_t *self)
 {
-    if(!self)return true;
+    assert(self);
     return _tree_to_list(self->root);
 
 }
 
 static bool _tree_flatten_check(node_t *node)
 {   
-    printf("node(%d)->",node->data);
+    
     if(node->left)
     {
-        printf("left(%d)->",node->left->data);
+        printf("left(%u)->",node->left->data);
         _tree_flatten_check(node->left);
     }
     if(node->right)
     {
-        printf("right(%d)\n",node->right->data);
+        printf("right(%u)\n",node->right->data);
         _tree_flatten_check(node->right);
     }
     if(!node->left && !node->right)printf("none\n");
     return false;
-    
-    
 }
 
 bool tree_flatten_check(tree_t *self)
@@ -291,7 +360,7 @@ bool tree_flatten_check(tree_t *self)
 
     assert(self);
     
-    printf("root(%d)\n",self->root->data);
+    printf("root(%u)\n",self->root->data);
     
     return _tree_flatten_check(self->root);
 

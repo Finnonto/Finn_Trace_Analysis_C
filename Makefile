@@ -28,8 +28,11 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 
 .PHONY:clean
 
+
 run:
-	./bin/Finn_trace_analysis  ~/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test_Clifford 30	
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000 30
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080015.pcap.gz 202004080015 30
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080030.pcap.gz 202004080030 30
 
 clean:
 	rm -f all $(DIR_OBJ)/*.o
