@@ -43,7 +43,7 @@ uint32_t tree_insert(tree_t *self,uint32_t value);
 
 bool tree_return_all(tree_t *self);
 
-bool tree_to_list(tree_t *self);
+void tree_to_list(tree_t *self);
 
 bool tree_flatten_check(tree_t *self);
 

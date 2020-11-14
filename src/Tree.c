@@ -7,6 +7,7 @@ static void _tree_delete(node_t *node);
 static size_t _tree_height(const node_t *node);
 static uint32_t _tree_insert(node_t **node,uint32_t value);
 static bool _tree_return_all(const node_t * node);
+static void _tree_to_list(node_t* node);
 static bool _tree_flatten_check(node_t *node);
 static void tree_LL(node_t **node);
 static void tree_RR(node_t **node);
@@ -19,15 +20,15 @@ static void tree_LL(node_t **node)
 {
     
 
-    if((*node)->left->right && (*node)->right)
+    if((*node)->left->right != NULL && (*node)->right != NULL)
     {
         (*node)->bf =0;
     }
-    else if(!((*node)->left->right) && (*node)->right)
+    else if(((*node)->left->right) == NULL && (*node)->right != NULL)
     {
         (*node)->bf = -1;
     }
-    else if(!(*node)->right)
+    else if((*node)->right ==NULL)
     {
         (*node)->bf =0;
     }
@@ -43,15 +44,15 @@ static void tree_LL(node_t **node)
 
 static void tree_RR(node_t **node)
 {
-    if((*node)->right->left && (*node)->left)
+    if((*node)->right->left  != NULL && (*node)->left != NULL)
     {
         (*node)->bf =0;
     }
-    else if(!((*node)->right->left) && (*node)->left)
+    else if(((*node)->right->left) == NULL && (*node)->left != NULL)
     {
         (*node)->bf =1;
     }
-    else if(!(*node)->left)
+    else if((*node)->left == NULL)
     {
         (*node)->bf =0;
     }
@@ -273,68 +274,40 @@ bool tree_return_all(tree_t *self)
     return _tree_return_all(self->root);
 }
 
-static node_t* right_side(node_t *node)
-{
-    if(!node->right)
-    {   
-        return node;
-    }
-    return right_side(node->right);
-}
 
-static bool _tree_to_list(node_t* node)
+static void _tree_to_list(node_t* node)
 {
-    if(!(node->left) && !(node->right))
+    if(node == NULL || (node->left == NULL && node->right == NULL ))
     {
-        return false;
+        return ;
     }
-    printf("node = %"PRIu32" \n",node->data);
-    if(node->left)
+    if(node->left != NULL)
     {
-        printf("node->left = %"PRIu32"\n",node->left->data);
+        _tree_to_list(node->left);
+
+        node_t *node_tmp = node->right;
         
-        printf("check1\n");
-        node_t *node_tmp;
-        if(node->left->right)
-        {   
-            printf("node->left->right = %"PRIu32"\n",node->left->right->data);
-            printf("check2-1\n");
-            node_tmp = right_side(node->left);
-            printf("node_tmp = %"PRIu32"\n",node_tmp->data);
-        }
-        else 
-        {
-            printf("check2-2\n");
-            node_tmp = node->left;
-            printf("node_tmp = %"PRIu32"\n",node_tmp->data);
-        }
-        if(node->right)
-        {
-            printf("node->right = %"PRIu32"\n",node->right->data);
-            printf("check3\n");
-            node_tmp->right = node->right;    
-        }
-        printf("check4\n");
         node->right = node->left;
         node->left = NULL;
         
+
+        node_t *node_max = node->right;
+        while (node_max->right)
+        {
+            node_max = node_max->right;
+        }
+        node_max = node_tmp;
     }
-    printf("check5\n");
-    if(node->right)
-    {
-        printf("node->right = %"PRIu32"\n",node->right->data);
-        if(node->right->right)printf("node->right->right = %"PRIu32"\n",node->right->right->data);
-        printf("check6\n");
-        _tree_to_list(node->right);
-    }
-    printf("check7\n");
-    return false;
+    
+    _tree_to_list(node->right);
+    
 }
 
-bool tree_to_list(tree_t *self)
+void tree_to_list(tree_t *self)
 {
-    assert(self);
-    return _tree_to_list(self->root);
+    if(self->root == NULL ) return;
+    if(self->root->left == NULL && self->root->right == NULL ) return ;
+    _tree_to_list(self->root);
 
 }
 
