@@ -3,7 +3,7 @@
 #include <inttypes.h>
 
 
-static void _tree_delete(node_t *node);
+
 static size_t _tree_height(const node_t *node);
 static uint32_t _tree_insert(node_t **node,uint32_t value);
 static bool _tree_return_all(const node_t * node);
@@ -116,27 +116,19 @@ tree_t  *tree_create()
     return tr;
 }
 
-static void _tree_delete(node_t *node)
-{
-    if(!node)return;
-
-
-    _tree_delete(node->left);
-    _tree_delete(node->right);
-    
-    free(node);
-}
 
 void tree_delete(void *self)
 {
 
     if(!self)return;
+    node_t* node = ((tree_t*)self)->root;
+    while (node)
+    {
+        node_t *node_tmp = node;
+        node = node->right;
+        free(node_tmp);
+    }
 
-    node_t* root = ((tree_t*)self)->root;
-
-    if(root)_tree_delete(root);
-
-    free(self);
 }
 
 bool tree_is_empty(void* self)
@@ -277,36 +269,33 @@ bool tree_return_all(tree_t *self)
 
 static void _tree_to_list(node_t* node)
 {
-    if(node == NULL || (node->left == NULL && node->right == NULL ))
+    while(node->right)
     {
-        return ;
-    }
-    if(node->left != NULL)
-    {
-        _tree_to_list(node->left);
 
-        node_t *node_tmp = node->right;
-        
-        node->right = node->left;
-        node->left = NULL;
-        
-
-        node_t *node_max = node->right;
-        while (node_max->right)
+        if(node->left)
         {
-            node_max = node_max->right;
-        }
-        node_max = node_tmp;
-    }
-    
-    _tree_to_list(node->right);
-    
-}
+            node_t* node_tmp  = node->right;
+            
+            node->right = node->left;
+            node->left = NULL;
+        
 
+            node_t *node_max = node->right;
+            while (node_max->right)
+            {
+                node_max = node_max->right;
+            }
+            node_max->right = node_tmp;
+        }
+
+        node = node->right;
+        
+    }
+   
+}
 void tree_to_list(tree_t *self)
 {
-    if(self->root == NULL ) return;
-    if(self->root->left == NULL && self->root->right == NULL ) return ;
+    assert(self);
     _tree_to_list(self->root);
 
 }

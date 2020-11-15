@@ -29,7 +29,9 @@ void trace_analysis_Init()
 
 void Items_Processing()
 {
-	printf("Processing");
+	
+
+
 	tree_to_list(SrcIP_tree);
 	tree_to_list(DesIP_tree);
 	tree_to_list(SrcPort_tree);
@@ -66,14 +68,13 @@ void Items_Processing()
 
 	while(ts.tv_sec>=next_report_time)
 	{
-			next_report_time += invalTime;
+		next_report_time += invalTime;
 	}
 }
 
 void per_packet(libtrace_packet_t *packet)
 {
-	static uint32_t runtime;
-	runtime+=1;
+	
 	
 	
 
@@ -89,7 +90,7 @@ void per_packet(libtrace_packet_t *packet)
 
 
 	//init the all counter and time 
-	if(!next_report_time)
+	if(next_report_time == 0)
 	{
 			//initialization
 			trace_analysis_Init();
@@ -107,17 +108,19 @@ void per_packet(libtrace_packet_t *packet)
 		struct sockaddr_in *v4 = (struct sockaddr_in *)saddr_ptr;
 		ip_addr_tmp=v4->sin_addr;
 		tree_insert(SrcIP_tree,ntohl(ip_addr_tmp.s_addr));
-		if(sport)tree_insert(SrcPort_tree,sport);
-		if(dport)tree_insert(DesPort_tree,dport);
-		if(payload_len)tree_insert(PktLen_tree,payload_len);
+		
+		tree_insert(SrcPort_tree,sport);
+		tree_insert(DesPort_tree,dport);
+		tree_insert(PktLen_tree,payload_len);
+		
+		struct sockaddr_in *v3 = (struct sockaddr_in *)daddr_ptr;
+		ip_addr_tmp=v3->sin_addr;
+		tree_insert(DesIP_tree,ntohl(ip_addr_tmp.s_addr));
+	   
 	}
 	
-	if(analysis_is_ipv4(daddr_ptr))
-	{
-		struct sockaddr_in *v4 = (struct sockaddr_in *)daddr_ptr;
-		ip_addr_tmp=v4->sin_addr;
-		tree_insert(DesIP_tree,ntohl(ip_addr_tmp.s_addr));
-	}       
+	
+		    
 		
 }
 

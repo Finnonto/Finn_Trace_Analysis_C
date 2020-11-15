@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
         
         libtrace_t *trace = NULL;
         libtrace_packet_t *packet = NULL;
+        next_report_time = 0;
         strcpy(Ouput_FileName,"./output/");
         
 

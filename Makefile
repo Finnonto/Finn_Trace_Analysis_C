@@ -30,9 +30,9 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 
 
 run:
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000 30
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080015.pcap.gz 202004080015 30
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080030.pcap.gz 202004080030 30
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000_cl 30
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080015.pcap.gz 202004080015_cl 30
+	./bin/Finn_trace_analysis ~/Desktop/1113/202004080030.pcap.gz 202004080030_cl 30
 
 clean:
 	rm -f all $(DIR_OBJ)/*.o

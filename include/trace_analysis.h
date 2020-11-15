@@ -38,7 +38,7 @@ trace_info_t Info_list[5];
 
 
 //Time
-uint32_t next_report_time;
+uint32_t next_report_time ;
 uint32_t invalTime;
 uint32_t Current_time;
 uint32_t First_Time ;
