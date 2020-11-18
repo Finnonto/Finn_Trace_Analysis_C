@@ -11,7 +11,10 @@ void libtrace_cleanup(libtrace_t *trace, libtrace_packet_t *packet)
 
 bool analysis_is_ipv4(struct sockaddr *ip)
 {
-	if (ip->sa_family == AF_INET)return true;
+	if (ip->sa_family == AF_INET)
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -38,11 +41,11 @@ void Items_Processing()
 	tree_to_list(DesPort_tree);
 	tree_to_list(PktLen_tree);
 	
-	SrcIP_info = exact(SrcIP_tree,0);
-	DesIP_info = exact(DesIP_tree,0);
-	SrcPort_info = exact(SrcPort_tree,0);
-	DesPort_info = exact(DesPort_tree,0);
-	PktLen_info = exact(PktLen_tree,0);
+	SrcIP_info = Clifford_est(SrcIP_tree,20);
+	DesIP_info = Clifford_est(DesIP_tree,20);
+	SrcPort_info = Clifford_est(SrcPort_tree,20);
+	DesPort_info = Clifford_est(DesPort_tree,20);
+	PktLen_info = Clifford_est(PktLen_tree,20);
 
 	
 	Info_list[0] =*SrcIP_info;

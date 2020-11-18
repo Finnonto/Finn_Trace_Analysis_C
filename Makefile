@@ -28,9 +28,11 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 
 .PHONY:clean
 
+test:
+	./bin/Finn_trace_analysis /root/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test 30
 
 run:
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000_cl 30
+	#./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000_cl 30
 	./bin/Finn_trace_analysis ~/Desktop/1113/202004080015.pcap.gz 202004080015_cl 30
 	./bin/Finn_trace_analysis ~/Desktop/1113/202004080030.pcap.gz 202004080030_cl 30
 

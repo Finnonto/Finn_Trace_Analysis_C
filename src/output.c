@@ -27,19 +27,23 @@ void Output_Init()
 void output_entropy_csv(trace_info_t *info ,uint32_t ct )
 {
     fprintf(Output_File,"%u,",ct);
-    fprintf(Output_File,"%f,",info[0].entropy);
+    fprintf(Output_File,"%lf,",info[0].entropy);
     fprintf(Output_File,"%u,",info[0].total_count);
     fprintf(Output_File,"%u,",info[0].distinct);
-    fprintf(Output_File,"%f,",info[1].entropy);
+
+    fprintf(Output_File,"%lf,",info[1].entropy);
     fprintf(Output_File,"%u,",info[1].total_count);
     fprintf(Output_File,"%u,",info[1].distinct);
-    fprintf(Output_File,"%f,",info[2].entropy);
+
+    fprintf(Output_File,"%lf,",info[2].entropy);
     fprintf(Output_File,"%u,",info[2].total_count);
     fprintf(Output_File,"%u,",info[2].distinct);
-    fprintf(Output_File,"%f,",info[3].entropy);
+
+    fprintf(Output_File,"%lf,",info[3].entropy);
     fprintf(Output_File,"%u,",info[3].total_count);
     fprintf(Output_File,"%u,",info[3].distinct);
-    fprintf(Output_File,"%f,",info[4].entropy);
+
+    fprintf(Output_File,"%lf,",info[4].entropy);
     fprintf(Output_File,"%u,",info[4].total_count);
     fprintf(Output_File,"%u,",info[4].distinct);
     fprintf(Output_File,"\n");    
