@@ -26,35 +26,46 @@ void trace_analysis_Init()
     DesPort_tree = tree_create();
     PktLen_tree = tree_create();
     
-    next_report_time = ts.tv_sec +invalTime;
+    next_report_time = ts.tv_sec +intervalTime;
     First_Time = ts.tv_sec;
 }
 
-void Items_Processing()
+void cal(trace_info_t* (*alg)(tree_t *))
 {
-	
+	SrcIP_info = alg(SrcIP_tree);
+	DesIP_info = alg(DesIP_tree);
+	SrcPort_info = alg(SrcPort_tree);
+	DesPort_info = alg(DesPort_tree);
+	PktLen_info = alg(PktLen_tree);
 
-
-	tree_to_list(SrcIP_tree);
-	tree_to_list(DesIP_tree);
-	tree_to_list(SrcPort_tree);
-	tree_to_list(DesPort_tree);
-	tree_to_list(PktLen_tree);
-	
-	SrcIP_info = Clifford_est(SrcIP_tree,20);
-	DesIP_info = Clifford_est(DesIP_tree,20);
-	SrcPort_info = Clifford_est(SrcPort_tree,20);
-	DesPort_info = Clifford_est(DesPort_tree,20);
-	PktLen_info = Clifford_est(PktLen_tree,20);
-
-	
 	Info_list[0] =*SrcIP_info;
 	Info_list[1] =*DesIP_info;
 	Info_list[2] =*SrcPort_info;
 	Info_list[3] =*DesPort_info;
 	Info_list[4] =*PktLen_info;
+
+	output();
+}
+
+void Items_Processing()
+{
+	tree_to_list(SrcIP_tree);
+	tree_to_list(DesIP_tree);
+	tree_to_list(SrcPort_tree);
+	tree_to_list(DesPort_tree);
+	tree_to_list(PktLen_tree);
+
 	
-	output_entropy_csv(Info_list,Current_time);
+	if (EXACT)
+	{
+		algorithm=0;
+		cal(exact);
+	}
+	if (CLIFFORD)
+	{
+		algorithm=1;
+		cal(Clifford_est);
+	}
 	
 	tree_delete(SrcIP_tree);
 	tree_delete(DesIP_tree);	
@@ -71,7 +82,7 @@ void Items_Processing()
 
 	while(ts.tv_sec>=next_report_time)
 	{
-		next_report_time += invalTime;
+		next_report_time += intervalTime;
 	}
 }
 
@@ -110,8 +121,7 @@ void per_packet(libtrace_packet_t *packet)
 	{       
 		struct sockaddr_in *v4 = (struct sockaddr_in *)saddr_ptr;
 		ip_addr_tmp=v4->sin_addr;
-		tree_insert(SrcIP_tree,ntohl(ip_addr_tmp.s_addr));
-		
+		tree_insert(SrcIP_tree,ntohl(ip_addr_tmp.s_addr));		
 		tree_insert(SrcPort_tree,sport);
 		tree_insert(DesPort_tree,dport);
 		tree_insert(PktLen_tree,payload_len);
@@ -122,8 +132,7 @@ void per_packet(libtrace_packet_t *packet)
 	   
 	}
 	
-	
 		    
-		
+	
 }
 
