@@ -22,10 +22,12 @@ typedef struct Trace_info
 }trace_info_t;
 
 
-uint8_t K_Value;
+//uint32_t K_Value;   /*------xiu-----*/
+uint16_t it;   //xiu
 
 
-trace_info_t *exact(tree_t *item,uint32_t k_value);
 
-trace_info_t *Clifford_est(tree_t *item,uint32_t k_value);
+trace_info_t *exact(tree_t *item);
+
+trace_info_t *Clifford_est(tree_t *item);
 #endif
