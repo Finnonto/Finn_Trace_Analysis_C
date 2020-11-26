@@ -9,7 +9,8 @@
 #include "trace_analysis.h"
 
 #include <stdio.h>
-
+#include <string.h>
+#include <unistd.h> 
 
 
 int main(int argc, char *argv[])
@@ -18,11 +19,13 @@ int main(int argc, char *argv[])
         
         libtrace_t *trace = NULL;
         libtrace_packet_t *packet = NULL;
+        Table_Size = 16384; 
+        Table_Amount = 10;
         next_report_time = 0;
-        strcpy(Ouput_FileName,"./output/");
-        
+        strcpy(Ouput_FileName,"/mnt/c/Users/Lab108/Desktop/1120/");
 
-        if (argc < 4) {
+
+        if (argc < 5) {
                 fprintf(stderr, "Usage: %s inputURI\n", argv[0]);
                 return 1;
         }
@@ -50,16 +53,19 @@ int main(int argc, char *argv[])
         }
 
         invalTime = strtoul(argv[3],NULL,10);
-        
+
         if(invalTime<=0)
         {
                 invalTime = 1;
         }
 
         strcat(Ouput_FileName,argv[2]);
-       
+                Deviation = strtoul(argv[4],NULL,10);
+
         Output_Init();
-        
+        import_inverse_cdf_table(Table_Amount);
+        import_HeadTail_table();
+        import_inverse_cdf_stage_table(Table_Amount);
         while (trace_read_packet(trace,packet)>0) {
                 
                 per_packet(packet);

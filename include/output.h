@@ -11,8 +11,8 @@
 
 
 
-char Ouput_FileName[50];
-char CSV[4];
+char Ouput_FileName[100];
+char CSV[5];
 FILE *Output_File; 
 
 void Output_Init();

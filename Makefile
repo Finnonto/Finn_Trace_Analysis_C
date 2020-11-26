@@ -29,12 +29,13 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 .PHONY:clean
 
 test:
-	./bin/Finn_trace_analysis /root/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test 30
+	./bin/Finn_trace_analysis /root/Desktop/libtrace_tutorial/traces/2minutes.erf.gz Test 30 5
 
 run:
-	#./bin/Finn_trace_analysis ~/Desktop/1113/202004080000.pcap.gz 202004080000_cl 30
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080015.pcap.gz 202004080015_cl 30
-	./bin/Finn_trace_analysis ~/Desktop/1113/202004080030.pcap.gz 202004080030_cl 30
+
+	./bin/Finn_trace_analysis  /mnt/d/Download/MAWI2007/200701011400.dump.gz  clifford_{0}-30/Analysis_sec_30s_200701011400 30 1
+
+
 
 clean:
 	rm -f all $(DIR_OBJ)/*.o
