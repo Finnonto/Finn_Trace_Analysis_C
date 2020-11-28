@@ -25,6 +25,7 @@ typedef struct Trace_info
 //uint32_t K_Value;   /*------xiu-----*/
 uint16_t it;   //xiu
 
+int rand_tmp;
 
 
 trace_info_t *exact(tree_t *item);

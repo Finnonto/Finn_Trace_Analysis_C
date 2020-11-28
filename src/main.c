@@ -27,7 +27,7 @@ uint8_t ORIGIN = 0; uint8_t TOTAL = 0;    uint8_t DISTINCT = 0;
 int main(int argc, char *argv[])
 {
         uint16_t arg_num=2;   //xiu
-        char time[10];
+        char time[10]="30";
         libtrace_t *trace = NULL;
         libtrace_packet_t *packet = NULL;
         next_report_time = 0;
