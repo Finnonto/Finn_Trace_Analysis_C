@@ -22,6 +22,11 @@ typedef struct Trace_info
 }trace_info_t;
 
 
+
+
+uint16_t it;   //xiu
+int rand_tmp;
+
 uint32_t K_Value;
 // for invers cdf
 uint32_t Table_Size; 
@@ -69,4 +74,5 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item);
 trace_info_t *Clifford_HT_est(tree_t *item);
 
 trace_info_t *Clifford_HTo_est(tree_t *item);
+
 #endif
