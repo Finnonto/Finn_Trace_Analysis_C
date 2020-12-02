@@ -142,6 +142,41 @@ void import_inverse_cdf_stage_table(uint16_t table_amount)
     }
 }
 
+void import_inverse_cdf_single_table(uint32_t index)
+{
+    char table_path[100] = {"tables/inverse_table/inverse_table_16384_100/table_100_"};
+    char TXT[5]={".txt"};
+
+    
+    Table_Amount = 1;
+    IC_Entry = 1;
+    FILE *tb;
+    char table_path_tmp[100];
+    strcpy(table_path_tmp,table_path);
+    char num[4];
+    sprintf(num,"%d",index);
+
+    strcat(table_path_tmp,num);
+    strcat(table_path_tmp,TXT);
+            
+    if(!(tb = fopen(table_path_tmp,"r")))
+    {
+        printf("load inverse table file fail\n");
+        exit(0);
+    }
+    
+    
+    while(fscanf(tb,"%lf %d",&Inverse_Stage_table[0].Table[IC_Entry],&Inverse_Stage_point[0].point[IC_Entry]) != EOF)
+    {
+        IC_Entry ++;
+    }
+    Table_Entry_list[0] = IC_Entry;
+    fclose(tb);
+    printf("%u %u\n",Inverse_Stage_point[0].point[IC_Entry-1],IC_Entry-1);
+
+
+}
+
 void import_HeadTail_table()
 {
     char table_path[60] = {"tables/ht_table/HT_Table_50.txt"};
@@ -211,6 +246,7 @@ trace_info_t *exact(tree_t *item)
 trace_info_t *Clifford_est(tree_t *item)
 {   
     K_Value = 20;
+    Deviation = 0;
     //return info init
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
@@ -387,7 +423,7 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     Table_Size = 16384;
-    Table_Amount = 10;
+
     K_Value = 20;
     
     double k_register[K_Value];    

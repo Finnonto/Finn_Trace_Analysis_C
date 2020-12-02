@@ -42,6 +42,7 @@ ICTable_list Inverse_Stage_point[10];
 
 //for Clifford_est srand deviate
 uint32_t Deviation;
+uint32_t TableIndex;
 
 //for head and tail 
 double Head_Value[2000];
@@ -52,6 +53,8 @@ uint32_t HT_Table_Entry ;
 void import_inverse_cdf_table(uint16_t table_amount);
 
 void import_inverse_cdf_stage_table(uint16_t table_amount);
+
+void import_inverse_cdf_single_table(uint32_t index);
 
 void import_HeadTail_table();
 
