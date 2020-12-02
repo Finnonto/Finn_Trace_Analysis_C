@@ -1,9 +1,62 @@
 #include "output.h"
 
-void Output_Init()
+
+void create_folder()
 {
-    strcpy(CSV,".csv");
-    Output_File = fopen(strcat(Ouput_FileName,CSV),"w");
+    char Output_FolderName[100];
+    if (EXACT)
+    {
+        strcpy(Output_FolderName,"./output/Exact");
+        mkdir(Output_FolderName,0777);
+        NORfolder(Output_FolderName);
+    }
+    if (CLIFFORD)
+    {
+        strcpy(Output_FolderName,"./output/Clifford");
+        mkdir(Output_FolderName,0777);
+        NORfolder(Output_FolderName);
+    }
+    if (INVERSE_CLI)
+    {
+        strcpy(Output_FolderName,"./output/Inverse_cli");
+        mkdir(Output_FolderName,0777);
+        NORfolder(Output_FolderName);
+    }
+    file_cnt=0;
+}
+
+void NORfolder( char *Output_FolderName)
+{   
+    char ALGFolderName[100];
+    if (ORIGIN)
+    {
+        strcpy(ALGFolderName,Output_FolderName);
+        strcat(ALGFolderName,"/origin");
+        mkdir(ALGFolderName,0777);
+        Output_Init(ALGFolderName);
+    }
+    if (DISTINCT)
+    {
+        strcpy(ALGFolderName,Output_FolderName);
+        strcat(ALGFolderName,"/distinct");
+        mkdir(ALGFolderName,0777);
+        Output_Init(ALGFolderName);
+    }
+    if (TOTAL)
+    {
+        strcpy(ALGFolderName,Output_FolderName);
+        strcat(ALGFolderName,"/total");
+        mkdir(ALGFolderName,0777);
+        Output_Init(ALGFolderName);
+    }
+} 
+
+void Output_Init(char *FolderName)
+{
+    strcpy(CSV,".csv");   //csv=.csv
+    strcat(FolderName,Output_FileName);
+    Output_File=fopen(strcat(FolderName,CSV),"w");
+    filelist[file_cnt] = Output_File;
     fprintf(Output_File,"time(sec),");
     fprintf(Output_File,"SrcIP_entropy,");
     fprintf(Output_File,"SrcIP_total_cnt,");
@@ -21,36 +74,117 @@ void Output_Init()
     fprintf(Output_File,"PktLe_total_cnt,");
     fprintf(Output_File,"PktLe_distinct,");
     fprintf(Output_File,"\n");
-
+    file_cnt++;
 }
 
-void output_entropy_csv(trace_info_t *info ,uint32_t ct )
+void output()
 {
-    fprintf(Output_File,"%u,",ct);
-    fprintf(Output_File,"%lf,",info[0].entropy);
-    fprintf(Output_File,"%u,",info[0].total_count);
-    fprintf(Output_File,"%u,",info[0].distinct);
 
-    fprintf(Output_File,"%lf,",info[1].entropy);
-    fprintf(Output_File,"%u,",info[1].total_count);
-    fprintf(Output_File,"%u,",info[1].distinct);
+    if (ORIGIN)
+    {
+        Output_File=filelist[file_cnt];
+        output_entropy_csv_origin();
+        file_cnt++;
+    }
+    if (DISTINCT)
+    {
+        Output_File=filelist[file_cnt];
+        output_entropy_csv_distinct();
+        file_cnt++;
+    }
+    if (TOTAL)
+    {
+        Output_File=filelist[file_cnt];
+        output_entropy_csv_total();
+        file_cnt++;
+    }
+}
 
-    fprintf(Output_File,"%lf,",info[2].entropy);
-    fprintf(Output_File,"%u,",info[2].total_count);
-    fprintf(Output_File,"%u,",info[2].distinct);
+void output_entropy_csv_origin()
+{
+    fprintf(Output_File,"%u,",Current_time);
+    fprintf(Output_File,"%lf,",Info_list[0].entropy);
+    fprintf(Output_File,"%u,",Info_list[0].total_count);
+    fprintf(Output_File,"%u,",Info_list[0].distinct);
 
-    fprintf(Output_File,"%lf,",info[3].entropy);
-    fprintf(Output_File,"%u,",info[3].total_count);
-    fprintf(Output_File,"%u,",info[3].distinct);
+    fprintf(Output_File,"%lf,",Info_list[1].entropy);
+    fprintf(Output_File,"%u,",Info_list[1].total_count);
+    fprintf(Output_File,"%u,",Info_list[1].distinct);
 
-    fprintf(Output_File,"%lf,",info[4].entropy);
-    fprintf(Output_File,"%u,",info[4].total_count);
-    fprintf(Output_File,"%u,",info[4].distinct);
+    fprintf(Output_File,"%lf,",Info_list[2].entropy);
+    fprintf(Output_File,"%u,",Info_list[2].total_count);
+    fprintf(Output_File,"%u,",Info_list[2].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[3].entropy);
+    fprintf(Output_File,"%u,",Info_list[3].total_count);
+    fprintf(Output_File,"%u,",Info_list[3].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[4].entropy);
+    fprintf(Output_File,"%u,",Info_list[4].total_count);
+    fprintf(Output_File,"%u,",Info_list[4].distinct);
     fprintf(Output_File,"\n");    
 
 }
 
+void output_entropy_csv_distinct()
+{
+    fprintf(Output_File,"%u,",Current_time);
+    fprintf(Output_File,"%lf,",Info_list[0].entropy/log(Info_list[0].distinct));
+    fprintf(Output_File,"%u,",Info_list[0].total_count);
+    fprintf(Output_File,"%u,",Info_list[0].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[1].entropy/log(Info_list[1].distinct));
+    fprintf(Output_File,"%u,",Info_list[1].total_count);
+    fprintf(Output_File,"%u,",Info_list[1].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[2].entropy/log(Info_list[2].distinct));
+    fprintf(Output_File,"%u,",Info_list[2].total_count);
+    fprintf(Output_File,"%u,",Info_list[2].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[3].entropy/log(Info_list[3].distinct));
+    fprintf(Output_File,"%u,",Info_list[3].total_count);
+    fprintf(Output_File,"%u,",Info_list[3].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[4].entropy/log(Info_list[4].distinct));
+    fprintf(Output_File,"%u,",Info_list[4].total_count);
+    fprintf(Output_File,"%u,",Info_list[4].distinct);
+    fprintf(Output_File,"\n");    
+}
+
+void output_entropy_csv_total()
+{
+    fprintf(Output_File,"%u,",Current_time);
+    fprintf(Output_File,"%lf,",Info_list[0].entropy/log(Info_list[0].total_count));
+    fprintf(Output_File,"%u,",Info_list[0].total_count);
+    fprintf(Output_File,"%u,",Info_list[0].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[1].entropy/log(Info_list[1].total_count));
+    fprintf(Output_File,"%u,",Info_list[1].total_count);
+    fprintf(Output_File,"%u,",Info_list[1].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[2].entropy/log(Info_list[2].total_count));
+    fprintf(Output_File,"%u,",Info_list[2].total_count);
+    fprintf(Output_File,"%u,",Info_list[2].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[3].entropy/log(Info_list[3].total_count));
+    fprintf(Output_File,"%u,",Info_list[3].total_count);
+    fprintf(Output_File,"%u,",Info_list[3].distinct);
+
+    fprintf(Output_File,"%lf,",Info_list[4].entropy/log(Info_list[4].total_count));
+    fprintf(Output_File,"%u,",Info_list[4].total_count);
+    fprintf(Output_File,"%u,",Info_list[4].distinct);
+    fprintf(Output_File,"\n");    
+
+}
+
+
 void Close_Output_File()
 {
-    fclose(Output_File);
+    file_cnt=0;
+    while(filelist[file_cnt])
+    {
+        Output_File=filelist[file_cnt];
+        fclose(Output_File);
+        file_cnt++;
+    }
 }
