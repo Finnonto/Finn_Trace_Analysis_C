@@ -58,12 +58,16 @@ struct sockaddr *saddr_ptr,*daddr_ptr;
 uint16_t sport,dport;
 size_t payload_len ;
 struct in_addr ip_addr_tmp;
-uint32_t k_value;      //xiu
+
 uint16_t algorithm,alg_cnt,nor_cnt;
+
+libtrace_linktype_t  linktype;
+uint16_t eth_type;
+uint32_t rem;
 
 void libtrace_cleanup(libtrace_t *trace, libtrace_packet_t *packet);
 
-bool analysis_is_ipv4(struct sockaddr *ip);
+bool analysis_is_ipv4( libtrace_packet_t *packet);
 
 void trace_analysis_Init();
 

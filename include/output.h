@@ -10,8 +10,9 @@
 
 
 
-uint16_t normalization;
-char Output_FileName[50];
+
+char Ouput_FileName[100];
+
 char CSV[5];
 FILE *Output_File; 
 FILE *filelist[20];

@@ -9,8 +9,10 @@
 
 #include <stdio.h>
 
+
 /*-------xiu---------*/
-uint32_t k_value = 20;
+// default values 
+uint32_t K_value = 20;
 uint32_t intervalTime = 30; 
 uint16_t it = 10;  
 uint16_t algorithm = 0; 
@@ -23,6 +25,10 @@ uint16_t file_cnt=0;
 uint8_t EXACT = 0;  uint8_t CLIFFORD = 0; uint8_t INVERSE_CLI = 0;
 uint8_t ORIGIN = 0; uint8_t TOTAL = 0;    uint8_t DISTINCT = 0;
 
+#include <string.h>
+#include <unistd.h> 
+
+
 
 int main(int argc, char *argv[])
 {
@@ -30,9 +36,13 @@ int main(int argc, char *argv[])
         char time[10]="30";
         libtrace_t *trace = NULL;
         libtrace_packet_t *packet = NULL;
+        Table_Size = 16384; 
+        Table_Amount = 10;
         next_report_time = 0;
 
+
         if (argc < 2) {             //xiu
+
                 fprintf(stderr, "Usage: %s inputURI\n", argv[0]);
                 return 1;
         }
@@ -48,7 +58,7 @@ int main(int argc, char *argv[])
                 }
                 //--------k_value--------
                 else if(strncmp(argv[arg_num],"-k",2)==0){
-                        k_value = atoi(argv[arg_num+1]);
+                        K_value = atoi(argv[arg_num+1]);
                         arg_num+=2;
                 }
                 //------algorithm------  //0:exact  1:clifford  2.inverse_cli 3.all
@@ -121,6 +131,7 @@ int main(int argc, char *argv[])
                 libtrace_cleanup(trace, packet);
                 return 1;
         }
+
          //Filename
         
         strcpy(Output_FileName,"/Analysis_sec_");
@@ -133,6 +144,7 @@ int main(int argc, char *argv[])
         strcat(Output_FileName,strtok(strtok(NULL,"/"),"."));
    
         create_folder();
+
 
         while (trace_read_packet(trace,packet)>0) {
                 file_cnt=0;

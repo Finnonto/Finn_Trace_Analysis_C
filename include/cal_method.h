@@ -22,13 +22,54 @@ typedef struct Trace_info
 }trace_info_t;
 
 
-//uint32_t K_Value;   /*------xiu-----*/
-uint16_t it;   //xiu
 
+
+uint16_t it;   //xiu
 int rand_tmp;
 
+uint32_t K_Value;
+// for invers cdf
+uint32_t Table_Size; 
+uint16_t Table_Amount;
+uint32_t IC_Entry;
+uint32_t Table_Entry_list[10];
+//
+typedef struct ICTable_list
+{
+    double Table[65536];
+    uint32_t point[1000];
+}ICTable_list;
+
+ICTable_list Inverse_table[10];
+
+ICTable_list Inverse_Stage_table[10];
+ICTable_list Inverse_Stage_point[10];
+
+//for Clifford_est srand deviate
+uint32_t Deviation;
+
+//for head and tail 
+double Head_Value[2000];
+uint32_t Stage_Point[2000];
+uint32_t HT_Table_Entry ;
+
+
+void import_inverse_cdf_table(uint16_t table_amount);
+
+void import_inverse_cdf_stage_table(uint16_t table_amount);
+
+void import_HeadTail_table();
 
 trace_info_t *exact(tree_t *item);
 
 trace_info_t *Clifford_est(tree_t *item);
+
+trace_info_t *Clifford_cdf_est(tree_t *item);
+
+trace_info_t *Clifford_cdf_stage_est(tree_t *item);
+
+trace_info_t *Clifford_HT_est(tree_t *item);
+
+trace_info_t *Clifford_HTo_est(tree_t *item);
+
 #endif
