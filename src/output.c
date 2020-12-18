@@ -53,7 +53,24 @@ void NORfolder( char *Output_FolderName)
 
 void Output_Init(char *FolderName)
 {
+    char time[10];
+    char *tmp1,*tmp2;
     strcpy(CSV,".csv");   //csv=.csv
+    
+    // make output file name 
+    strcpy(Output_FileName,"/Analysis_sec_");
+    sprintf(time,"%d",intervalTime);
+    strcat(Output_FileName,time);
+    strcat(Output_FileName,"s_");
+    tmp1 = strtok(Trace_Path,"/");
+    while(tmp2!=NULL)
+    {
+        tmp1 = tmp2;
+        tmp2 = strtok(NULL,"/");
+    }
+    strcat(Output_FileName,strtok(tmp1,"."));
+
+
     strcat(FolderName,Output_FileName);
     Output_File=fopen(strcat(FolderName,CSV),"w");
     filelist[file_cnt] = Output_File;

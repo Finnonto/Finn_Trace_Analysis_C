@@ -10,7 +10,7 @@
 
 
 
-
+char Trace_Path[200];
 char Output_FileName[100];
 
 char CSV[5];

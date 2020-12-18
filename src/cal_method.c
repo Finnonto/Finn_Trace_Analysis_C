@@ -7,15 +7,14 @@ double RandInRnage()
     
     rand_tmp = rand();
     
-    if(rand_tmp<=0)
+    if(rand_tmp <=0)
     {
-        rand_tmp = 0 ;
-        rand_tmp += 1;
+        rand_tmp = 1;
     }
     else if (rand_tmp >= RAND_MAX)
     {
-        rand_tmp = RAND_MAX;
-        rand_tmp -= 1;
+        rand_tmp = RAND_MAX -1 ;
+        
     }
     
     return (double)rand_tmp /RAND_MAX;
@@ -246,6 +245,7 @@ trace_info_t *exact(tree_t *item)
 
 trace_info_t *Clifford_est(tree_t *item)
 {   
+    
     //return info init
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
@@ -259,6 +259,7 @@ trace_info_t *Clifford_est(tree_t *item)
     //init node
     node_t *current_node;
     current_node = item->root;
+    
     //Clifford param
     double k_register[K_Value];
     double u1=0;
@@ -276,13 +277,13 @@ trace_info_t *Clifford_est(tree_t *item)
 
     while(current_node)
     {
+        
         total_item_cnt += current_node->cnt;
         distinct++;
         srand(current_node->data + Deviation);
 
         for(uint32_t i=0;i<K_Value;i++)
         {
-            
 
             u1 = RandInRnage();
 
@@ -299,13 +300,14 @@ trace_info_t *Clifford_est(tree_t *item)
             // store k value
 
             k_register[i] += ran * current_node->cnt;
-
+            
+            
         }
         
 	    current_node = current_node->right;
 
     }
-
+    
     if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
     else{
 
@@ -340,7 +342,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     info->distinct = 0;
     //cal value init
     Table_Size = 16384;
-    Table_Amount = 10;
+    Table_Amount = it;
     K_Value = 20;
     
     double k_register[K_Value];    

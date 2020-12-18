@@ -22,9 +22,22 @@ typedef struct Trace_info
 }trace_info_t;
 
 
+//flag
+uint8_t EXACT;  //algorithm flag
+uint8_t CLIFFORD;  //algorithm flag
+uint8_t INVERSE_CLI;  //algorithm flag
 
+uint8_t ORIGIN;  //normalization flag
+uint8_t TOTAL;  //normalization flag
+uint8_t DISTINCT;  //normalization flag
 
-uint16_t it;   //xiu
+/*
+
+    for import table 
+
+*/
+
+uint16_t it;   //inverse table amount
 int rand_tmp;
 
 uint32_t K_Value;
