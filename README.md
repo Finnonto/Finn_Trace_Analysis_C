@@ -10,20 +10,23 @@ mkdir output
 
 ## usage: 
  
-### Simulation:
+### Simulation:  
 This method use zipf dbn to generate streams and calculate the entropy with sketch algorithm we choose, and use parameter <simulation> to enable this method
-#### usage:
-'''
-$ Finn_Trace_Analysis_C simulation [<option>]
-'''
-####　Options 
--l <vlaue>       simutlate stream length,
--r <vlaue>       rmage of dbn of zipf of simutlate stream, 
--k <vlaue>       k value of sketch entropy algorithm ,
--z <vlaue>       z parameter of zipf dbn,
--t <vlaue>       simulation times,
--e <vlaue>       error prob. threshold,
--o <vlaue>       zipf dbn offset,must be greater be positve integer,
--a <vlaue>       choose specific sketch algorithm,
--i <vlaue>       table amount of inverse cdf of clifford,
--KLD             enable to simulate another alogrithm and calculate the KLD of them,
+#### usage:  
+    
+```
+ $ Finn_Trace_Analysis_C simulation [<option>]
+```
+  
+#### Options
+
+-l <vlaue>&emsp;&emsp;&emsp;              simutlate stream length,  
+-r <vlaue>&emsp;&emsp;&emsp;            rmage of dbn of zipf of simutlate stream,   
+-k <vlaue>&emsp;&emsp;&emsp;           k value of sketch entropy algorithm ,  
+-z <vlaue>&emsp;&emsp;&emsp;           z parameter of zipf dbn,  
+-t <vlaue>&emsp;&emsp;&emsp;           simulation times,  
+-e <vlaue>&emsp;&emsp;&emsp;          error prob. threshold,  
+-o <vlaue>&emsp;&emsp;&emsp;           zipf dbn offset,must be greater be positve integer,  
+-a <vlaue>&emsp;&emsp;&emsp;           choose specific sketch algorithm,  
+-it <vlaue>&emsp;&emsp;&emsp;           table amount of inverse cdf of clifford,  
+-KLD&emsp;&emsp;&emsp;                enable to simulate another alogrithm and calculate the KLD of them,     
