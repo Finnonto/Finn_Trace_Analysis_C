@@ -18,7 +18,11 @@ This method use zipf dbn to generate streams and calculate the entropy with sket
 ```
  $ Finn_Trace_Analysis_C simulation <options><parameter>
 ```
-  
+or you can use 
+```
+make sim 
+```
+to make simple test.
 #### Options
 
 `-l` : simutlate stream length [positive integer]  
