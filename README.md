@@ -1,32 +1,49 @@
 # Finn_Trace_Analysis_C
 implement trace analysis method based on libtrace in C  
 
+
+
+If there is no output folder:
 ```
-mkdir bin
-mkdir obj
 mkdir output
 ```
+before you started,recommand you to make clean first.
 
-
-## usage: 
+## Usage: 
  
 ### Simulation:  
-This method use zipf dbn to generate streams and calculate the entropy with sketch algorithm we choose, and use parameter <simulation> to enable this method
+This method use zipf dbn to generate streams and calculate the entropy with sketch algorithm we choose, and use parameter [simulation] to enable this method.
 #### usage:  
     
 ```
- $ Finn_Trace_Analysis_C simulation [<option>]
+ $ Finn_Trace_Analysis_C simulation <options><parameter>
 ```
   
 #### Options
 
--l <vlaue>&emsp;&emsp;&emsp;              simutlate stream length,  
--r <vlaue>&emsp;&emsp;&emsp;            rmage of dbn of zipf of simutlate stream,   
--k <vlaue>&emsp;&emsp;&emsp;           k value of sketch entropy algorithm ,  
--z <vlaue>&emsp;&emsp;&emsp;           z parameter of zipf dbn,  
--t <vlaue>&emsp;&emsp;&emsp;           simulation times,  
--e <vlaue>&emsp;&emsp;&emsp;          error prob. threshold,  
--o <vlaue>&emsp;&emsp;&emsp;           zipf dbn offset,must be greater be positve integer,  
--a <vlaue>&emsp;&emsp;&emsp;           choose specific sketch algorithm,  
--it <vlaue>&emsp;&emsp;&emsp;           table amount of inverse cdf of clifford,  
--KLD&emsp;&emsp;&emsp;                enable to simulate another alogrithm and calculate the KLD of them,     
+`-l` : simutlate stream length [positive integer]  
+`-r` :  range of dbn of zipf of simutlate stream [positive integer]    
+`-k` :  k value of sketch entropy algorithm [positive integer]     
+`-z` :  z parameter of zipf dbn   [positive float]  
+`-t` :  simulation times  [positive integer]   
+`-o` :  zipf dbn offset  [positive integer]  
+`-a` :  choose specific sketch algorithm  
+`-it` :   amount of inverse cdf table of clifford  [positive integer max:10]    
+`-Tbs` : size of CDF table [16384,32768,65536]
+
+### Trace:
+We can calculate specific Trace.pcap file whether it's zipped or not, and use parameter <trace> to enable this method.
+
+!!note this part is not finished yet.
+
+```
+$ Finn_Trace_Analysis_C trace <options><parameter>
+```
+
+
+#### Options
+
+`-t` : time interval of analysis(seconds) [positive integer]   
+`-k` : k value of algorithm   [positive integer]  
+`-a` : choose specific sketch algorithm  
+`-it`:  amount of inverse cdf table of clifford  [positive integer max:10]    
