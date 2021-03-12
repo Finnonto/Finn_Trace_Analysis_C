@@ -21,7 +21,7 @@ double RandInRnage()
 }
 
 
-static void hash_affine_20para(uint32_t in_data,uint16_t table_size,uint32_t *hash_result)
+static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result)
 {
     uint32_t para_a[20]={0x177510d1, 0xda1e0f42, 0x964fbf1e, 0x269df1e6, 0x916cc092,
                     0x7931bd51, 0x12a504fc, 0x76100f01, 0xc246978c, 0x87f2cc91, 
@@ -36,11 +36,14 @@ static void hash_affine_20para(uint32_t in_data,uint16_t table_size,uint32_t *ha
     memset(hash_result, 0, sizeof(int) * K_Value);
     for(int i= 0;i<K_Value;i++)
     {
+        
         hash_result[i] = ( (para_a[i]*in_data + para_c[i]) % mod_m ) % table_size;
+        
+        //printf("%d\n",( (para_a[i]*in_data + para_c[i]) % mod_m ) % table_size);
     }
 }
 
-static void hash_affine_20_2para(uint32_t in_data,uint16_t table_size,uint32_t *hash_result_a,uint32_t *hash_result_b)
+static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result_a,uint32_t *hash_result_b)
 {
     uint32_t para_a[40]={0x177510d1, 0xda1e0f42, 0x964fbf1e, 0x269df1e6, 0x916cc092,
                         0x7931bd51, 0x12a504fc, 0x76100f01, 0xc246978c, 0x87f2cc91, 
@@ -75,13 +78,13 @@ void import_inverse_cdf_table(uint16_t table_amount)
 
     char table_size_char[10];
     char table_path[60] = {"tables/inverse_table/inverse_table_"};
-    uint32_t entry_cnt = 0;
+    
     sprintf(table_size_char,"%d",Table_Size);
     strcat(table_path,table_size_char);
     strcat(table_path,"/table");
     for(int i=0;i<table_amount;++i)
     {
-        entry_cnt = 0;
+        
         FILE *tb;
         
         char table_path_tmp[60];
@@ -98,20 +101,33 @@ void import_inverse_cdf_table(uint16_t table_amount)
         }
         
         
-        while(fscanf(tb,"%lf",&Inverse_table[i].Table[entry_cnt]) != EOF)
+        for(int j = 0;j<Table_Size;j++)
         {
-            entry_cnt ++;
+            fscanf(tb,"%lf",&Inverse_table[i].Table[j]);
+
         }
-        Table_Entry_list[i] = entry_cnt;
+
+        CDF_Table_Entry_list[i] = Table_Size;
         fclose(tb);
     }
     
 }
 
-void import_inverse_cdf_stage_table(uint16_t table_amount)
+void import_inverse_cdf_stage50_table(uint16_t table_amount,int num)
 {
     
-    char table_path[100] = {"tables/inverse_table/inverse_table_16384_50/table_50_"};
+
+    char tmp[20];
+	
+
+	
+    char table_path[100] = {"tables/inverse_table/inverse_table_16384_"};
+    sprintf(tmp,"%d",num);
+    strcat(table_path,tmp);
+    strcat(table_path,"/table_");
+    strcat(table_path,tmp);
+    strcat(table_path,"_");
+    
     char TXT[5]={".txt"};
 
     
@@ -121,10 +137,10 @@ void import_inverse_cdf_stage_table(uint16_t table_amount)
         FILE *tb;
         char table_path_tmp[100];
         strcpy(table_path_tmp,table_path);
-        char num[4];
-        sprintf(num,"%d",i);
+        char tmp[4];
+        sprintf(tmp,"%d",i);
 
-        strcat(table_path_tmp,num);
+        strcat(table_path_tmp,tmp);
         strcat(table_path_tmp,TXT);
                 
         if(!(tb = fopen(table_path_tmp,"r")))
@@ -134,13 +150,62 @@ void import_inverse_cdf_stage_table(uint16_t table_amount)
         }
         
         
-        while(fscanf(tb,"%lf %d",&Inverse_Stage_table[i].Table[IC_Entry],&Inverse_Stage_point[i].point[IC_Entry]) != EOF)
+        while(fscanf(tb,"%lf %d",&Inverse_Stage50_table[i].Table[IC_Entry],&Inverse_Stage50_point[i].point[IC_Entry]) != EOF)
         {
             IC_Entry ++;
         }
-        Table_Entry_list[i] = IC_Entry;
+        CDF_Stage50_Table_Entry_list[i] = IC_Entry;
+        
         fclose(tb);
-        printf("%u %u\n",Inverse_Stage_point[i].point[IC_Entry-1],IC_Entry-1);
+        //printf("%u %u\n",Inverse_Stage50_point[i].point[IC_Entry-1],IC_Entry-1);
+    }
+}
+
+void import_inverse_cdf_stage100_table(uint16_t table_amount,int num)
+{
+    
+
+    char tmp[20];
+	
+
+	
+    char table_path[100] = {"tables/inverse_table/inverse_table_16384_"};
+    sprintf(tmp,"%d",num);
+    strcat(table_path,tmp);
+    strcat(table_path,"/table_");
+    strcat(table_path,tmp);
+    strcat(table_path,"_");
+    
+    char TXT[5]={".txt"};
+
+    
+    for(int i=0;i<table_amount;++i)
+    {
+        IC_Entry = 1;
+        FILE *tb;
+        char table_path_tmp[100];
+        strcpy(table_path_tmp,table_path);
+        char tmp[4];
+        sprintf(tmp,"%d",i);
+
+        strcat(table_path_tmp,tmp);
+        strcat(table_path_tmp,TXT);
+                
+        if(!(tb = fopen(table_path_tmp,"r")))
+        {
+            printf("load inverse table file fail\n");
+            exit(0);
+        }
+        
+        
+        while(fscanf(tb,"%lf %d",&Inverse_Stage100_table[i].Table[IC_Entry],&Inverse_Stage100_point[i].point[IC_Entry]) != EOF)
+        {
+            IC_Entry ++;
+        }
+        CDF_Stage100_Table_Entry_list[i] = IC_Entry;
+        
+        fclose(tb);
+        //printf("%u %u\n",Inverse_Stage50_point[i].point[IC_Entry-1],IC_Entry-1);
     }
 }
 
@@ -168,20 +233,64 @@ void import_inverse_cdf_single_table(uint32_t index)
     }
     
     
-    while(fscanf(tb,"%lf %d",&Inverse_Stage_table[0].Table[IC_Entry],&Inverse_Stage_point[0].point[IC_Entry]) != EOF)
+    while(fscanf(tb,"%lf %d",&Inverse_Stage50_table[0].Table[IC_Entry],&Inverse_Stage50_point[0].point[IC_Entry]) != EOF)
     {
         IC_Entry ++;
     }
-    Table_Entry_list[0] = IC_Entry;
+    CDF_Stage50_Table_Entry_list[0] = IC_Entry;
     fclose(tb);
-    printf("%u %u\n",Inverse_Stage_point[0].point[IC_Entry-1],IC_Entry-1);
+    //printf("%u %u\n",Inverse_Stage50_point[0].point[IC_Entry-1],IC_Entry-1);
 
+
+}
+
+void import_optimized_cdf_table(uint16_t table_amount)
+{
+
+    char table_size_char[10];
+    char table_path[60] = {"tables/inverse_table/opt_inverse_table_"};
+    
+    sprintf(table_size_char,"%d",Table_Size);
+    strcat(table_path,table_size_char);
+    strcat(table_path,"/table");
+    for(int i=0;i<table_amount;++i)
+    {
+        
+        FILE *tb;
+        
+        IC_Entry =0;
+        char table_path_tmp[60];
+        strcpy(table_path_tmp,table_path);
+        char num[4];
+        sprintf(num,"%d",i);
+        strcat(table_path_tmp,num);
+        strcat(table_path_tmp,".txt");
+                
+        if(!(tb = fopen(table_path_tmp,"r")))
+        {
+            printf("load inverse table file fail\n");
+            exit(0);
+        }
+        
+        
+        while(fscanf(tb,"%d %d",&Inverse_opt_table[i].Table[IC_Entry],&Inverse_opt_table[i].point[IC_Entry]) != EOF)
+        {
+            IC_Entry ++;
+        }
+        
+        CDF_opt_Table_Entry_list[i] = IC_Entry;
+
+        
+        fclose(tb);
+    }
+    
+    //printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
 
 }
 
 void import_HeadTail_table()
 {
-    char table_path[60] = {"tables/ht_table/HT_Table_50.txt"};
+    char table_path[60] = {"tables/ht_table/HT_Table.txt"};
     
     HT_Table_Entry  = 1;
     FILE *tb;
@@ -191,13 +300,13 @@ void import_HeadTail_table()
         printf("load inverse table file fail\n");
         exit(0);
     }
-    while(fscanf(tb,"%lf %d",&Head_Value[HT_Table_Entry],&Stage_Point[HT_Table_Entry]) != EOF)
+    while(fscanf(tb,"%d %d",&Head_Value[HT_Table_Entry],&Stage_Point[HT_Table_Entry]) != EOF)
     {
         HT_Table_Entry ++;
     }
     
     fclose(tb);
-    printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
+    //printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
 
 }
 
@@ -325,7 +434,7 @@ trace_info_t *Clifford_est(tree_t *item)
 
         entropy = -log(entropy);
     }
-
+    
     // set info member
     info->entropy = entropy;
     info->total_count = total_item_cnt;
@@ -341,7 +450,6 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     info->total_count = 0;
     info->distinct = 0;
     //cal value init
-    Table_Size = 16384;
     Table_Amount = it;
     K_Value = 20;
     
@@ -374,6 +482,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
             total_item_cnt += current_node->cnt;
             distinct++;
             // store k value
+            
             hash_affine_20para(current_node->data , Table_Size , hash_result);
             
             for(int i=0; i<K_Value; i++)
@@ -388,6 +497,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
         for(int i=0;i<K_Value;i++)
         {
             k_register[i] /= total_item_cnt;
+            
             entropy += exp(k_register[i]);
         }
 
@@ -415,7 +525,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
 
 }
 
-trace_info_t *Clifford_cdf_stage_est(tree_t *item)
+trace_info_t *Clifford_cdf_stage50_est(tree_t *item)
 {
     //return info init
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
@@ -423,8 +533,8 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
     info->total_count = 0;
     info->distinct = 0;
     //cal value init
-    Table_Size = 16384;
-
+    Table_Amount = it;
+    uint32_t TBS = 16384;
     K_Value = 20;
     
     double k_register[K_Value];    
@@ -452,14 +562,17 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
         // calculate elements within the time interval
         while(current_node)
         {
+        
             // total cnt
             total_item_cnt += current_node->cnt;
             distinct++;
             // store k value
-            hash_affine_20para(current_node->data , Table_Size , hash_result);
+            hash_affine_20para(current_node->data ,TBS , hash_result);
             
             for(int i=0; i<K_Value; i++)
             {
+                
+                /*
                 if(hash_result[i]>=Table_Size)
                 {
                 hash_result[i]-=1;
@@ -468,24 +581,25 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
                 {
                 hash_result[i]+=1;
                 }
-                
+                */          
 
-                if(hash_result[i]<=274)k_register[i] += Inverse_Stage_table[tn].Table[hash_result[i]] * current_node->cnt;	
+                if(hash_result[i]<=274)k_register[i] += Inverse_Stage50_table[tn].Table[hash_result[i]] * current_node->cnt;	
                 else
                 {
-                    for(int sp =275;sp<Table_Entry_list[tn];sp++)
+                    for(int sp =275;sp<CDF_Stage50_Table_Entry_list[tn];sp++)
                     {
-                        if(hash_result[i]< Inverse_Stage_point[tn].point[sp])
+                        if(hash_result[i]< Inverse_Stage50_point[tn].point[sp])
                         {
-                            k_register[i] += Inverse_Stage_table[tn].Table[sp] * current_node->cnt;	
+                            k_register[i] += Inverse_Stage50_table[tn].Table[sp] * current_node->cnt;	
                             break;
                         }
-                        if(sp==(Table_Entry_list[tn]-1) && hash_result[i] > Inverse_Stage_point[tn].point[Table_Entry_list[tn]-1])
+                        if(sp==(CDF_Stage50_Table_Entry_list[tn]-1) && hash_result[i] > Inverse_Stage50_point[tn].point[CDF_Stage50_Table_Entry_list[tn]-1])
                         {
-                            k_register[i] += Inverse_Stage_table[tn].Table[sp] * current_node->cnt;	
+                            k_register[i] += Inverse_Stage50_table[tn].Table[sp] * current_node->cnt;	
                         }
                     }
-                
+                    
+        
                 }
 
             }
@@ -496,11 +610,14 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
         
         for(int i=0;i<K_Value;i++)
         {
-            k_register[i] /= total_item_cnt;
+            k_register[i] /= (double)total_item_cnt;
+            
             entropy += exp(k_register[i]);
+            //printf("%lf\n",entropy);    
         }
 
         entropy /= K_Value;
+        //printf("%lf\n",entropy);
         entropy_list[tn] = -log(entropy);
     }
     // get the mean of entropy list 
@@ -521,6 +638,227 @@ trace_info_t *Clifford_cdf_stage_est(tree_t *item)
     return info;
 }
 
+trace_info_t *Clifford_cdf_stage100_est(tree_t *item)
+{
+    //return info init
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    Table_Amount = it;
+    uint32_t TBS = 16384;
+    K_Value = 20;
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    double entropy_sum = 0;
+    double entropy_list[K_Value];
+    uint32_t hash_result[K_Value];
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    node_t *current_node;
+    
+    
+    
+    for(int tn = 0 ;tn< Table_Amount; tn++)
+    {
+        
+        total_item_cnt = 0;
+        distinct = 0;
+        current_node = item->root;
+
+        memset(k_register, 0, sizeof(double) * K_Value);
+        memset(hash_result, 0, sizeof(uint32_t) * K_Value);
+        // create inverse cdf table
+        
+        // calculate elements within the time interval
+        while(current_node)
+        {
+        
+            // total cnt
+            total_item_cnt += current_node->cnt;
+            distinct++;
+            // store k value
+            hash_affine_20para(current_node->data ,TBS , hash_result);
+            
+            for(int i=0; i<K_Value; i++)
+            {
+                
+                /*
+                if(hash_result[i]>=Table_Size)
+                {
+                hash_result[i]-=1;
+                }
+                else if(hash_result[i]<=0)
+                {
+                hash_result[i]+=1;
+                }
+                */          
+
+                if(hash_result[i]<=274)k_register[i] += Inverse_Stage100_table[tn].Table[hash_result[i]] * current_node->cnt;	
+                else
+                {
+                    for(int sp =275;sp<CDF_Stage100_Table_Entry_list[tn];sp++)
+                    {
+                        if(hash_result[i]< Inverse_Stage100_point[tn].point[sp])
+                        {
+                            k_register[i] += Inverse_Stage100_table[tn].Table[sp] * current_node->cnt;	
+                            break;
+                        }
+                        if(sp==(CDF_Stage100_Table_Entry_list[tn]-1) && hash_result[i] > Inverse_Stage100_point[tn].point[CDF_Stage100_Table_Entry_list[tn]-1])
+                        {
+                            k_register[i] += Inverse_Stage50_table[tn].Table[sp] * current_node->cnt;	
+                        }
+                    }
+                    
+        
+                }
+
+            }
+            current_node = current_node->right;
+        }
+
+        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+        
+        for(int i=0;i<K_Value;i++)
+        {
+            k_register[i] /= (double)total_item_cnt;
+            
+            entropy += exp(k_register[i]);
+            //printf("%lf\n",entropy);    
+        }
+
+        entropy /= K_Value;
+        //printf("%lf\n",entropy);
+        entropy_list[tn] = -log(entropy);
+    }
+    // get the mean of entropy list 
+
+
+
+
+    for(int i =0 ;i<Table_Amount;i++)
+    {
+        
+        entropy_sum += entropy_list[i];
+    }
+    entropy = entropy_sum/Table_Amount;
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+
+    return info;
+}
+
+trace_info_t *Clifford_cdf_opt_est(tree_t *item)
+{
+    //return info init
+    
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    Table_Amount = it;
+    
+    K_Value = 20;
+    
+    double k_register[Table_Amount][K_Value];    
+    double entropy = 0;
+    double entropy_sum = 0;
+    
+    uint32_t hash_result[K_Value];
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    node_t *current_node;
+    
+    
+    
+ 
+        total_item_cnt = 0;
+        distinct = 0;
+        current_node = item->root;
+
+        memset(k_register, 0, sizeof(double) * K_Value*Table_Amount);
+        memset(hash_result, 0, sizeof(uint32_t) * K_Value);
+        // create inverse cdf table
+        
+        // calculate elements within the time interval
+        while(current_node)
+        {
+        
+            // total cnt
+            total_item_cnt += current_node->cnt;
+            distinct++;
+            // store k value
+            hash_affine_20para(current_node->data ,Table_Size , hash_result);
+            
+            for(int tn = 0 ;tn< Table_Amount; tn++)
+            {
+                for(int i=0; i<K_Value; i++)
+                {
+                    
+                  
+                    
+                    for(int sp =0;sp<CDF_opt_Table_Entry_list[tn];sp++)
+                    {
+                        if(hash_result[i]< Inverse_opt_table[tn].point[sp])
+                        {
+                            k_register[tn][i] += (double)Inverse_opt_table[tn].Table[sp-1] * current_node->cnt;	
+                            break;
+                        }
+                        else if (hash_result[i] == Inverse_opt_table[tn].point[sp])
+                        {
+                            k_register[tn][i] += (double)Inverse_opt_table[tn].Table[sp] * current_node->cnt;	
+                            break;
+                        }
+                        if(sp==(CDF_opt_Table_Entry_list[tn]-1) && hash_result[i] > Inverse_opt_table[tn].point[CDF_opt_Table_Entry_list[tn]-1])
+                        {
+                            k_register[tn][i] += (double)Inverse_opt_table[tn].Table[sp] * current_node->cnt;	
+                        }
+                    }
+                        
+            
+                    
+
+                }
+            } 
+            current_node = current_node->right;
+        }
+
+        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+
+        for(int tn = 0 ;tn< Table_Amount; tn++)
+        {
+            entropy = 0;
+            for(int i=0;i<K_Value;i++)
+            {
+                k_register[tn][i] /= (double)total_item_cnt;
+                
+                entropy += exp(k_register[tn][i]);
+                //printf("%lf\n",entropy);    
+            }
+
+            entropy /= K_Value;
+            //printf("%lf\n",entropy);
+            entropy_sum += (-log(entropy));
+        }
+    
+    // get the mean of entropy list 
+
+
+
+
+    
+    entropy = entropy_sum/Table_Amount;
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+
+    return info;
+}
+
 trace_info_t *Clifford_HT_est(tree_t *item)
 {
     uint32_t Tail_Threshold[13] = {104, 2154, 7507, 12230, 14702, 15742, 16144, 16295, 16351, 16372, 16380, 16383, 16384};
@@ -530,7 +868,7 @@ trace_info_t *Clifford_HT_est(tree_t *item)
     info->total_count = 0;
     info->distinct = 0;
     //cal value init
-    Table_Size = 16384;
+    
     K_Value = 20;
     
     double k_register[K_Value];    
@@ -662,7 +1000,7 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
     info->total_count = 0;
     info->distinct = 0;
     //cal value init
-    Table_Size = 16384;
+    
     K_Value = 20;
     
     double k_register[K_Value];    
@@ -709,7 +1047,12 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
             {
                 for(int sp =275;sp<HT_Table_Entry;sp++)
                 {
-                    if(hash_result_a[i]<Stage_Point[sp])
+                    if(hash_result_a[i]<=Stage_Point[sp])
+                    {
+                        ran = Head_Value[sp-1];
+                        break;
+                    }
+                    else if(hash_result_a[i] ==Stage_Point[sp])
                     {
                         ran = Head_Value[sp];
                         break;
@@ -785,6 +1128,495 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
 
     }
 
+trace_info_t *Clifford_HTo_65536_est(tree_t *item)
+{
+    uint32_t Tail_Threshold[13] = {486, 10785, 33743, 51336, 59905, 63406, 64744, 65244, 65429, 65497, 65522, 65531, 65535}; 
 
 
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    
+    K_Value = 20;
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    
+    uint32_t hash_result_a[K_Value];
+    uint32_t hash_result_b[K_Value];
+
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    
+    //alpha stable 
+   
+    double ran =0;
+    // head & tail
+    
+    memset(k_register, 0, sizeof(double) * K_Value);
+    memset(hash_result_a, 0, sizeof(uint32_t) * K_Value);
+    memset(hash_result_b, 0, sizeof(uint32_t) * K_Value);
+
+    node_t* current_node;
+
+    current_node  = item->root;
+    
+    while (current_node)
+    {
+        total_item_cnt+=current_node->cnt;
+        distinct++;
+        hash_affine_20_2para(current_node->data,Table_Size,hash_result_a,hash_result_b);
+        for(int i = 0;i<K_Value;i++)
+        {
+            if(hash_result_a[i]>=Table_Size)
+            {
+                hash_result_a[i]-=1;
+            }
+            else if(hash_result_a[i]<=0)
+            {
+                hash_result_a[i]+=1;
+            }
+
+            
+            if(hash_result_a[i]<=274)ran = Head_Value[hash_result_a[i]];
+            else
+            {
+                for(int sp =275;sp<HT_Table_Entry;sp++)
+                {
+                    if(hash_result_a[i]<=Stage_Point[sp])
+                    {
+                        ran = Head_Value[sp-1];
+                        break;
+                    }
+                    if(sp==(HT_Table_Entry-1) && hash_result_a[i]>Stage_Point[HT_Table_Entry-1])
+                    {
+                        ran = Head_Value[sp];
+                    }
+                }
+            
+            }
+            
+            
+            
+            int table_end_correction = 0;
+            uint32_t table_end_key;
+            
+            
+            if( hash_result_b[i]==Table_Size)
+            {
+                table_end_key = hash_result_b[i]-1;
+            }
+            else
+            {
+                table_end_key = hash_result_b[i];
+            }
+            
+
+            if (table_end_key   <= Tail_Threshold[0])table_end_correction = 0;
+            else if (table_end_key <= Tail_Threshold[1])table_end_correction = -1;
+            else if (table_end_key <= Tail_Threshold[2])table_end_correction = -2;
+            else if (table_end_key <= Tail_Threshold[3])table_end_correction = -3;
+            else if (table_end_key <= Tail_Threshold[4])table_end_correction = -4;
+            else if (table_end_key <= Tail_Threshold[5])table_end_correction = -5;
+            else if (table_end_key <= Tail_Threshold[6])table_end_correction = -6;
+            else if (table_end_key <= Tail_Threshold[7])table_end_correction = -7;
+            else if (table_end_key <= Tail_Threshold[8])table_end_correction = -8;
+            else if (table_end_key <= Tail_Threshold[9])table_end_correction = -9;
+            else if (table_end_key <= Tail_Threshold[10])table_end_correction = -10;
+            else if (table_end_key <= Tail_Threshold[11])table_end_correction = -11;
+            else if (table_end_key <= Tail_Threshold[12])table_end_correction = -12;
+            else table_end_correction = -13;
+            k_register[i] += (double)(ran+table_end_correction)*current_node->cnt; 
+            //printf("k_i=%lf\n",k_register[i]);
+
+
+        }
+        current_node = current_node->right;
+
+    }
+
+    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    else{
+        for(uint32_t i=0;i<K_Value;i++){
+            k_register[i] /= total_item_cnt;
+            
+            entropy += exp(k_register[i]);
+            
+        }
+        
+        entropy /= K_Value;
+        
+        
+        entropy = -log(entropy);
+    }
+
+    // set info member
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+
+    return info;
+
+    }
+
+trace_info_t *Clifford_HTo_interpolation_est(tree_t *item)
+{
+    uint32_t Tail_Threshold[13] = {104, 2154, 7507, 12230, 14702, 15742, 16144, 16295, 16351, 16372, 16380, 16383, 16384};
+    
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    
+    K_Value = 20;
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    
+    uint32_t hash_result_a[K_Value];
+    uint32_t hash_result_b[K_Value];
+
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    
+    //alpha stable 
+   
+    double ran =0;
+    // head & tail
+    
+    memset(k_register, 0, sizeof(double) * K_Value);
+    memset(hash_result_a, 0, sizeof(uint32_t) * K_Value);
+    memset(hash_result_b, 0, sizeof(uint32_t) * K_Value);
+
+    node_t* current_node;
+
+    current_node  = item->root;
+    
+    while (current_node)
+    {
+        total_item_cnt+=current_node->cnt;
+        distinct++;
+        hash_affine_20_2para(current_node->data,Table_Size,hash_result_a,hash_result_b);
+        for(int i = 0;i<K_Value;i++)
+        {
+            if(hash_result_a[i]>=Table_Size)
+            {
+                hash_result_a[i]-=1;
+            }
+            else if(hash_result_a[i]<=0)
+            {
+                hash_result_a[i]+=1;
+            }
+
+            
+            if(hash_result_a[i]<=274)ran = Head_Value[hash_result_a[i]];
+            else
+            {
+                for(int sp =275;sp<HT_Table_Entry;sp++)
+                {
+                    if(hash_result_a[i]<=Stage_Point[sp])
+                    {
+                        double length  = Stage_Point[sp] - Stage_Point[sp-1];
+                        double height  = Head_Value[sp] - Head_Value[sp-1];
+                        double distance  = hash_result_a[i] - Stage_Point[sp-1];
+
+                        ran = (height/length)*distance + (double)Head_Value[sp-1];
+                        break;
+                    }
+                    if(sp==(HT_Table_Entry-1) && hash_result_a[i]>Stage_Point[HT_Table_Entry-1])
+                    {
+                        ran = (double)Head_Value[sp];
+                    }
+                }
+            
+            }
+            
+            
+            
+            int table_end_correction = 0;
+            uint32_t table_end_key;
+            
+            
+            if( hash_result_b[i]==Table_Size)
+            {
+                table_end_key = hash_result_b[i]-1;
+            }
+            else
+            {
+                table_end_key = hash_result_b[i];
+            }
+            
+
+            if (table_end_key   <= Tail_Threshold[0])table_end_correction = 0;
+            else if (table_end_key <= Tail_Threshold[1])table_end_correction = -1;
+            else if (table_end_key <= Tail_Threshold[2])table_end_correction = -2;
+            else if (table_end_key <= Tail_Threshold[3])table_end_correction = -3;
+            else if (table_end_key <= Tail_Threshold[4])table_end_correction = -4;
+            else if (table_end_key <= Tail_Threshold[5])table_end_correction = -5;
+            else if (table_end_key <= Tail_Threshold[6])table_end_correction = -6;
+            else if (table_end_key <= Tail_Threshold[7])table_end_correction = -7;
+            else if (table_end_key <= Tail_Threshold[8])table_end_correction = -8;
+            else if (table_end_key <= Tail_Threshold[9])table_end_correction = -9;
+            else if (table_end_key <= Tail_Threshold[10])table_end_correction = -10;
+            else if (table_end_key <= Tail_Threshold[11])table_end_correction = -11;
+            else if (table_end_key <= Tail_Threshold[12])table_end_correction = -12;
+        
+            k_register[i] += (double)(ran+table_end_correction)*current_node->cnt; 
+            //printf("k_i=%lf\n",k_register[i]);
+
+
+        }
+        current_node = current_node->right;
+
+    }
+
+    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    else{
+        for(uint32_t i=0;i<K_Value;i++){
+            k_register[i] /= total_item_cnt;
+            
+            entropy += exp(k_register[i]);
+            
+        }
+        
+        entropy /= K_Value;
+        
+        
+        entropy = -log(entropy);
+    }
+
+    // set info member
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+
+    return info;
+
+    }
+
+trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item)
+{
+    uint32_t Tail_Threshold[13] = {486, 10785, 33743, 51336, 59905, 63406, 64744, 65244, 65429, 65497, 65522, 65531, 65535}; 
+    
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    
+    K_Value = 20;
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    
+    uint32_t hash_result_a[K_Value];
+    uint32_t hash_result_b[K_Value];
+
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    
+    //alpha stable 
+   
+    double ran =0;
+    // head & tail
+    
+    memset(k_register, 0, sizeof(double) * K_Value);
+    memset(hash_result_a, 0, sizeof(uint32_t) * K_Value);
+    memset(hash_result_b, 0, sizeof(uint32_t) * K_Value);
+
+    node_t* current_node;
+
+    current_node  = item->root;
+    
+    while (current_node)
+    {
+        total_item_cnt+=current_node->cnt;
+        distinct++;
+        hash_affine_20_2para(current_node->data,Table_Size,hash_result_a,hash_result_b);
+        for(int i = 0;i<K_Value;i++)
+        {
+            if(hash_result_a[i]>=Table_Size)
+            {
+                hash_result_a[i]-=1;
+            }
+            else if(hash_result_a[i]<=0)
+            {
+                hash_result_a[i]+=1;
+            }
+
+            
+            if(hash_result_a[i]<=274)ran = Head_Value[hash_result_a[i]];
+            else
+            {
+                for(int sp =275;sp<HT_Table_Entry;sp++)
+                {
+                    if(hash_result_a[i]<=Stage_Point[sp])
+                    {
+                        double length  = Stage_Point[sp] - Stage_Point[sp-1];
+                        double height  = Head_Value[sp] - Head_Value[sp-1];
+                        double distance  = hash_result_a[i] - Stage_Point[sp-1];
+
+                        ran = (height/length)*distance + (double)Head_Value[sp-1];
+                        break;
+                    }
+                    if(sp==(HT_Table_Entry-1) && hash_result_a[i]>Stage_Point[HT_Table_Entry-1])
+                    {
+                        ran = (double)Head_Value[sp];
+                    }
+                }
+            
+            }
+            
+            
+            
+            int table_end_correction = 0;
+            uint32_t table_end_key;
+            
+            
+            if( hash_result_b[i]==Table_Size)
+            {
+                table_end_key = hash_result_b[i]-1;
+            }
+            else
+            {
+                table_end_key = hash_result_b[i];
+            }
+            
+
+            if (table_end_key   <= Tail_Threshold[0])table_end_correction = 0;
+            else if (table_end_key <= Tail_Threshold[1])table_end_correction = -1;
+            else if (table_end_key <= Tail_Threshold[2])table_end_correction = -2;
+            else if (table_end_key <= Tail_Threshold[3])table_end_correction = -3;
+            else if (table_end_key <= Tail_Threshold[4])table_end_correction = -4;
+            else if (table_end_key <= Tail_Threshold[5])table_end_correction = -5;
+            else if (table_end_key <= Tail_Threshold[6])table_end_correction = -6;
+            else if (table_end_key <= Tail_Threshold[7])table_end_correction = -7;
+            else if (table_end_key <= Tail_Threshold[8])table_end_correction = -8;
+            else if (table_end_key <= Tail_Threshold[9])table_end_correction = -9;
+            else if (table_end_key <= Tail_Threshold[10])table_end_correction = -10;
+            else if (table_end_key <= Tail_Threshold[11])table_end_correction = -11;
+            else if (table_end_key <= Tail_Threshold[12])table_end_correction = -12;
+        
+            k_register[i] += (double)(ran+table_end_correction)*current_node->cnt; 
+            //printf("k_i=%lf\n",k_register[i]);
+
+
+        }
+        current_node = current_node->right;
+
+    }
+
+    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    else{
+        for(uint32_t i=0;i<K_Value;i++){
+            k_register[i] /= total_item_cnt;
+            
+            entropy += exp(k_register[i]);
+            
+        }
+        
+        entropy /= K_Value;
+        
+        
+        entropy = -log(entropy);
+    }
+
+    // set info member
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+
+    return info;
+
+    }
+
+trace_info_t *PingLi_est(tree_t *item)
+{
+    
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+        
+    double alpha = 0.9;
+    double delta = 1 - alpha;
+
+        
+    double k_register[K_Value];
+    double entropy        = 0;
+    uint32_t multiplicity = 0;
+    uint32_t cardinality = 0;
+
+    //init node
+    node_t *current_node;
+    current_node = item->root;
+    
+    // R function variables
+
+    double v,w;
+    double r_1 ,r_2_1 ,r_2 ,r_3_1 ,r_3 ,r ;
+    
+    
+    memset(k_register, 0, sizeof(double) * K_Value);
+
+
+    while(current_node)
+    {
+        
+        multiplicity += current_node->cnt;
+        cardinality++;
+        srand(current_node->data);
+
+        for(uint32_t i=0;i<K_Value;i++)
+        {
+
+            v = RandInRnage()*PI;
+            w = -log(RandInRnage());
+            
+            r_1    = sin(alpha * v);
+            r_2_1  = sin(v);
+            r_2    = pow(r_2_1,(1/alpha));
+            r_3_1  = sin(v * delta);
+            r_3    = pow((r_3_1/w),(delta/alpha) );
+            r      = (r_1/r_2) * (r_3);
+            
+            k_register[i] += r*current_node->cnt;
+    
+        }
+        current_node = current_node->right;
+    }
+        // entropy evaluation variables
+    double j_1,j_2 ,alt_pow ,j_value ;
+        
+    double h_1 ,h_2_1 ,h_2_2 ,h_2_3 ,h_2 ;
+    
+
+    
+    j_1 = delta / K_Value;
+    j_2 = 0;
+    alt_pow = -(alpha/delta);
+    printf("%lf\n",alt_pow);
+    
+    for (int i=0;i<K_Value;++i)
+    {
+        j_2 += pow(k_register[i],alt_pow);
+        printf("%lf\n",k_register[i]);
+    }
+    j_value = j_1 * j_2;
+    
+    
+    h_1 = -log(j_value);
+    h_2_1 = 1/delta;
+    h_2_2 = pow(multiplicity,alpha);
+    h_2_3 = log(h_2_2);
+    h_2 = h_2_1 * h_2_3;
+    
+    entropy = (h_1 - h_2);
+    // set info member
+    info->entropy = entropy;
+    info->total_count = multiplicity;
+    info->distinct = cardinality;
+    return info;
+    
+}
 

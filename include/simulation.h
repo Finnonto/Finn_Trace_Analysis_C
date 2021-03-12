@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <signal.h>
 
 #include "Tree.h"
 #include "cal_method.h"

@@ -155,19 +155,21 @@ void CreateStream(tree_t * container ,int length, float z,int range,int offset)
 
 }
 
-
 void Simulation_processing()
 {
 	//import tables 
-
-
-	import_inverse_cdf_table(it);
+	/*
+	printf("importing table ...\n");
+	import_optimized_cdf_table(it);
+	//import_inverse_cdf_stage50_table(it,50);
+	//import_inverse_cdf_stage100_table(it,100);
+	//import_HeadTail_table();
 	printf("import table done!\n");
 
-
+	*/
     
   	tree_t* Sim_tree;
-	trace_info_t *exact_info,*Clifford_info,*Clifford_cdf_info;
+	trace_info_t *exact_info,*Clifford_info,*PingLi_info;
 	
 	
 
@@ -175,7 +177,7 @@ void Simulation_processing()
 	
 	double exact_entropy[sim_times];//store exact entropies
 	double Clifford_entropy[sim_times];// store base entropies of algorithm
-	double Clifford_cdf_entropy[sim_times];// store target entropies of algorithm
+	double PingLi_entropy[sim_times];// store target entropies of algorithm
 	int    Distinct[sim_times];
 	
 
@@ -206,17 +208,17 @@ void Simulation_processing()
 		Distinct[i] =exact_info->distinct;
 		
 		
-
+		
 		// estimate entropy
 		Clifford_info = Clifford_est(Sim_tree);
 		Clifford_entropy[i] = Clifford_info->entropy;
 		
+		PingLi_info = PingLi_est(Sim_tree);
+		PingLi_entropy[i] = PingLi_info->entropy;
 		
 
 		// if KLD is not started the we would not have an control group for 
 		// base entropy , so we will just measure the base entropy.
-		Clifford_cdf_info = Clifford_cdf_est(Sim_tree);
-		Clifford_cdf_entropy[i] = Clifford_cdf_info->entropy;
 		
 	
 		
@@ -264,20 +266,21 @@ void Simulation_processing()
 	else 
 	{
    		fp = fopen(output,"w");
-		fprintf(fp,"Exact_entropy,Clifford_entropy,Clifford_cdf_entropy");
+		fprintf(fp,"Exact_entropy,Clifford_entropy,PingLi_entropy");
 		
-		fprintf(fp,",Distinct Count,Total Len\n");
+		fprintf(fp,",Distinct Count,Total Len,Table Size\n");
 	}
 	
 	for(int i=0;i<sim_times;i++)
 	{
-		fprintf(fp,"%f,%f,%f,%d,%d \n",
+		fprintf(fp,"%f,%f,%f,%d,%d,%d \n",
 							
 										exact_entropy[i],
 										Clifford_entropy[i],
-										Clifford_cdf_entropy[i],
+										PingLi_entropy[i],
 										Distinct[i],
-										zipf_slen
+										zipf_slen,
+										Table_Size
 										);	
 	}
 	

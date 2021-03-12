@@ -29,7 +29,7 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 .PHONY:clean
 
 sim:
-	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 0.5 -t 5 -e 0.2 -it 10
+	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 0.5 -t  5 
 
 run:
 

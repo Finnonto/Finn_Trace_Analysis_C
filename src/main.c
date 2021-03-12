@@ -54,7 +54,7 @@ void Checkargument(int  argc, char** argv)
                 zipf_offset = 4;
 
                 // simulation paramters
-                it = 10;  //inverse table amount 
+                it = 1;  //inverse table amount 
                 Table_Size = 16384; // inverse table size
 
                 algorithm = 0; //algorithm amount 
@@ -172,19 +172,33 @@ void Checkargument(int  argc, char** argv)
                         }
                         /*************inverse table amount********/
                         else if(strncmp(argv[arg_num],"-it",3)==0){
-                                if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
+                                if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
                                 else {fprintf(stderr, "it_error"); exit(0);}
-                                arg_num+=2;
+                                arg_num++;
                         }
+                        /*************count KLD (not recommand)********/
                         else if(strncmp(argv[arg_num],"-KLD",3)==0){
                                 m_KLD = 1;
                                 arg_num+=2;
+                        }
+                        /*************CDF table size********/
+                        else if(strncmp(argv[arg_num],"-Tbs",4)==0){
+                                int tmp = atoi(argv[++arg_num]);
+                                if(tmp== 16384 || tmp==65536 || tmp==32768)Table_Size = tmp;
+                                else {fprintf(stderr, "Table size errror 16384 ,65536,32768"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************raising exception********/
+                        else 
+                        {
+                                printf("There is no argument %s ,please check again\n",argv[arg_num]);
+                                exit(0);
                         }
                  }
                  
         }
         /******************** trace analysis mode ***********************/ 
-        else{
+        else if(strncmp(argv[1],"trace",5)==0) {
 
                 // tace analysis mode parameters default value 
                 TRACE = 1;
@@ -295,9 +309,10 @@ int main(int argc, char *argv[])
         fprintf(stderr,
 	  "____________________________________________________________\n");
         fprintf(stderr,
-                "%s running at %s, %s\n", __FILE__, __TIME__, __DATE__);
+                "%s compiled at %s, %s\n", __FILE__, __TIME__, __DATE__);
 
         Checkargument(argc,argv);
+        
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
@@ -306,7 +321,8 @@ int main(int argc, char *argv[])
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)
         {
-                printf("sim start: z:%g length:%d range:%d \n",zipf_par,zipf_slen,zipf_range);
+                printf("sim start: z:%g length:%d range:%d offset:%d Table Size:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,Table_Size);
+        
                 Simulation_processing();
 
         }
