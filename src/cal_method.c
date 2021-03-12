@@ -162,6 +162,7 @@ void import_inverse_cdf_stage50_table(uint16_t table_amount,int num)
         
         fclose(tb);
         //printf("%u %u\n",Inverse_Stage50_point[i].point[IC_Entry-1],IC_Entry-1);
+        printf("stage50 cdf table imported\n");
     }
 }
 
@@ -210,6 +211,7 @@ void import_inverse_cdf_stage100_table(uint16_t table_amount,int num)
         
         fclose(tb);
         //printf("%u %u\n",Inverse_Stage50_point[i].point[IC_Entry-1],IC_Entry-1);
+        printf("stage100 cdf table imported\n");
     }
 }
 
@@ -250,7 +252,7 @@ void import_inverse_cdf_single_table(uint32_t index)
 
 void import_optimized_cdf_table(uint16_t table_amount)
 {
-
+    
     char table_size_char[10];
     char table_path[60] = {"tables/inverse_table/opt_inverse_table_"};
     
@@ -286,6 +288,7 @@ void import_optimized_cdf_table(uint16_t table_amount)
 
         
         fclose(tb);
+        printf("opt cdf table imported\n");
     }
     
     //printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
@@ -313,7 +316,7 @@ void import_HeadTail_table()
     
     fclose(tb);
     //printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
-
+    printf("HT table imported\n");
 }
 
 

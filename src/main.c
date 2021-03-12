@@ -159,30 +159,33 @@ void Checkargument(int  argc, char** argv)
                                 alg_cnt = atoi(argv[++arg_num]);
                                 
                                 int tmp =  arg_num+alg_cnt;
+                                
+                                
                                 while (arg_num<tmp)
                                 {       
                                         
                                         ++arg_num; 
-                                
-                                        if(strncmp(argv[arg_num],"exact",5)==0)ALG_flag[0]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford",8)==0)ALG_flag[1]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf",12)==0)ALG_flag[2]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage50",20)==0)ALG_flag[3]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage100",21)==0)ALG_flag[4]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_opt",16)==0)ALG_flag[5]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_HT",11)==0)ALG_flag[6]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo",12)==0)ALG_flag[7]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_65536",18)==0)ALG_flag[8]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation",26)==0)ALG_flag[9]=1;
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation_65536",32)==0)ALG_flag[10]=1;
-                                        else if(strncmp(argv[arg_num],"PingLi",6)==0)ALG_flag[11]=1;
+                                        
+                                        
+                                        if(strncmp(argv[arg_num],"exact",5)==0){ALG_flag[0]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation_65536",32)==0){ALG_flag[10]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation",26)==0){ALG_flag[9]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage100",21)==0){ALG_flag[4]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage50",20)==0){ALG_flag[3]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_65536",18)==0){ALG_flag[8]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_opt",16)==0){ALG_flag[5]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf",12)==0){ALG_flag[2]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo",12)==0){ALG_flag[7]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford_HT",11)==0){ALG_flag[6]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford",8)==0){ALG_flag[1]=1;}
+                                        else if(strncmp(argv[arg_num],"PingLi",6)==0){ALG_flag[11]=1;}
                                         else {
-                                                fprintf(stderr, "algorithm_error:%s\n",argv[arg_num]);
+                                                fprintf(stderr, "algorithm name error:%s\n",argv[arg_num]);
                                                 exit(0);}
-                                }
+                                }       
                                 arg_num++;
                                 
-                                
+                             
                                 
                         }
                         /*************inverse table amount********/

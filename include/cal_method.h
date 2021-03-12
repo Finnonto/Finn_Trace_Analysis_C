@@ -26,9 +26,6 @@ typedef struct Trace_info
 //flag
 int ALG_flag[MAX_ALG];
 
-uint8_t ORIGIN;  //normalization flag
-uint8_t TOTAL;  //normalization flag
-uint8_t DISTINCT;  //normalization flag
 
 /*
 
