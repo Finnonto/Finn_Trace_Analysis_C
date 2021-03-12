@@ -13,6 +13,7 @@
     #define PI acos(-1)
 #endif
 
+#define MAX_ALG 12
 
 typedef struct Trace_info
 {
@@ -23,9 +24,7 @@ typedef struct Trace_info
 
 
 //flag
-uint8_t EXACT;  //algorithm flag
-uint8_t CLIFFORD;  //algorithm flag
-uint8_t INVERSE_CLI;  //algorithm flag
+int ALG_flag[MAX_ALG];
 
 uint8_t ORIGIN;  //normalization flag
 uint8_t TOTAL;  //normalization flag
@@ -84,6 +83,9 @@ uint32_t TableIndex;
 int Head_Value[2000];
 uint32_t Stage_Point[2000];
 uint32_t HT_Table_Entry ;
+
+
+
 
 
 void import_inverse_cdf_table(uint16_t table_amount);

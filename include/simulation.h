@@ -26,11 +26,39 @@ float zipf_par;
 
 
 
-void classify(double* classify_container,double* stream,int length,int range,int part);
+// for simulation variables 
 
-double cross_entropy(double* a_classify,double* b_classify,int length);
+// info_t
+trace_info_t *exact_info;
+trace_info_t *Clifford_info;
+trace_info_t *Clifford_cdf_info;
+trace_info_t *Clifford_cdf_stage50_info;
+trace_info_t *Clifford_cdf_stage100_info;
+trace_info_t *Clifford_cdf_opt_info;
+trace_info_t *Clifford_HT_info;
+trace_info_t *Clifford_HTo_info;
+trace_info_t *Clifford_HTo_65536_info;
+trace_info_t *Clifford_HTo_interpolation_info;
+trace_info_t *Clifford_HTo_interpolation_65536_info;
+trace_info_t *PingLi_info;
 
-double cal_KLD(double* exact_stream ,double* base_stream,double* target_stream,int length);
+
+// for result storage
+int    Distinct[600];
+double exact_entropy[600];
+double Clifford_entropy[600];
+double Clifford_cdf_entropy[600];
+double Clifford_cdf_stage50_entropy[600];
+double Clifford_cdf_stage100_entropy[600];
+double Clifford_cdf_opt_entropy[600];
+double Clifford_HT_entropy[600];
+double Clifford_HTo_entropy[600];
+double Clifford_HTo_65536_entropy[600];
+double Clifford_HTo_interpolation_entropy[600];
+double Clifford_HTo_interpolation_65536_entropy[600];
+double PingLi_entropy[600];
+
+
 
 void CreateStream(tree_t * container ,int length, float z,int range,int offset);
 

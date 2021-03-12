@@ -1,7 +1,7 @@
 #include "cal_method.h"
 #include "trace_analysis.h"
 
-
+// generate a double number between 0 and 1
 double RandInRnage()
 {   
     
@@ -20,7 +20,7 @@ double RandInRnage()
     return (double)rand_tmp /RAND_MAX;
 }
 
-
+// hash to get random number set
 static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result)
 {
     uint32_t para_a[20]={0x177510d1, 0xda1e0f42, 0x964fbf1e, 0x269df1e6, 0x916cc092,
@@ -72,6 +72,10 @@ static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *
     }
 }
 
+// importing different table for different algoritm
+
+
+// normal cdf table use -Tbs parameter to get different size of table
 void import_inverse_cdf_table(uint16_t table_amount)
 {
     
@@ -288,6 +292,8 @@ void import_optimized_cdf_table(uint16_t table_amount)
 
 }
 
+
+// normal HT table ,there is no parameter can choose other table
 void import_HeadTail_table()
 {
     char table_path[60] = {"tables/ht_table/HT_Table.txt"};
@@ -309,6 +315,9 @@ void import_HeadTail_table()
     //printf("%u %u\n",Stage_Point[HT_Table_Entry-1],HT_Table_Entry-1);
 
 }
+
+
+
 
 
 trace_info_t *exact(tree_t *item)
@@ -1595,12 +1604,12 @@ trace_info_t *PingLi_est(tree_t *item)
     j_1 = delta / K_Value;
     j_2 = 0;
     alt_pow = -(alpha/delta);
-    printf("%lf\n",alt_pow);
     
+
     for (int i=0;i<K_Value;++i)
     {
         j_2 += pow(k_register[i],alt_pow);
-        printf("%lf\n",k_register[i]);
+    
     }
     j_value = j_1 * j_2;
     

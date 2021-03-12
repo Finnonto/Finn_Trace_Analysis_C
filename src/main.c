@@ -52,7 +52,7 @@ void Checkargument(int  argc, char** argv)
                 zipf_range = 10000000;
                 zipf_par =  0.8;
                 zipf_offset = 4;
-
+                
                 // simulation paramters
                 it = 1;  //inverse table amount 
                 Table_Size = 16384; // inverse table size
@@ -63,10 +63,8 @@ void Checkargument(int  argc, char** argv)
                 normalization = 0;
                 
                 //   algoritm flags init value
-                EXACT = 0;  
-                CLIFFORD = 0; 
-                INVERSE_CLI = 0;
-               
+                memset(ALG_flag, 0, sizeof(int) * MAX_ALG);
+
                 while(arg_num<argc){
                         
                         //*************stream length****************/
@@ -157,29 +155,41 @@ void Checkargument(int  argc, char** argv)
                         }
                         /***************algorithm*****************/
                         else if(strncmp(argv[arg_num],"-a",2)==0){
+                                
                                 alg_cnt = atoi(argv[++arg_num]);
-                                ++arg_num;
-                                for(int i = arg_num;i< arg_num+alg_cnt;++i)
+                                
+                                int tmp =  arg_num+alg_cnt;
+                                while (arg_num<tmp)
                                 {       
-                                        if(strncmp(argv[arg_num],"exact",5)==0)EXACT=1;
-                                        else if(strncmp(argv[arg_num],"clifford",8)==0)CLIFFORD=1;
-                                        else if(strncmp(argv[arg_num],"inverse_cli",11)==0)INVERSE_CLI=1;
-                                        else if(strncmp(argv[arg_num],"all",3)==0){EXACT=1;CLIFFORD=1;INVERSE_CLI=1;}
-                                        else {fprintf(stderr, "algorithm_error%s\n",argv[arg_num]); exit(0);}
                                         
+                                        ++arg_num; 
+                                
+                                        if(strncmp(argv[arg_num],"exact",5)==0)ALG_flag[0]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford",8)==0)ALG_flag[1]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf",12)==0)ALG_flag[2]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage50",20)==0)ALG_flag[3]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage100",21)==0)ALG_flag[4]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_cdf_opt",16)==0)ALG_flag[5]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_HT",11)==0)ALG_flag[6]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo",12)==0)ALG_flag[7]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_65536",18)==0)ALG_flag[8]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation",26)==0)ALG_flag[9]=1;
+                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation_65536",32)==0)ALG_flag[10]=1;
+                                        else if(strncmp(argv[arg_num],"PingLi",6)==0)ALG_flag[11]=1;
+                                        else {
+                                                fprintf(stderr, "algorithm_error:%s\n",argv[arg_num]);
+                                                exit(0);}
                                 }
-                                arg_num += alg_cnt;;
+                                arg_num++;
+                                
+                                
+                                
                         }
                         /*************inverse table amount********/
                         else if(strncmp(argv[arg_num],"-it",3)==0){
                                 if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
                                 else {fprintf(stderr, "it_error"); exit(0);}
                                 arg_num++;
-                        }
-                        /*************count KLD (not recommand)********/
-                        else if(strncmp(argv[arg_num],"-KLD",3)==0){
-                                m_KLD = 1;
-                                arg_num+=2;
                         }
                         /*************CDF table size********/
                         else if(strncmp(argv[arg_num],"-Tbs",4)==0){

@@ -27,7 +27,8 @@ This method use zipf dbn to generate streams and calculate the entropy with sket
 `-z` :  z parameter of zipf dbn   [positive float]  
 `-t` :  simulation times  [positive integer]   
 `-o` :  zipf dbn offset  [positive integer]  
-`-a` :  choose specific sketch algorithm  
+`-a` :  choose specific sketch algorithm,need to provide amount of algorithm,then type algorthms. e.g [-a 2 Clifford PingLi]   
+  
 `-it` :   amount of inverse cdf table of clifford  [positive integer max:10]    
 `-Tbs` : size of CDF table [16384,32768,65536]
 

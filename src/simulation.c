@@ -1,125 +1,6 @@
 #include "simulation.h"
 
 
-
-void classify(double* classify_container,double* stream,int length,int range,int part)
-{
-	
-	
-	
-
-	for(int i=0;i<601;i++)
-	{
-		//printf("%lf\n",classify_container[i]);
-	}
-
-
-	for(int i =0;i<length;i++)
-	{
-		double item;
-		
-		if(stream[i]<= -(range))
-		{
-			item = (double)-range;	
-		}
-		else if (stream[i]>=range)
-		{
-			item = (double)range;
-		}
-		else 
-		{
-			item = stream[i];
-		}	
-		
-		int key = (int)(item*part) + range*part;
-		
-		//printf("%d\n",key);
-		classify_container[key] +=  (double)1/length;
-	}
-
-
-	
-
-}
-
-double cross_entropy(double* a_classify,double* b_classify,int length)
-{
-	
-	double S = 0;
-
-    for(int i =0;i<length;i++)
-	{
-		if(a_classify[i]!=0)		
-		{
-			if (b_classify[i]/a_classify[i]!=0)
-			{
-				S-=a_classify[i]*(log(b_classify[i]/a_classify[i]));
-				
-			}
-		}
-	}    	
-	
-    return S;
-
-}
-
-double cal_KLD(double* exact_stream ,double* base_stream,double* target_stream,int length)
-{
-
-	double base_dev[length];
-	double target_dev[length];
-	
-
-	
-
-	// to calculate the base_deviation with exact stream 
-	for(int i =0;i<length;i++)
-	{
-		base_dev[i] = (exact_stream[i]-base_stream[i])/log(length);
-		target_dev[i] = (exact_stream[i]-target_stream[i])/log(length);
-	}
-	
-	//classification 
-	int range = 2;
-	int part = 100;
-	int classify_len = 2*(range*part)+1;
-	
-	double* base_classify = (double*)calloc(classify_len,sizeof(double));
-	double* target_classify = (double*)calloc(classify_len,sizeof(double));
-
-	for(int i =0;i<(classify_len);i++)
-	{
-		base_classify[i]= 0.0 ;
-		
-		//printf("%d:%lf\n",i,base_classify[i]);
-	
-		target_classify[i]= 0.0 ;
-	}	
-
-	
-	classify(base_classify,base_dev,length,range,part);
-	classify(target_classify,target_dev,length,range,part);
-	for(int i =0;i<(classify_len);i++)
-	{
-	
-		//printf("%d:%lf\n",i,base_classify[i]);
-		
-	}	
-	
-
-	double a_b;
-	double b_a;
-    
-	a_b = cross_entropy(base_classify,target_classify,classify_len);
-	b_a = cross_entropy(target_classify,base_classify,classify_len);
-	
-
-	
-	return (a_b+b_a)/2;
-
-
-}
-
 void CreateStream(tree_t * container ,int length, float z,int range,int offset)
 {
   // generate a stream based of values drawn from a zip distribution
@@ -158,7 +39,7 @@ void CreateStream(tree_t * container ,int length, float z,int range,int offset)
 void Simulation_processing()
 {
 	//import tables 
-	/*
+	
 	printf("importing table ...\n");
 	import_optimized_cdf_table(it);
 	//import_inverse_cdf_stage50_table(it,50);
@@ -166,20 +47,8 @@ void Simulation_processing()
 	//import_HeadTail_table();
 	printf("import table done!\n");
 
-	*/
-    
-  	tree_t* Sim_tree;
-	trace_info_t *exact_info,*Clifford_info,*PingLi_info;
-	
 	
 
-	//for absolute error measurement 
-	
-	double exact_entropy[sim_times];//store exact entropies
-	double Clifford_entropy[sim_times];// store base entropies of algorithm
-	double PingLi_entropy[sim_times];// store target entropies of algorithm
-	int    Distinct[sim_times];
-	
 
 	// create  streams and use binary tree to classify
 	// if we only need to calculate the sketch entropy 
@@ -189,11 +58,14 @@ void Simulation_processing()
 	//of these streams
 	// 
 	fprintf(stderr,"simulate %d sim_times\n",sim_times);
-	for(int i =0;i<sim_times;i++)
+	for(int sim =0;sim<sim_times;sim++)
 	{
+
 		
+
+		tree_t* Sim_tree;
 		Sim_tree = tree_create();
-		CreateStream(Sim_tree,zipf_slen,zipf_par,zipf_range,i);
+		CreateStream(Sim_tree,zipf_slen,zipf_par,zipf_range,sim);
 		
 		
 		// flatten the tree to linked list 
@@ -204,25 +76,82 @@ void Simulation_processing()
 		
 		// exact entropy
 		exact_info = exact(Sim_tree);
-		exact_entropy[i] = exact_info->entropy;
-		Distinct[i] =exact_info->distinct;
-		
-		
-		
-		// estimate entropy
-		Clifford_info = Clifford_est(Sim_tree);
-		Clifford_entropy[i] = Clifford_info->entropy;
-		
-		PingLi_info = PingLi_est(Sim_tree);
-		PingLi_entropy[i] = PingLi_info->entropy;
-		
+		exact_entropy[sim] = exact_info->entropy;
+		Distinct[sim] =exact_info->distinct;
+		//choosing algorithm
+		for(int j=1;j<MAX_ALG;j++)
+		{
+			if(ALG_flag[j]==1)
+			{
+				switch (j){
+					case 1:
+						Clifford_info = Clifford_est(Sim_tree);
+						Clifford_entropy[sim] = Clifford_info->entropy;
+						break;
+					
+					case 2:
+						Clifford_cdf_info = Clifford_cdf_est(Sim_tree);
+						Clifford_cdf_entropy[sim] = Clifford_cdf_info->entropy;
+						break;
+					
+					case 3:
+						Clifford_cdf_stage50_info = Clifford_cdf_stage50_est(Sim_tree);
+						Clifford_cdf_stage50_entropy[sim] = Clifford_cdf_stage50_info->entropy;
+						break;
+					
+					case 4:
+						Clifford_cdf_stage100_info = Clifford_cdf_stage100_est(Sim_tree);
+						Clifford_cdf_stage100_entropy[sim] = Clifford_cdf_stage100_info->entropy;
+						break;
+					
+					case 5:
+						Clifford_cdf_opt_info = Clifford_cdf_opt_est(Sim_tree);
+						Clifford_cdf_opt_entropy[sim] = Clifford_cdf_opt_info->entropy;
+						break;
+					
+					case 6:
+						Clifford_HT_info = Clifford_HT_est(Sim_tree);
+						Clifford_HT_entropy[sim] = Clifford_HT_info->entropy;
+						break;
+					
+					case 7:
+						Clifford_HTo_info = Clifford_HTo_est(Sim_tree);
+						Clifford_HTo_entropy[sim] = Clifford_HTo_info->entropy;
+						break;
+					
+					case 8:
+						Clifford_HTo_65536_info = Clifford_HTo_65536_est(Sim_tree);
+						Clifford_HTo_65536_entropy[sim] = Clifford_HTo_65536_info->entropy;
+						break;
+					
+					case 9:
+						Clifford_HTo_interpolation_info = Clifford_HTo_interpolation_est(Sim_tree);
+						Clifford_HTo_interpolation_entropy[sim] = Clifford_HTo_interpolation_info->entropy;
+						break;
+					
+					case 10:
+						Clifford_HTo_interpolation_65536_info = Clifford_HTo_interpolation_65536_est(Sim_tree);
+						Clifford_HTo_interpolation_65536_entropy[sim] = Clifford_HTo_interpolation_65536_info->entropy;
+						break;
+					
+					case 11:
+						PingLi_info = PingLi_est(Sim_tree);
+						PingLi_entropy[sim] = PingLi_info->entropy;
+						break;
+
+					default:
+						fprintf(stderr,"invoke algorthm error!\n");
+						exit(0);
+				}
+			}
+		}
 
 		// if KLD is not started the we would not have an control group for 
 		// base entropy , so we will just measure the base entropy.
 		
 	
 		
-		printf("Progress %g%%\r",(float)(i+1)/sim_times);
+		printf("Progress %g%%\r",(float)(sim+1)/sim_times);
 		fflush(stdout);
 		
 		
@@ -266,26 +195,125 @@ void Simulation_processing()
 	else 
 	{
    		fp = fopen(output,"w");
-		fprintf(fp,"Exact_entropy,Clifford_entropy,PingLi_entropy");
-		
-		fprintf(fp,",Distinct Count,Total Len,Table Size\n");
+		fprintf(fp,"Exact_entropy,");
+		for(int i=1;i<MAX_ALG;i++)
+		{
+			if(ALG_flag[i]==1)
+			{
+				switch (i)
+				{
+					case 1:
+					fprintf(fp,"Clifford_entropy,");
+					break;
+				
+					case 2:
+						fprintf(fp,"Clifford_cdf_entropy,");
+						break;
+					
+					case 3:
+						fprintf(fp,"Clifford_cdf_stage50_entropy,");
+						break;
+					
+					case 4:
+						fprintf(fp,"Clifford_cdf_stage100_entropy,");
+						break;
+					
+					case 5:
+						fprintf(fp,"Clifford_cdf_opt_entropy,");
+						break;
+					
+					case 6:
+						fprintf(fp,"Clifford_HT_entropy,");
+						break;
+					
+					case 7:
+						fprintf(fp,"Clifford_HTo_entropy,");
+						break;
+					
+					case 8:
+						fprintf(fp,"Clifford_HTo_65536_entropy,");
+						break;
+					
+					case 9:
+						fprintf(fp,"Clifford_HTo_interpolation_entropy,");
+						break;
+					
+					case 10:
+						fprintf(fp,"Clifford_HTo_interpolation_65536_entropy,");
+						break;
+					
+					case 11:
+						fprintf(fp,"PingLi_entropy,");
+						break;
+				}
+			}
+		}					
+		fprintf(fp,"Distinct Count,Total Len,Table Size\n");
 	}
 	
 	for(int i=0;i<sim_times;i++)
 	{
-		fprintf(fp,"%f,%f,%f,%d,%d,%d \n",
-							
-										exact_entropy[i],
-										Clifford_entropy[i],
-										PingLi_entropy[i],
-										Distinct[i],
-										zipf_slen,
-										Table_Size
-										);	
+
+		fprintf(fp,"%f,",exact_entropy[i]);
+		for(int j=1;j<MAX_ALG;j++)
+		{
+			if(ALG_flag[j]==1)
+			{
+				switch (j)
+				{
+					case 1:
+						fprintf(fp,"%f,",Clifford_entropy[i]);
+						break;
+					
+					case 2:
+						fprintf(fp,"%f,",Clifford_cdf_entropy[i]);
+						break;
+					
+					case 3:
+						fprintf(fp,"%f,",Clifford_cdf_stage50_entropy[i]);
+						break;
+					
+					case 4:
+						fprintf(fp,"%f,",Clifford_cdf_stage100_entropy[i]);
+						break;
+					
+					case 5:
+						fprintf(fp,"%f,",Clifford_cdf_opt_entropy[i]);
+						break;
+					
+					case 6:
+						fprintf(fp,"%f,",Clifford_HT_entropy[i]);
+						break;
+					
+					case 7:
+						fprintf(fp,"%f,",Clifford_HTo_entropy[i]);
+						break;
+					
+					case 8:
+						fprintf(fp,"%f,",Clifford_HTo_65536_entropy[i]);
+						break;
+					
+					case 9:
+						fprintf(fp,"%f,",Clifford_HTo_interpolation_entropy[i]);
+						break;
+					
+					case 10:
+						fprintf(fp,"%f,",Clifford_HTo_interpolation_65536_entropy[i]);
+						break;
+					
+					case 11:						
+						fprintf(fp,"%f,",PingLi_entropy[i]);
+						break;
+				}
+			}
+		}		
+		fprintf(fp,"%d,%d,%d \n",
+								Distinct[i],
+								zipf_slen,
+								Table_Size
+								);	
 	}
 	
-
-
 
 
 	fclose(fp);
