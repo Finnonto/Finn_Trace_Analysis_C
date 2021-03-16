@@ -47,6 +47,9 @@ void Simulation_processing()
 	import_HeadTail_table();
 	printf("import table done!\n");
 
+
+	//decimal init
+	mpd_init(&ctx, 20);
 	
 
 

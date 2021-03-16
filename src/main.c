@@ -102,6 +102,7 @@ void Checkargument(int  argc, char** argv)
                         else if(strncmp(argv[arg_num],"-k",2)==0){
                                 
                                 K_Value = atoi(argv[++arg_num]);
+                                
                                 if(K_Value<=0)
                                 {
                                         fprintf(stderr,"K value must be greater than 0");
@@ -177,7 +178,7 @@ void Checkargument(int  argc, char** argv)
                                         else if(strncmp(argv[arg_num],"Clifford_cdf",12)==0){ALG_flag[2]=1;}
                                         else if(strncmp(argv[arg_num],"Clifford_HTo",12)==0){ALG_flag[7]=1;}
                                         else if(strncmp(argv[arg_num],"Clifford_HT",11)==0){ALG_flag[6]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford",8)==0){ALG_flag[1]=1;}
+                                        else if(strncmp(argv[arg_num],"Clifford",9)==0){ALG_flag[1]=1;}
                                         else if(strncmp(argv[arg_num],"PingLi",6)==0){ALG_flag[11]=1;}
                                         else {
                                                 fprintf(stderr, "algorithm name error:%s\n",argv[arg_num]);

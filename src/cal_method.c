@@ -463,7 +463,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     info->distinct = 0;
     //cal value init
     Table_Amount = it;
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -547,7 +547,7 @@ trace_info_t *Clifford_cdf_stage50_est(tree_t *item)
     //cal value init
     Table_Amount = it;
     uint32_t TBS = 16384;
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -660,7 +660,7 @@ trace_info_t *Clifford_cdf_stage100_est(tree_t *item)
     //cal value init
     Table_Amount = it;
     uint32_t TBS = 16384;
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -774,7 +774,7 @@ trace_info_t *Clifford_cdf_opt_est(tree_t *item)
     //cal value init
     Table_Amount = it;
     
-    K_Value = 20;
+    
     
     double k_register[Table_Amount][K_Value];    
     double entropy = 0;
@@ -881,7 +881,7 @@ trace_info_t *Clifford_HT_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -1013,7 +1013,7 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -1151,7 +1151,7 @@ trace_info_t *Clifford_HTo_65536_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -1283,7 +1283,7 @@ trace_info_t *Clifford_HTo_interpolation_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -1419,7 +1419,7 @@ trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item)
     info->distinct = 0;
     //cal value init
     
-    K_Value = 20;
+    
     
     double k_register[K_Value];    
     double entropy = 0;
@@ -1549,10 +1549,12 @@ trace_info_t *PingLi_est(tree_t *item)
 {
     
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
-        
-    double alpha = 0.9;
-    double delta = 1 - alpha;
 
+
+
+    double alpha = 0.999999;
+    double delta = 1 - alpha;
+    double shift_factor = 10000000;
         
     double k_register[K_Value];
     double entropy        = 0;
@@ -1564,7 +1566,7 @@ trace_info_t *PingLi_est(tree_t *item)
     current_node = item->root;
     
     // R function variables
-
+  
     double v,w;
     double r_1 ,r_2_1 ,r_2 ,r_3_1 ,r_3 ,r ;
     
@@ -1598,32 +1600,87 @@ trace_info_t *PingLi_est(tree_t *item)
         current_node = current_node->right;
     }
         // entropy evaluation variables
-    double j_1,j_2 ,alt_pow ,j_value ;
-        
+          
     double h_1 ,h_2_1 ,h_2_2 ,h_2_3 ,h_2 ;
     
+    
+	mpd_t *a, *b, *c;
+	mpd_t *result;
+    char a_s[64],b_s[64],c_s[64];
+    char *rstring;
 
     
-    j_1 = delta / K_Value;
-    j_2 = 0;
-    alt_pow = -(alpha/delta);
     
+    // decimal init
+    
+    ctx.traps = 0;
+    result = mpd_new(&ctx);
+	a = mpd_new(&ctx); //tmp variable 
+	b = mpd_new(&ctx); //tmp variable
+    c = mpd_new(&ctx); //tmp variable
+    
+
+    // estimate the entropy
+    
+    sprintf(a_s,"%lf",alpha);
+    sprintf(b_s,"%lf",delta);
+    mpd_set_string(a, a_s, &ctx);//a_s = alpha
+    mpd_set_string(b, b_s, &ctx);//b_s = delta
+
+    //alt_pow = -(alpha/delta);
+    mpd_div(result,a,b,&ctx);//result = alt_pow
+    mpd_minus(result,result,&ctx);
+	// init j2 ,j_2 = 0;
+    sprintf(c_s,"%lf",0.0);
+    mpd_set_string(c, c_s, &ctx);//c = j2
 
     for (int i=0;i<K_Value;++i)
     {
-        j_2 += pow(k_register[i],alt_pow);
-    
+        sprintf(a_s,"%lf",k_register[i]);// a =k_register
+        mpd_set_string(a, a_s, &ctx);
+        mpd_pow(b,a,result,&ctx); //b= power result
+        mpd_add(c,c,b,&ctx);//c = j2
     }
-    j_value = j_1 * j_2;
+    //j2 = b;
+    // init j_1 ,j_1 = delta / K_Value;
+    sprintf(a_s,"%lf",delta);
+    sprintf(b_s,"%lf",(double)K_Value);
+    mpd_set_string(a, a_s, &ctx);
+    mpd_set_string(b, b_s, &ctx);
+    mpd_div(result,a,b,&ctx);//result = j1
     
+    //rstring = mpd_to_sci(c, 1);
+	//printf("%s\n", rstring);
+
+    mpd_mul(b,result,c,&ctx);//b = = j_1 * j_2;
     
-    h_1 = -log(j_value);
+    //we need to shift the result to preserve floating points
+    sprintf(a_s,"%lf",shift_factor);//shift
+    mpd_set_string(a, a_s, &ctx);
+    mpd_ln(c,b,&ctx);
+    mpd_mul(result,c,a,&ctx);//h_1 = -log(j_value);
+
+
+    double h_1_tmp;
+    
+    rstring = mpd_format(result,"0",&ctx);
+    
+    h_1_tmp = atof(rstring);
+    h_1 = (double)h_1_tmp/(-shift_factor);
     h_2_1 = 1/delta;
     h_2_2 = pow(multiplicity,alpha);
     h_2_3 = log(h_2_2);
     h_2 = h_2_1 * h_2_3;
     
     entropy = (h_1 - h_2);
+
+    mpd_del(a);
+	mpd_del(b);
+    mpd_del(c);
+	mpd_del(result);
+    
+    mpd_free(rstring);
+
     // set info member
     info->entropy = entropy;
     info->total_count = multiplicity;

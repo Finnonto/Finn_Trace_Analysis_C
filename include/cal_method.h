@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Tree.h"
-
+#include "mpdecimal.h"
 
 #ifndef PI
     #define PI acos(-1)
@@ -81,7 +81,9 @@ int Head_Value[2000];
 uint32_t Stage_Point[2000];
 uint32_t HT_Table_Entry ;
 
+// pingli
 
+mpd_context_t ctx;
 
 
 
