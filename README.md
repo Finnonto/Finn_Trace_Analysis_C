@@ -40,6 +40,7 @@ to make simple test.
 "PingLi"  
 `-it` :   amount of inverse cdf table of clifford  [positive integer max:10]    
 `-Tbs` : size of CDF table [16384,32768,65536]
+`-PA` : alpha of PingLi
 
 ### Trace:
 We can calculate specific Trace.pcap file whether it's zipped or not, and use parameter <trace> to enable this method.
