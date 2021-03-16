@@ -1552,7 +1552,8 @@ trace_info_t *PingLi_est(tree_t *item)
 
 
 
-    double alpha = 0.999999;
+    double alpha = pingli_alpha;
+    printf("%lf\n",alpha);
     double delta = 1 - alpha;
     double shift_factor = 10000000;
         

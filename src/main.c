@@ -61,7 +61,7 @@ void Checkargument(int  argc, char** argv)
                 alg_cnt = 0; // 
                 nor_cnt = 0; 
                 normalization = 0;
-                
+                pingli_alpha = 0.9;
                 //   algoritm flags init value
                 memset(ALG_flag, 0, sizeof(int) * MAX_ALG);
 
@@ -200,6 +200,12 @@ void Checkargument(int  argc, char** argv)
                                 int tmp = atoi(argv[++arg_num]);
                                 if(tmp== 16384 || tmp==65536 || tmp==32768)Table_Size = tmp;
                                 else {fprintf(stderr, "Table size errror 16384 ,65536,32768"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************CDF table size********/
+                        else if(strncmp(argv[arg_num],"-PA",3)==0){
+                                pingli_alpha = atof(argv[++arg_num]);
+                                if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1"); exit(0);}
                                 arg_num++;
                         }
                         /*************raising exception********/

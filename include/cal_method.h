@@ -84,7 +84,7 @@ uint32_t HT_Table_Entry ;
 // pingli
 
 mpd_context_t ctx;
-
+double pingli_alpha;
 
 
 void import_inverse_cdf_table(uint16_t table_amount);

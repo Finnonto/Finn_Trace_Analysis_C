@@ -29,7 +29,7 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 .PHONY:clean
 
 sim:
-	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3  -a 4  Clifford Clifford_HT Clifford_HTo  PingLi  -it 10 -Tbs 16384
+	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3 -PA 0.9999 -a 4  Clifford Clifford_HT Clifford_HTo  PingLi  -it 10 -Tbs 16384
 
 run:
 
