@@ -32,7 +32,12 @@ to make simple test.
 `-t` :  simulation times  [positive integer]   
 `-o` :  zipf dbn offset  [positive integer]  
 `-a` :  choose specific sketch algorithm,need to provide amount of algorithm,then type algorthms. e.g [-a 2 Clifford PingLi]   
-  
+  there are 5 Algorithm  :
+"exact",
+"Clifford",
+"Clifford_cdf",
+"Clifford_HT",
+"PingLi"  
 `-it` :   amount of inverse cdf table of clifford  [positive integer max:10]    
 `-Tbs` : size of CDF table [16384,32768,65536]
 
