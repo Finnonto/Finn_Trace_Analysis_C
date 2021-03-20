@@ -4,20 +4,20 @@
 // generate a double number between 0 and 1
 double RandInRnage()
 {   
+    rand_tmp = rand()%resolution;
     
-    rand_tmp = rand();
     
     if(rand_tmp <=0)
     {
         rand_tmp = 1;
     }
-    else if (rand_tmp >= RAND_MAX)
+    else if (rand_tmp >= resolution)
     {
-        rand_tmp = RAND_MAX -1 ;
+        rand_tmp = resolution -1 ;
         
     }
     
-    return (double)rand_tmp /RAND_MAX;
+    return (double)rand_tmp /resolution;
 }
 
 // hash to get random number set
@@ -80,12 +80,16 @@ void import_inverse_cdf_table(uint16_t table_amount)
 {
     
 
-    char table_size_char[10];
+    char char_tmp[10];
     char table_path[60] = {"tables/inverse_table/inverse_table_"};
     
-    sprintf(table_size_char,"%d",Table_Size);
-    strcat(table_path,table_size_char);
+    sprintf(char_tmp,"%d",resolution);
+    strcat(table_path,char_tmp);
+    strcat(table_path,"_");
+    sprintf(char_tmp,"%d",Table_Size);
+    strcat(table_path,char_tmp);
     strcat(table_path,"/table");
+    printf("%s\n",table_path);
     for(int i=0;i<table_amount;++i)
     {
         
@@ -1549,11 +1553,12 @@ trace_info_t *PingLi_est(tree_t *item)
 {
     
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
-
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
 
 
     double alpha = pingli_alpha;
-    printf("%lf\n",alpha);
     double delta = 1 - alpha;
     double shift_factor = 10000000;
         
@@ -1625,12 +1630,12 @@ trace_info_t *PingLi_est(tree_t *item)
     
     sprintf(a_s,"%lf",alpha);
     sprintf(b_s,"%lf",delta);
-    mpd_set_string(a, a_s, &ctx);//a_s = alpha
-    mpd_set_string(b, b_s, &ctx);//b_s = delta
+    mpd_set_string(a, a_s, &ctx);//a = alpha
+    mpd_set_string(b, b_s, &ctx);//b = delta
 
     //alt_pow = -(alpha/delta);
     mpd_div(result,a,b,&ctx);//result = alt_pow
-    mpd_minus(result,result,&ctx);
+    mpd_minus(result,result,&ctx);//result = -alt_pow
 	// init j2 ,j_2 = 0;
     sprintf(c_s,"%lf",0.0);
     mpd_set_string(c, c_s, &ctx);//c = j2
@@ -1644,11 +1649,11 @@ trace_info_t *PingLi_est(tree_t *item)
     }
     //j2 = b;
     // init j_1 ,j_1 = delta / K_Value;
-    sprintf(a_s,"%lf",delta);
-    sprintf(b_s,"%lf",(double)K_Value);
+    sprintf(a_s,"%lf",delta);//a= delta
+    sprintf(b_s,"%lf",(double)K_Value);//b= K
     mpd_set_string(a, a_s, &ctx);
     mpd_set_string(b, b_s, &ctx);
-    mpd_div(result,a,b,&ctx);//result = j1
+    mpd_div(result,a,b,&ctx);//result = j1 =delta/K
     
     //rstring = mpd_to_sci(c, 1);
 	//printf("%s\n", rstring);
@@ -1657,17 +1662,17 @@ trace_info_t *PingLi_est(tree_t *item)
     
     //we need to shift the result to preserve floating points
     sprintf(a_s,"%lf",shift_factor);//shift
-    mpd_set_string(a, a_s, &ctx);
-    mpd_ln(c,b,&ctx);
-    mpd_mul(result,c,a,&ctx);//h_1 = -log(j_value);
+    mpd_set_string(a, a_s, &ctx);//a = shift_factor
+    mpd_ln(c,b,&ctx);//c = logJ(a)
+    mpd_mul(result,c,a,&ctx);//c *shift_factor
 
 
     double h_1_tmp;
     
-    rstring = mpd_format(result,"0",&ctx);
+    rstring = mpd_format(result,"0",&ctx); // H1 to int
     
-    h_1_tmp = atof(rstring);
-    h_1 = (double)h_1_tmp/(-shift_factor);
+    h_1_tmp = atof(rstring);// transfer to float
+    h_1 = (double)h_1_tmp/(-shift_factor);// divde by shift_factor
     h_2_1 = 1/delta;
     h_2_2 = pow(multiplicity,alpha);
     h_2_3 = log(h_2_2);

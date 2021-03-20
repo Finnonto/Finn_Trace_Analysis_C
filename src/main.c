@@ -26,6 +26,7 @@ void Checkargument(int  argc, char** argv)
         
         TRACE = 0;
         SIMULATION = 0;       
+        resolution = RAND_MAX;
         // k value fot algorithm 
         K_Value = 20;
         
@@ -83,6 +84,18 @@ void Checkargument(int  argc, char** argv)
                                 
                                 arg_num++;
                                 
+                        }
+                        /*************Resolution bit num ********/
+                        else if(strncmp(argv[arg_num],"-resolution",11)==0){
+                                
+                                if(strncmp(argv[++arg_num],"MAX",3)==0){
+                                        resolution = RAND_MAX;        
+                                }
+                                else{
+                                        resolution = pow(2,atoi(argv[arg_num]));
+                                }                
+                                if (resolution<=0){fprintf(stderr, "resolution must be positive integer"); exit(0);}
+                                arg_num++;
                         }
                         /**************stream data range***********/
                         else if(strncmp(argv[arg_num],"-r",2)==0)
@@ -198,11 +211,11 @@ void Checkargument(int  argc, char** argv)
                         /*************CDF table size********/
                         else if(strncmp(argv[arg_num],"-Tbs",4)==0){
                                 int tmp = atoi(argv[++arg_num]);
-                                if(tmp== 16384 || tmp==65536 || tmp==32768)Table_Size = tmp;
-                                else {fprintf(stderr, "Table size errror 16384 ,65536,32768"); exit(0);}
+                                if(tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096)Table_Size = tmp;
+                                else {fprintf(stderr, "Table size errror 4096 16384 ,65536,32768"); exit(0);}
                                 arg_num++;
                         }
-                        /*************CDF table size********/
+                        /*************PingLi alpha ********/
                         else if(strncmp(argv[arg_num],"-PA",3)==0){
                                 pingli_alpha = atof(argv[++arg_num]);
                                 if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1"); exit(0);}
@@ -341,7 +354,7 @@ int main(int argc, char *argv[])
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)
         {
-                printf("sim start: z:%g length:%d range:%d offset:%d Table Size:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,Table_Size);
+                printf("sim start: z:%g length:%d range:%d offset:%d Table Size:%d resolution:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,Table_Size,resolution);
         
                 Simulation_processing();
 

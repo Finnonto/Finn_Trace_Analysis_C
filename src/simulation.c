@@ -44,6 +44,7 @@ void Simulation_processing()
 	//import_optimized_cdf_table(it);
 	//import_inverse_cdf_stage50_table(it,50);
 	//import_inverse_cdf_stage100_table(it,100);
+	import_inverse_cdf_table(it);
 	import_HeadTail_table();
 	printf("import table done!\n");
 
@@ -188,6 +189,11 @@ void Simulation_processing()
 
 	sprintf(num,"%d",zipf_range);
 	strcat(output,num);		
+	strcat(output,"_");
+
+	
+	sprintf(num,"%d",resolution);
+	strcat(output,num);		
 
 	strcat(output,".csv");
 
@@ -251,7 +257,7 @@ void Simulation_processing()
 				}
 			}
 		}					
-		fprintf(fp,"Distinct Count,Total Len,Table Size\n");
+		fprintf(fp,"Distinct Count,Total Len,Table Size,resolution\n");
 	}
 	
 	for(int i=0;i<sim_times;i++)
@@ -310,10 +316,11 @@ void Simulation_processing()
 				}
 			}
 		}		
-		fprintf(fp,"%d,%d,%d \n",
+		fprintf(fp,"%d,%d,%d,%d \n",
 								Distinct[i],
 								zipf_slen,
-								Table_Size
+								Table_Size,
+								resolution
 								);	
 	}
 	

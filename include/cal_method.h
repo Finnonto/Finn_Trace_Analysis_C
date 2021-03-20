@@ -26,6 +26,8 @@ typedef struct Trace_info
 //flag
 int ALG_flag[MAX_ALG];
 
+// variable resolution
+int resolution;
 
 /*
 
