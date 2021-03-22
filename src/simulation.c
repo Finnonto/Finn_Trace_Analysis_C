@@ -40,14 +40,15 @@ void Simulation_processing()
 {
 	//import tables 
 	
-	printf("importing table ...\n");
-	//import_optimized_cdf_table(it);
-	//import_inverse_cdf_stage50_table(it,50);
-	//import_inverse_cdf_stage100_table(it,100);
-	import_inverse_cdf_table(it);
-	import_HeadTail_table();
-	printf("import table done!\n");
-
+	if(resolution != RAND_MAX && resolution != 4096){
+		printf("importing table ...\n");
+		//import_optimized_cdf_table(it);
+		//import_inverse_cdf_stage50_table(it,50);
+		//import_inverse_cdf_stage100_table(it,100);
+		import_inverse_cdf_table(it);
+		import_HeadTail_table();
+		printf("import table done!\n");
+	}
 
 	//decimal init
 	mpd_init(&ctx, 20);
@@ -79,9 +80,11 @@ void Simulation_processing()
 		// and clifford entropy
 		
 		// exact entropy
-		exact_info = exact(Sim_tree);
-		exact_entropy[sim] = exact_info->entropy;
-		Distinct[sim] =exact_info->distinct;
+		entropy_info = exact(Sim_tree);
+		exact_entropy[0][sim] = entropy_info->entropy;
+		StreamDistinct[0][sim] =entropy_info->distinct;
+		StreamLength[0][sim] =entropy_info->total_count;
+
 		//choosing algorithm
 		for(int j=1;j<MAX_ALG;j++)
 		{
@@ -89,58 +92,58 @@ void Simulation_processing()
 			{
 				switch (j){
 					case 1:
-						Clifford_info = Clifford_est(Sim_tree);
-						Clifford_entropy[sim] = Clifford_info->entropy;
+						entropy_info = Clifford_est(Sim_tree);
+						Clifford_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 2:
-						Clifford_cdf_info = Clifford_cdf_est(Sim_tree);
-						Clifford_cdf_entropy[sim] = Clifford_cdf_info->entropy;
+						entropy_info = Clifford_cdf_est(Sim_tree);
+						Clifford_cdf_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 3:
-						Clifford_cdf_stage50_info = Clifford_cdf_stage50_est(Sim_tree);
-						Clifford_cdf_stage50_entropy[sim] = Clifford_cdf_stage50_info->entropy;
+						entropy_info = Clifford_cdf_stage50_est(Sim_tree);
+						Clifford_cdf_stage50_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 4:
-						Clifford_cdf_stage100_info = Clifford_cdf_stage100_est(Sim_tree);
-						Clifford_cdf_stage100_entropy[sim] = Clifford_cdf_stage100_info->entropy;
+						entropy_info = Clifford_cdf_stage100_est(Sim_tree);
+						Clifford_cdf_stage100_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 5:
-						Clifford_cdf_opt_info = Clifford_cdf_opt_est(Sim_tree);
-						Clifford_cdf_opt_entropy[sim] = Clifford_cdf_opt_info->entropy;
+						entropy_info = Clifford_cdf_opt_est(Sim_tree);
+						Clifford_cdf_opt_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 6:
-						Clifford_HT_info = Clifford_HT_est(Sim_tree);
-						Clifford_HT_entropy[sim] = Clifford_HT_info->entropy;
+						entropy_info = Clifford_HT_est(Sim_tree);
+						Clifford_HT_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 7:
-						Clifford_HTo_info = Clifford_HTo_est(Sim_tree);
-						Clifford_HTo_entropy[sim] = Clifford_HTo_info->entropy;
+						entropy_info = Clifford_HTo_est(Sim_tree);
+						Clifford_HTo_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 8:
-						Clifford_HTo_65536_info = Clifford_HTo_65536_est(Sim_tree);
-						Clifford_HTo_65536_entropy[sim] = Clifford_HTo_65536_info->entropy;
+						entropy_info = Clifford_HTo_65536_est(Sim_tree);
+						Clifford_HTo_65536_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 9:
-						Clifford_HTo_interpolation_info = Clifford_HTo_interpolation_est(Sim_tree);
-						Clifford_HTo_interpolation_entropy[sim] = Clifford_HTo_interpolation_info->entropy;
+						entropy_info = Clifford_HTo_interpolation_est(Sim_tree);
+						Clifford_HTo_interpolation_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 10:
-						Clifford_HTo_interpolation_65536_info = Clifford_HTo_interpolation_65536_est(Sim_tree);
-						Clifford_HTo_interpolation_65536_entropy[sim] = Clifford_HTo_interpolation_65536_info->entropy;
+						entropy_info = Clifford_HTo_interpolation_65536_est(Sim_tree);
+						Clifford_HTo_interpolation_65536_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 11:
-						PingLi_info = PingLi_est(Sim_tree);
-						PingLi_entropy[sim] = PingLi_info->entropy;
+						entropy_info = PingLi_est(Sim_tree);
+						PingLi_entropy[0][sim] = entropy_info->entropy;
 						break;
 
 					default:
@@ -153,19 +156,21 @@ void Simulation_processing()
 		// if KLD is not started the we would not have an control group for 
 		// base entropy , so we will just measure the base entropy.
 		
-	
+
 		
-		printf("Progress %g%%\r",(float)(sim+1)/sim_times);
+		printf("Progress %0.1f%%\r",(float)(sim+1)/sim_times*100);
 		fflush(stdout);
-		
+		ent_cnt = sim_times;
 		
 
 		
+		
+
 		tree_delete(Sim_tree);
 
 	}
-	
-	
+	printf("\n");
+	Output_Simulation();
 		
 	
 	//output 
@@ -175,157 +180,6 @@ void Simulation_processing()
 	
 
 
-	FILE *fp;
-	char num[20];
-	char output[200] = "./output/Simulation/";
-
-	sprintf(num,"%d",zipf_slen);
-	strcat(output,num);
-	strcat(output,"_");
-
-	sprintf(num,"%.1f",zipf_par);
-	strcat(output,num);
-	strcat(output,"_");
-
-	sprintf(num,"%d",zipf_range);
-	strcat(output,num);		
-	strcat(output,"_");
-
 	
-	sprintf(num,"%d",resolution);
-	strcat(output,num);		
-
-	strcat(output,".csv");
-
-	if( access( output, F_OK ) == 0 ) 
-	{
-    	fp = fopen(output,"a");
-	} 	
-	else 
-	{
-   		fp = fopen(output,"w");
-		fprintf(fp,"Exact_entropy,");
-		for(int i=1;i<MAX_ALG;i++)
-		{
-			if(ALG_flag[i]==1)
-			{
-				switch (i)
-				{
-					case 1:
-					fprintf(fp,"Clifford_entropy,");
-					break;
-				
-					case 2:
-						fprintf(fp,"Clifford_cdf_entropy,");
-						break;
-					
-					case 3:
-						fprintf(fp,"Clifford_cdf_stage50_entropy,");
-						break;
-					
-					case 4:
-						fprintf(fp,"Clifford_cdf_stage100_entropy,");
-						break;
-					
-					case 5:
-						fprintf(fp,"Clifford_cdf_opt_entropy,");
-						break;
-					
-					case 6:
-						fprintf(fp,"Clifford_HT_entropy,");
-						break;
-					
-					case 7:
-						fprintf(fp,"Clifford_HTo_entropy,");
-						break;
-					
-					case 8:
-						fprintf(fp,"Clifford_HTo_65536_entropy,");
-						break;
-					
-					case 9:
-						fprintf(fp,"Clifford_HTo_interpolation_entropy,");
-						break;
-					
-					case 10:
-						fprintf(fp,"Clifford_HTo_interpolation_65536_entropy,");
-						break;
-					
-					case 11:
-						fprintf(fp,"PingLi_entropy,");
-						break;
-				}
-			}
-		}					
-		fprintf(fp,"Distinct Count,Total Len,Table Size,resolution\n");
-	}
-	
-	for(int i=0;i<sim_times;i++)
-	{
-
-		fprintf(fp,"%f,",exact_entropy[i]);
-		for(int j=1;j<MAX_ALG;j++)
-		{
-			if(ALG_flag[j]==1)
-			{
-				switch (j)
-				{
-					case 1:
-						fprintf(fp,"%f,",Clifford_entropy[i]);
-						break;
-					
-					case 2:
-						fprintf(fp,"%f,",Clifford_cdf_entropy[i]);
-						break;
-					
-					case 3:
-						fprintf(fp,"%f,",Clifford_cdf_stage50_entropy[i]);
-						break;
-					
-					case 4:
-						fprintf(fp,"%f,",Clifford_cdf_stage100_entropy[i]);
-						break;
-					
-					case 5:
-						fprintf(fp,"%f,",Clifford_cdf_opt_entropy[i]);
-						break;
-					
-					case 6:
-						fprintf(fp,"%f,",Clifford_HT_entropy[i]);
-						break;
-					
-					case 7:
-						fprintf(fp,"%f,",Clifford_HTo_entropy[i]);
-						break;
-					
-					case 8:
-						fprintf(fp,"%f,",Clifford_HTo_65536_entropy[i]);
-						break;
-					
-					case 9:
-						fprintf(fp,"%f,",Clifford_HTo_interpolation_entropy[i]);
-						break;
-					
-					case 10:
-						fprintf(fp,"%f,",Clifford_HTo_interpolation_65536_entropy[i]);
-						break;
-					
-					case 11:						
-						fprintf(fp,"%f,",PingLi_entropy[i]);
-						break;
-				}
-			}
-		}		
-		fprintf(fp,"%d,%d,%d,%d \n",
-								Distinct[i],
-								zipf_slen,
-								Table_Size,
-								resolution
-								);	
-	}
-	
-
-
-	fclose(fp);
 }
 

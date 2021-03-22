@@ -1,207 +1,277 @@
 #include "output.h"
 
 
+void Output_write_file(char* Output_filename,int index)
+{
+    FILE* fp;
+    
+    if( access( Output_filename, F_OK ) == 0 ) 
+	{
+    	fp = fopen(Output_filename,"a");
+	} 	
+	else 
+	{
+   		fp = fopen(Output_filename,"w");
+		fprintf(fp,"Exact_entropy,");
+		for(int i=1;i<MAX_ALG;i++)
+		{
+			if(ALG_flag[i]==1)
+			{
+				switch (i)
+				{
+					case 1:
+					fprintf(fp,"Clifford_entropy,");
+					break;
+				
+					case 2:
+						fprintf(fp,"Clifford_cdf_entropy,");
+						break;
+					
+					case 3:
+						fprintf(fp,"Clifford_cdf_stage50_entropy,");
+						break;
+					
+					case 4:
+						fprintf(fp,"Clifford_cdf_stage100_entropy,");
+						break;
+					
+					case 5:
+						fprintf(fp,"Clifford_cdf_opt_entropy,");
+						break;
+					
+					case 6:
+						fprintf(fp,"Clifford_HT_entropy,");
+						break;
+					
+					case 7:
+						fprintf(fp,"Clifford_HTo_entropy,");
+						break;
+					
+					case 8:
+						fprintf(fp,"Clifford_HTo_65536_entropy,");
+						break;
+					
+					case 9:
+						fprintf(fp,"Clifford_HTo_interpolation_entropy,");
+						break;
+					
+					case 10:
+						fprintf(fp,"Clifford_HTo_interpolation_65536_entropy,");
+						break;
+					
+					case 11:
+						fprintf(fp,"PingLi_entropy,");
+						break;
+				}
+			}
+		}	
+        
+        fprintf(fp,"Distinct Count,Total Len,Table Size,resolution\n");
+        
+		}
+
+	
+	for(int i=0;i<ent_cnt;i++)
+	{
+        
+		fprintf(fp,"%.30lf,",exact_entropy[index][i]);
+    
+    	for(int j=1;j<MAX_ALG;j++)
+		{
+			if(ALG_flag[j]==1)
+			{
+				switch (j)
+				{
+					case 1:
+						fprintf(fp,"%.30lf,",Clifford_entropy[index][i]);
+						break;
+					
+					case 2:
+						fprintf(fp,"%.30lf,",Clifford_cdf_entropy[index][i]);
+						break;
+					
+					case 3:
+						fprintf(fp,"%.30lf,",Clifford_cdf_stage50_entropy[index][i]);
+						break;
+					
+					case 4:
+						fprintf(fp,"%.30lf,",Clifford_cdf_stage100_entropy[index][i]);
+						break;
+					
+					case 5:
+						fprintf(fp,"%.30lf,",Clifford_cdf_opt_entropy[index][i]);
+						break;
+					
+					case 6:
+						fprintf(fp,"%.30lf,",Clifford_HT_entropy[index][i]);
+						break;
+					
+					case 7:
+						fprintf(fp,"%.30lf,",Clifford_HTo_entropy[index][i]);
+						break;
+					
+					case 8:
+						fprintf(fp,"%.30lf,",Clifford_HTo_65536_entropy[index][i]);
+						break;
+					
+					case 9:
+						fprintf(fp,"%.30lf,",Clifford_HTo_interpolation_entropy[index][i]);
+						break;
+					
+					case 10:
+						fprintf(fp,"%.30lf,",Clifford_HTo_interpolation_65536_entropy[index][i]);
+						break;
+					
+					case 11:						
+						fprintf(fp,"%.30lf,",PingLi_entropy[index][i]);
+						break;
+				}
+			}
+		}
+    
+		fprintf(fp,"%d,%d,%d,%d \n",
+								StreamDistinct[index][i],
+								StreamLength[index][i],
+								Table_Size,
+								resolution
+								);	
+	}
+
+
+
+	fclose(fp);
+
+}
+
+
 void create_folder()
 {
-    char Output_FolderName[100];
-    if (EXACT)
-    {
-        strcpy(Output_FolderName,"./output/Exact");
-        mkdir(Output_FolderName,0777);
-        NORfolder(Output_FolderName);
-    }
-    if (CLIFFORD)
-    {
-        strcpy(Output_FolderName,"./output/Clifford");
-        mkdir(Output_FolderName,0777);
-        NORfolder(Output_FolderName);
-    }
-    if (INVERSE_CLI)
-    {
-        strcpy(Output_FolderName,"./output/Inverse_cli");
-        mkdir(Output_FolderName,0777);
-        NORfolder(Output_FolderName);
-    }
-    file_cnt=0;
-}
-
-void NORfolder( char *Output_FolderName)
-{   
-    char ALGFolderName[100];
-    if (ORIGIN)
-    {
-        strcpy(ALGFolderName,Output_FolderName);
-        strcat(ALGFolderName,"/origin");
-        mkdir(ALGFolderName,0777);
-        Output_Init(ALGFolderName);
-    }
-    if (DISTINCT)
-    {
-        strcpy(ALGFolderName,Output_FolderName);
-        strcat(ALGFolderName,"/distinct");
-        mkdir(ALGFolderName,0777);
-        Output_Init(ALGFolderName);
-    }
-    if (TOTAL)
-    {
-        strcpy(ALGFolderName,Output_FolderName);
-        strcat(ALGFolderName,"/total");
-        mkdir(ALGFolderName,0777);
-        Output_Init(ALGFolderName);
-    }
-} 
-
-void Output_Init(char *FolderName)
-{
-    char time[10];
-    char *tmp1,*tmp2;
-    strcpy(CSV,".csv");   //csv=.csv
     
-    // make output file name 
-    strcpy(Output_FileName,"/Analysis_sec_");
-    sprintf(time,"%d",intervalTime);
-    strcat(Output_FileName,time);
-    strcat(Output_FileName,"s_");
-    tmp1 = strtok(Trace_Path,"/");
-    while(tmp2!=NULL)
-    {
-        tmp1 = tmp2;
-        tmp2 = strtok(NULL,"/");
+    struct stat st = {0};
+    
+    if (TRACE)
+    {   
+        
+
+
+        strcpy(Output_FolderName,"./output/Trace/");
+        if (stat(Output_FolderName, &st) == -1) 
+        {
+            mkdir(Output_FolderName, 0700);
+        }
+        
+        //to create a subfolder for different trace
+        char *tmp1,*tmp2;
+        tmp1 = strtok(Trace_Path,"/");
+        while(tmp2!=NULL)
+        {
+            tmp1 = tmp2;
+            tmp2 = strtok(NULL,"/");
+        }
+        
+        strcat(Output_FolderName,strtok(tmp1,"."));
+        if (stat(Output_FolderName, &st) == -1) 
+        {
+            mkdir(Output_FolderName, 0700);
+        }
+        strcat(Output_FolderName,"/");
+
+        //to create several subfolder for tuples
+        //SrcIP
+        strcpy(Output_SrcIPName,Output_FolderName);
+        strcat(Output_SrcIPName,"SrcIP/");
+        if (stat(Output_SrcIPName, &st) == -1) 
+        {
+            mkdir(Output_SrcIPName, 0700);
+        }
+        
+        //DstIP
+        strcpy(Output_DstIPName,Output_FolderName);
+        strcat(Output_DstIPName,"DstIP/");
+        if (stat(Output_DstIPName, &st) == -1) 
+        {
+            
+            mkdir(Output_DstIPName, 0700);
+        }
+        //SrcPort
+        strcpy(Output_SrcPortName,Output_FolderName);
+        strcat(Output_SrcPortName,"SrcPort/");
+        if (stat(Output_SrcPortName, &st) == -1) 
+        {
+            
+            mkdir(Output_SrcPortName, 0700);
+        }
+        //DstPort
+        strcpy(Output_DstPortName,Output_FolderName);
+        strcat(Output_DstPortName,"DstPort/");
+        if (stat(Output_DstPortName, &st) == -1) 
+        {
+            
+            mkdir(Output_DstPortName, 0700);
+        }
+        //PktLen
+        strcpy(Output_PktLenName,Output_FolderName);
+        strcat(Output_PktLenName,"PktLen/");
+        if (stat(Output_PktLenName, &st) == -1) 
+        {
+            
+            mkdir(Output_PktLenName, 0700);
+        }
+        
+
+
+
     }
-    strcat(Output_FileName,strtok(tmp1,"."));
-
-
-    strcat(FolderName,Output_FileName);
-    Output_File=fopen(strcat(FolderName,CSV),"w");
-    filelist[file_cnt] = Output_File;
-    fprintf(Output_File,"time(sec),");
-    fprintf(Output_File,"SrcIP_entropy,");
-    fprintf(Output_File,"SrcIP_total_cnt,");
-    fprintf(Output_File,"SrcIP_distinct,");
-    fprintf(Output_File,"DesIP_entropy,");
-    fprintf(Output_File,"DesIP_total_cnt,");
-    fprintf(Output_File,"DesIP_distinct,");
-    fprintf(Output_File,"SrcPort_entropy,");
-    fprintf(Output_File,"SrcPort_total_cnt,");
-    fprintf(Output_File,"SrcPort_distinct,");
-    fprintf(Output_File,"DesPort_entropy,");
-    fprintf(Output_File,"DesPort_total_cnt,");
-    fprintf(Output_File,"DesPort_distinct,");
-    fprintf(Output_File,"PktLe_entropy,");
-    fprintf(Output_File,"PktLe_total_cnt,");
-    fprintf(Output_File,"PktLe_distinct,");
-    fprintf(Output_File,"\n");
-    file_cnt++;
-}
-
-void output()
-{
-
-    if (ORIGIN)
+    if(SIMULATION)
     {
-        Output_File=filelist[file_cnt];
-        output_entropy_csv_origin();
-        file_cnt++;
-    }
-    if (DISTINCT)
-    {
-        Output_File=filelist[file_cnt];
-        output_entropy_csv_distinct();
-        file_cnt++;
-    }
-    if (TOTAL)
-    {
-        Output_File=filelist[file_cnt];
-        output_entropy_csv_total();
-        file_cnt++;
-    }
+        strcpy(Output_FolderName,"./output/Simulation/");
+        if (stat(Output_FolderName, &st) == -1) 
+        {
+            mkdir(Output_FolderName, 0700);
+        }
+    }    
+    
 }
 
-void output_entropy_csv_origin()
+
+void Output_Simulation()
 {
-    fprintf(Output_File,"%u,",Current_time);
-    fprintf(Output_File,"%lf,",Info_list[0].entropy);
-    fprintf(Output_File,"%u,",Info_list[0].total_count);
-    fprintf(Output_File,"%u,",Info_list[0].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[1].entropy);
-    fprintf(Output_File,"%u,",Info_list[1].total_count);
-    fprintf(Output_File,"%u,",Info_list[1].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[2].entropy);
-    fprintf(Output_File,"%u,",Info_list[2].total_count);
-    fprintf(Output_File,"%u,",Info_list[2].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[3].entropy);
-    fprintf(Output_File,"%u,",Info_list[3].total_count);
-    fprintf(Output_File,"%u,",Info_list[3].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[4].entropy);
-    fprintf(Output_File,"%u,",Info_list[4].total_count);
-    fprintf(Output_File,"%u,",Info_list[4].distinct);
-    fprintf(Output_File,"\n");    
+    
+    create_folder();
+	
+    
+	sprintf(filename,"%d_%.1f_%d_%d.csv",zipf_slen,zipf_par,zipf_range,resolution);
+	strcat(Output_FolderName,filename);
+    
+    Output_write_file(Output_FolderName,0);
 
 }
 
-void output_entropy_csv_distinct()
+
+void Output_Trace()
 {
-    fprintf(Output_File,"%u,",Current_time);
-    fprintf(Output_File,"%lf,",Info_list[0].entropy/log(Info_list[0].distinct));
-    fprintf(Output_File,"%u,",Info_list[0].total_count);
-    fprintf(Output_File,"%u,",Info_list[0].distinct);
+    create_folder();
+   
+	
+    
+	sprintf(filename,"%d_sec_%d.csv",intervalTime,resolution);
+	
+    //output 5 tuple 
+    
+    strcat(Output_SrcIPName,filename);
+    Output_write_file(Output_SrcIPName,0);
 
-    fprintf(Output_File,"%lf,",Info_list[1].entropy/log(Info_list[1].distinct));
-    fprintf(Output_File,"%u,",Info_list[1].total_count);
-    fprintf(Output_File,"%u,",Info_list[1].distinct);
+    strcat(Output_DstIPName,filename);
+    Output_write_file(Output_DstIPName,1);
 
-    fprintf(Output_File,"%lf,",Info_list[2].entropy/log(Info_list[2].distinct));
-    fprintf(Output_File,"%u,",Info_list[2].total_count);
-    fprintf(Output_File,"%u,",Info_list[2].distinct);
+    strcat(Output_SrcPortName,filename);
+    Output_write_file(Output_SrcPortName,2);
 
-    fprintf(Output_File,"%lf,",Info_list[3].entropy/log(Info_list[3].distinct));
-    fprintf(Output_File,"%u,",Info_list[3].total_count);
-    fprintf(Output_File,"%u,",Info_list[3].distinct);
+    strcat(Output_DstPortName,filename);
+    Output_write_file(Output_DstPortName,3);
 
-    fprintf(Output_File,"%lf,",Info_list[4].entropy/log(Info_list[4].distinct));
-    fprintf(Output_File,"%u,",Info_list[4].total_count);
-    fprintf(Output_File,"%u,",Info_list[4].distinct);
-    fprintf(Output_File,"\n");    
-}
-
-void output_entropy_csv_total()
-{
-    fprintf(Output_File,"%u,",Current_time);
-    fprintf(Output_File,"%lf,",Info_list[0].entropy/log(Info_list[0].total_count));
-    fprintf(Output_File,"%u,",Info_list[0].total_count);
-    fprintf(Output_File,"%u,",Info_list[0].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[1].entropy/log(Info_list[1].total_count));
-    fprintf(Output_File,"%u,",Info_list[1].total_count);
-    fprintf(Output_File,"%u,",Info_list[1].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[2].entropy/log(Info_list[2].total_count));
-    fprintf(Output_File,"%u,",Info_list[2].total_count);
-    fprintf(Output_File,"%u,",Info_list[2].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[3].entropy/log(Info_list[3].total_count));
-    fprintf(Output_File,"%u,",Info_list[3].total_count);
-    fprintf(Output_File,"%u,",Info_list[3].distinct);
-
-    fprintf(Output_File,"%lf,",Info_list[4].entropy/log(Info_list[4].total_count));
-    fprintf(Output_File,"%u,",Info_list[4].total_count);
-    fprintf(Output_File,"%u,",Info_list[4].distinct);
-    fprintf(Output_File,"\n");    
+    strcat(Output_PktLenName,filename);
+    Output_write_file(Output_PktLenName,4);
 
 }
 
-
-void Close_Output_File()
-{
-    file_cnt=0;
-    while(filelist[file_cnt])
-    {
-        Output_File=filelist[file_cnt];
-        fclose(Output_File);
-        file_cnt++;
-    }
-}

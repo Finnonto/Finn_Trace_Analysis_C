@@ -16,7 +16,8 @@
 
 //simulation mode parameters 
 uint8_t SIMULATION;
-int m_KLD;
+
+
 int sim_times;
 float sim_error;
 int  zipf_slen;
@@ -29,34 +30,6 @@ float zipf_par;
 // for simulation variables 
 
 // info_t
-trace_info_t *exact_info;
-trace_info_t *Clifford_info;
-trace_info_t *Clifford_cdf_info;
-trace_info_t *Clifford_cdf_stage50_info;
-trace_info_t *Clifford_cdf_stage100_info;
-trace_info_t *Clifford_cdf_opt_info;
-trace_info_t *Clifford_HT_info;
-trace_info_t *Clifford_HTo_info;
-trace_info_t *Clifford_HTo_65536_info;
-trace_info_t *Clifford_HTo_interpolation_info;
-trace_info_t *Clifford_HTo_interpolation_65536_info;
-trace_info_t *PingLi_info;
-
-
-// for result storage
-int    Distinct[600];
-double exact_entropy[600];
-double Clifford_entropy[600];
-double Clifford_cdf_entropy[600];
-double Clifford_cdf_stage50_entropy[600];
-double Clifford_cdf_stage100_entropy[600];
-double Clifford_cdf_opt_entropy[600];
-double Clifford_HT_entropy[600];
-double Clifford_HTo_entropy[600];
-double Clifford_HTo_65536_entropy[600];
-double Clifford_HTo_interpolation_entropy[600];
-double Clifford_HTo_interpolation_65536_entropy[600];
-double PingLi_entropy[600];
 
 
 

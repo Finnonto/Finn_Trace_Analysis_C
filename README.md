@@ -48,7 +48,7 @@ We can calculate specific Trace.pcap file whether it's zipped or not, and use pa
 !!note this part is not finished yet.
 
 ```
-$ Finn_Trace_Analysis_C trace <options><parameter>
+$ Finn_Trace_Analysis_C trace file_path <options><parameter>
 ```
 
 

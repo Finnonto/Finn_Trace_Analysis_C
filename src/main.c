@@ -36,17 +36,15 @@ void Checkargument(int  argc, char** argv)
                 fprintf(stderr, "Usage: %s inputURI\n", argv[0]);
                 exit(0);
         }
-
-        uint16_t arg_num=2;
-        
+            
+                        
         /******************** simulation mode ***************************/
-        if(strncmp(argv[1],"simulation",10)==0)
+        if(strcmp(argv[1],"simulation")==0)
         {
                 
-                
+                uint16_t arg_num=2;       
                 // simulation mode parameter default value 
                 SIMULATION = 1 ;// flag enable
-                m_KLD = 0;
                 sim_times = 30;
                 sim_error = 1;
                 zipf_slen = 100000;
@@ -54,22 +52,19 @@ void Checkargument(int  argc, char** argv)
                 zipf_par =  0.8;
                 zipf_offset = 4;
                 
-                // simulation paramters
+                
+                // algorithm parameter
                 it = 1;  //inverse table amount 
-                Table_Size = 16384; // inverse table size
-
-                algorithm = 0; //algorithm amount 
-                alg_cnt = 0; // 
-                nor_cnt = 0; 
-                normalization = 0;
+                Table_Size = 16384; // inverse table size             
+                alg_cnt = 0; //               
                 pingli_alpha = 0.9;
                 //   algoritm flags init value
                 memset(ALG_flag, 0, sizeof(int) * MAX_ALG);
-
+                
                 while(arg_num<argc){
                         
                         //*************stream length****************/
-                        if(strncmp(argv[arg_num],"-l",2)==0)
+                        if(strcmp(argv[arg_num],"-l")==0)
                         {
                                 
                                 
@@ -86,9 +81,9 @@ void Checkargument(int  argc, char** argv)
                                 
                         }
                         /*************Resolution bit num ********/
-                        else if(strncmp(argv[arg_num],"-resolution",11)==0){
+                        else if(strcmp(argv[arg_num],"-resolution")==0){
                                 
-                                if(strncmp(argv[++arg_num],"MAX",3)==0){
+                                if(strcmp(argv[++arg_num],"MAX")==0){
                                         resolution = RAND_MAX;        
                                 }
                                 else{
@@ -98,7 +93,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /**************stream data range***********/
-                        else if(strncmp(argv[arg_num],"-r",2)==0)
+                        else if(strcmp(argv[arg_num],"-r")==0)
                         {
                                 
                                 
@@ -112,7 +107,7 @@ void Checkargument(int  argc, char** argv)
                                 
                         }
                         /***************K value for algorithm*******/
-                        else if(strncmp(argv[arg_num],"-k",2)==0){
+                        else if(strcmp(argv[arg_num],"-k")==0){
                                 
                                 K_Value = atoi(argv[++arg_num]);
                                 
@@ -124,7 +119,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /*************Z value for zipf distribution*/
-                        else if(strncmp(argv[arg_num],"-z",2)==0)
+                        else if(strcmp(argv[arg_num],"-z")==0)
                         {       
                                 
                                 zipf_par = atof(argv[++arg_num]);
@@ -132,7 +127,7 @@ void Checkargument(int  argc, char** argv)
                                 
                         }
                         /************experiment times**************/
-                        else if(strncmp(argv[arg_num],"-t",2)==0)
+                        else if(strcmp(argv[arg_num],"-t")==0)
                         {
                                 
                                 sim_times = atoi(argv[++arg_num]);
@@ -144,7 +139,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /*******error probability threhold********/
-                        else if(strncmp(argv[arg_num],"-e",2)==0)
+                        else if(strcmp(argv[arg_num],"-e")==0)
                         {
                                 
                                 sim_error = atof(argv[++arg_num]);
@@ -156,7 +151,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /*********stream offset******************/
-                        else if(strncmp(argv[arg_num],"-o",2)==0)
+                        else if(strcmp(argv[arg_num],"-o")==0)
                         {
                                 
                                 zipf_offset = atoi(argv[++arg_num]);
@@ -168,7 +163,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /***************algorithm*****************/
-                        else if(strncmp(argv[arg_num],"-a",2)==0){
+                        else if(strcmp(argv[arg_num],"-a")==0){
                                 
                                 alg_cnt = atoi(argv[++arg_num]);
                                 
@@ -181,18 +176,18 @@ void Checkargument(int  argc, char** argv)
                                         ++arg_num; 
                                         
                                         
-                                        if(strncmp(argv[arg_num],"exact",5)==0){ALG_flag[0]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation_65536",32)==0){ALG_flag[10]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_interpolation",26)==0){ALG_flag[9]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage100",21)==0){ALG_flag[4]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_stage50",20)==0){ALG_flag[3]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo_65536",18)==0){ALG_flag[8]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf_opt",16)==0){ALG_flag[5]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_cdf",12)==0){ALG_flag[2]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_HTo",12)==0){ALG_flag[7]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford_HT",11)==0){ALG_flag[6]=1;}
-                                        else if(strncmp(argv[arg_num],"Clifford",9)==0){ALG_flag[1]=1;}
-                                        else if(strncmp(argv[arg_num],"PingLi",6)==0){ALG_flag[11]=1;}
+                                        if(strcmp(argv[arg_num],"exact")==0){ALG_flag[0]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage100")==0){ALG_flag[4]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage50")==0){ALG_flag[3]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo")==0){ALG_flag[7]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HT")==0){ALG_flag[6]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford")==0){ALG_flag[1]=1;}
+                                        else if(strcmp(argv[arg_num],"PingLi")==0){ALG_flag[11]=1;}
                                         else {
                                                 fprintf(stderr, "algorithm name error:%s\n",argv[arg_num]);
                                                 exit(0);}
@@ -203,20 +198,20 @@ void Checkargument(int  argc, char** argv)
                                 
                         }
                         /*************inverse table amount********/
-                        else if(strncmp(argv[arg_num],"-it",3)==0){
+                        else if(strcmp(argv[arg_num],"-it")==0){
                                 if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
                                 else {fprintf(stderr, "it_error"); exit(0);}
                                 arg_num++;
                         }
                         /*************CDF table size********/
-                        else if(strncmp(argv[arg_num],"-Tbs",4)==0){
+                        else if(strcmp(argv[arg_num],"-Tbs")==0){
                                 int tmp = atoi(argv[++arg_num]);
                                 if(tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096)Table_Size = tmp;
                                 else {fprintf(stderr, "Table size errror 4096 16384 ,65536,32768"); exit(0);}
                                 arg_num++;
                         }
                         /*************PingLi alpha ********/
-                        else if(strncmp(argv[arg_num],"-PA",3)==0){
+                        else if(strcmp(argv[arg_num],"-PA")==0){
                                 pingli_alpha = atof(argv[++arg_num]);
                                 if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1"); exit(0);}
                                 arg_num++;
@@ -231,125 +226,137 @@ void Checkargument(int  argc, char** argv)
                  
         }
         /******************** trace analysis mode ***********************/ 
-        else if(strncmp(argv[1],"trace",5)==0) {
-
+        else if(strcmp(argv[1],"trace")==0) {
+                uint16_t arg_num=3;
                 // tace analysis mode parameters default value 
-                TRACE = 1;
-                
+                TRACE = 1;                
                 // to init the time interval
                 next_report_time = 0;
-                intervalTime = 30; 
+                intervalTime = 30;                 
 
-                it = 10;  //inverse table amount 
-                Table_Size = 16384; // inverse table size
-
-                algorithm = 0; //algorithm amount 
-                alg_cnt = 0; // 
-                nor_cnt = 0; 
-                normalization = 0;
+                // algorithm parameter
+                it = 1;  //inverse table amount 
+                Table_Size = 16384; // inverse table size             
+                alg_cnt = 0; //               
+                pingli_alpha = 0.9;
+                
                         
-                file_cnt=0;
-                //   algoritm flags init value
-                EXACT = 0;  
-                CLIFFORD = 0; 
-                INVERSE_CLI = 0;
-                // normalization flags init value
-                ORIGIN = 0; 
-                TOTAL = 0;    
-                DISTINCT = 0;
+
+                
 
                 
                 while(arg_num<argc){
                         //-------intervalTime-------// (seconds)
-                        if(strncmp(argv[arg_num],"-t",2)==0){
+                        if(strcmp(argv[arg_num],"-t")==0){
                                 intervalTime = atoi(argv[arg_num+1]);
                                 if(intervalTime<=0)
                                 {
-                                        fprintf(stderr,"interval time must be greater than 0, default value is 30(sec)");
+                                        fprintf(stderr,"interval time must be greater than 0, default value is 30(sec)\n");
                                         exit(0);
                                 }
                                 arg_num+=2;
                         }
                         //--------k_value--------// must be positive integer 
-                        else if(strncmp(argv[arg_num],"-k",2)==0){
+                        else if(strcmp(argv[arg_num],"-k")==0){
                                 K_Value = atoi(argv[arg_num+1]);
                                 if(K_Value<=0)
                                 {
-                                        fprintf(stderr,"K value must be greater than 0");
+                                        fprintf(stderr,"K value must be greater than 0\n");
                                         exit(0);
                                 }
                                 arg_num+=2;
                         }
-                        //------algorithm------  // {number} {algorithm ... }  0:exact  1:clifford  2.inverse_cli 3.all
-                        else if(strncmp(argv[arg_num],"-a",2)==0){
-                                alg_cnt = atoi(argv[++arg_num]);
-                                ++arg_num;
-                                for(int i = arg_num;i< arg_num+alg_cnt;++i)
-                                {       
-                                        if(strncmp(argv[arg_num],"exact",5)==0)EXACT=1;
-                                        else if(strncmp(argv[arg_num],"clifford",8)==0)CLIFFORD=1;
-                                        else if(strncmp(argv[arg_num],"inverse_cli",11)==0)INVERSE_CLI=1;
-                                        else if(strncmp(argv[arg_num],"all",3)==0){EXACT=1;CLIFFORD=1;INVERSE_CLI=1;}
-                                        else {fprintf(stderr, "algorithm_error%s\n",argv[arg_num]); exit(0);}
-                                        
-                                }
-                                arg_num += alg_cnt;;
-                        }
-                        //-----normalization-----  // {number} {normalization ... } 0:origin 1:distinct 2:total 3:all
-                        else if(strncmp(argv[arg_num],"-n",2)==0){
-                                nor_cnt = atoi(argv[++arg_num]);
-                                ++arg_num;
-                                for(int i = arg_num;i< arg_num+nor_cnt;++i)
-                                {       
-                                        if(strncmp(argv[arg_num],"origin",5)==0)ORIGIN=1;
-                                        else if(strncmp(argv[arg_num],"distinct",8)==0)DISTINCT=1;
-                                        else if(strncmp(argv[arg_num],"inverse_cli",11)==0)TOTAL=1;
-                                        else if(strncmp(argv[arg_num],"all",3)==0){ORIGIN=1;DISTINCT=1;TOTAL=1;}
-                                        else {fprintf(stderr, "normalization_error%s",argv[arg_num]); exit(0);}
-                                        
-                                }
-                                arg_num += nor_cnt;
-                        }
                         //-------table--------// must be greater than 1 ,at least 1 external table 
-                        else if(strncmp(argv[arg_num],"-it",3)==0){
+                        else if(strcmp(argv[arg_num],"-it")==0){
                                 if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
-                                else {fprintf(stderr, "it_error"); exit(0);}
+                                else {fprintf(stderr, "it_error\n"); exit(0);}
                                 arg_num+=2;
                         }
                         /************help********************/
-                        else 
-                        {
+                        else if(strcmp(argv[arg_num],"-Tbs")==0){
+                                int tmp = atoi(argv[++arg_num]);
+                                if(tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096)Table_Size = tmp;
+                                else {fprintf(stderr, "Table size errror 4096 16384 ,65536,32768\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************PingLi alpha ********/
+                        else if(strcmp(argv[arg_num],"-PA")==0){
+                                pingli_alpha = atof(argv[++arg_num]);
+                                if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /***************algorithm*****************/
+                        else if(strcmp(argv[arg_num],"-a")==0){
+                                
+                                alg_cnt = atoi(argv[++arg_num]);
+                                
+                                int tmp =  arg_num+alg_cnt;
+                                
+                                
+                                while (arg_num<tmp)
+                                {       
+                                        
+                                        ++arg_num; 
+                                        
+                                        
+                                        if(strcmp(argv[arg_num],"exact")==0){ALG_flag[0]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage100")==0){ALG_flag[4]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage50")==0){ALG_flag[3]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo")==0){ALG_flag[7]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HT")==0){ALG_flag[6]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford")==0){ALG_flag[1]=1;}
+                                        else if(strcmp(argv[arg_num],"PingLi")==0){ALG_flag[11]=1;}
+                                        else {
+                                                fprintf(stderr, "algorithm name error:%s\n",argv[arg_num]);
+                                                exit(0);}
+                                }       
+                                arg_num++;
+                                
+                             
+                                
+                        }
+                        /*************Resolution bit num ********/
+                        else if(strcmp(argv[arg_num],"-resolution")==0){
+                                
+                                if(strcmp(argv[++arg_num],"MAX")==0){
+                                        resolution = RAND_MAX;        
+                                }
+                                else{
+                                        resolution = pow(2,atoi(argv[arg_num]));
+                                }                
+                                if (resolution<=0){fprintf(stderr, "resolution must be positive integer"); exit(0);}
+                                arg_num++;
+                        }
+                        else {
                                 fprintf(stderr,"input parameter error check --help");
                                 exit(0);
                         }
                 } 
 
-
-                // Flags default value 
-                if( ORIGIN == 0 && DISTINCT == 0 && TOTAL == 0)
-                {
-                        ORIGIN=1;
-                        DISTINCT=1;
-                        TOTAL=1;
-                }
-                if( EXACT == 0 && CLIFFORD == 0 && INVERSE_CLI == 0)EXACT=1;
         }
         
 }
 
 int main(int argc, char *argv[])
 {
+        
         fprintf(stderr,
 	  "____________________________________________________________\n");
         fprintf(stderr,
                 "%s compiled at %s, %s\n", __FILE__, __TIME__, __DATE__);
-
+               
         Checkargument(argc,argv);
         
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
-                Trace_processing(argv[1]);
+                fprintf(stderr,"check point1\n");
+                Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)

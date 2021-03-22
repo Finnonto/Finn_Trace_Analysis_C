@@ -25,7 +25,7 @@ typedef struct Trace_info
 
 //flag
 int ALG_flag[MAX_ALG];
-
+int alg_cnt;
 // variable resolution
 int resolution;
 
@@ -87,6 +87,10 @@ uint32_t HT_Table_Entry ;
 
 mpd_context_t ctx;
 double pingli_alpha;
+
+// entropy calculate storage 
+
+
 
 
 void import_inverse_cdf_table(uint16_t table_amount);

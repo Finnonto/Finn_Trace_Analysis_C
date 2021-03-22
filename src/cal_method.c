@@ -7,11 +7,11 @@ double RandInRnage()
     rand_tmp = rand()%resolution;
     
     
-    if(rand_tmp <=0)
+    if(rand_tmp == 0)
     {
         rand_tmp = 1;
     }
-    else if (rand_tmp >= resolution)
+    else if (rand_tmp == resolution)
     {
         rand_tmp = resolution -1 ;
         
@@ -411,9 +411,9 @@ trace_info_t *Clifford_est(tree_t *item)
         {
 
             u1 = RandInRnage();
-
+            
             u2 = RandInRnage();
-
+            
             // Alpha stable 
             w1 = PI*(u1-0.5);
             w2 = -log(u2);
