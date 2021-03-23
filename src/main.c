@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
-                fprintf(stderr,"check point1\n");
+                printf("go\n");
                 Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation

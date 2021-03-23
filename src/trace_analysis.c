@@ -35,15 +35,12 @@ void invoke_algorithms(tree_t *Stream,int index)
 	// we apply function pointer to replace the
 	// entropy calculation,so that we can choose 
 	// specific entropy calculation by arguments
-	fprintf(stderr,"check point4\n");
 	entropy_info = exact(Stream);
-	fprintf(stderr,"check point5\n");
 	exact_entropy[index][ent_cnt] = entropy_info->entropy;
-	fprintf(stderr,"check point6\n");
 	StreamDistinct[index][ent_cnt] =entropy_info->distinct;
-	fprintf(stderr,"check point7\n");
 	StreamLength[index][ent_cnt] =entropy_info->total_count;
-	fprintf(stderr,"check point8\n");
+	printf("\n");
+	printf("exact %f %d %d\n",entropy_info->entropy,entropy_info->distinct,entropy_info->total_count);
 	//choosing algorithm
 	for(int j=1;j<MAX_ALG;j++)
 	{
@@ -53,6 +50,8 @@ void invoke_algorithms(tree_t *Stream,int index)
 				case 1:
 					entropy_info = Clifford_est(Stream);
 					Clifford_entropy[index][ent_cnt] = entropy_info->entropy;
+					printf("\n");
+					printf("clifford %f %d %d\n",entropy_info->entropy,entropy_info->distinct,entropy_info->total_count);
 					break;
 				
 				case 2:
@@ -117,20 +116,20 @@ void invoke_algorithms(tree_t *Stream,int index)
 void Items_processing()
 {
 	
-	fprintf(stderr,"check point2\n");
+	
 	// flatten the container(tree) to linked list 
 	tree_to_list(SrcIP_tree);
 	tree_to_list(DesIP_tree);
 	tree_to_list(SrcPort_tree);
 	tree_to_list(DesPort_tree);
 	tree_to_list(PktLen_tree);
-	fprintf(stderr,"check point3\n");
+	
 	invoke_algorithms(SrcIP_tree,0);
 	invoke_algorithms(DesIP_tree,1);
 	invoke_algorithms(SrcPort_tree,2);
 	invoke_algorithms(DesPort_tree,3);
 	invoke_algorithms(PktLen_tree,4);
-	fprintf(stderr,"check point9\n");
+	
 
 
 	// clean up the container after we apply it
@@ -181,12 +180,13 @@ void Trace_processing(char* trace_path)
 	
 	
 
+	next_report_time = 0;
 	
-	
+	trace_packet_cnt = 0;
 	
 	while (trace_read_packet(trace,packet)>0) {
 			
-			packet_cnt++;
+			
 			per_packet(packet);
 	}
 	
@@ -221,7 +221,7 @@ void per_packet(libtrace_packet_t *packet)
 	
 	
 	
-
+	
 	// get the packet information
 	ts = trace_get_timeval(packet);
 	payload_len = trace_get_payload_length(packet);
@@ -233,15 +233,13 @@ void per_packet(libtrace_packet_t *packet)
 		trace_analysis_Init();
 	}
 
-
-	
 	
 	 
-	if(ts.tv_sec >= next_report_time || packet_cnt == 2133034)
+	while(ts.tv_sec >next_report_time || trace_packet_cnt==2133034 )
 	{   
 		// when time interval is over ,we do Items processing
 		Items_processing();
-		
+		printf("pkt_cnt :%d\n",trace_packet_cnt);
 		//to make sure that next_report_time is over ts.tv_sec
 		while(ts.tv_sec>next_report_time)
 		{
@@ -250,6 +248,7 @@ void per_packet(libtrace_packet_t *packet)
 		printf("Progress %d timeinterval\r",ent_cnt);
 		fflush(stdout);
 		ent_cnt ++;
+		trace_packet_cnt= 1;
 	}
 	
 	// we only apply two types of packet to entropy
@@ -257,7 +256,7 @@ void per_packet(libtrace_packet_t *packet)
 	
 	if(linktype == TRACE_TYPE_NONE)//condition  for raw packet
 	{
-		
+		trace_packet_cnt++;
 		saddr_ptr = trace_get_source_address(packet, (struct sockaddr *)&saddr);
 		daddr_ptr = trace_get_destination_address(packet, (struct sockaddr *)&daddr);
 		
@@ -274,7 +273,7 @@ void per_packet(libtrace_packet_t *packet)
 	}
 	else if (linktype == TRACE_TYPE_ETH && analysis_is_ipv4(packet))// condition for IPv4 packet
 	{
-		
+		trace_packet_cnt++;
 		saddr_ptr = trace_get_source_address(packet, (struct sockaddr *)&saddr);
 		daddr_ptr = trace_get_destination_address(packet, (struct sockaddr *)&daddr);
 		sport = trace_get_source_port(packet);
@@ -295,7 +294,7 @@ void per_packet(libtrace_packet_t *packet)
 		tree_insert(DesIP_tree,ntohl(ip_addr_tmp.s_addr));
 
 
-		}
+	}
 	
 	
 		    

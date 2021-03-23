@@ -20,7 +20,7 @@ BIN_TARGET = ${DIR_BIN}/${TARGET}
 
 
 ${BIN_TARGET}:${OBJ}
-	$(CC) $(OBJ) -o $@  $(LIBINCLUDE)
+	$(CC) $(OBJ) -g -o $@  $(LIBINCLUDE)
 
 
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
@@ -35,7 +35,7 @@ sim:
 	
 trace:
 
-	./bin/Finn_trace_analysis trace /mnt/d/Download/MAWI_2020_48_AD/pcap/202004080000.pcap.gz 
+	./bin/Finn_trace_analysis trace ~/Desktop/202004080000.pcap -a 1  Clifford -resolution 16
 
 
 clean:

@@ -1,5 +1,5 @@
 #include "cal_method.h"
-#include "trace_analysis.h"
+
 
 // generate a double number between 0 and 1
 double RandInRnage()
@@ -363,7 +363,7 @@ trace_info_t *exact(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
+    
     return info;								
     
 }

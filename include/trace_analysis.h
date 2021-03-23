@@ -47,7 +47,7 @@ struct sockaddr *saddr_ptr,*daddr_ptr;
 uint16_t sport,dport;
 size_t payload_len ;
 struct in_addr ip_addr_tmp;
-int packet_cnt = 0;
+int trace_packet_cnt;
 
 
 
