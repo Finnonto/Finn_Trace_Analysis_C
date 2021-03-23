@@ -11,10 +11,10 @@
 #include "simulation.h"
 
 #define ENT_MAX 1000
-#define CHAR_LEN 300
+#define CHAR_LEN 200
 
 
-
+char TraceName[CHAR_LEN];
 char filename[CHAR_LEN];
 char Trace_Path[CHAR_LEN];
 char Output_SrcIPName[CHAR_LEN];

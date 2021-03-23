@@ -1,6 +1,7 @@
 #include "cal_method.h"
 
 
+#define TMP_CHAR_LEN 200
 // generate a double number between 0 and 1
 double RandInRnage()
 {   
@@ -80,29 +81,17 @@ void import_inverse_cdf_table(uint16_t table_amount)
 {
     
 
-    char char_tmp[10];
-    char table_path[60] = {"tables/inverse_table/inverse_table_"};
     
-    sprintf(char_tmp,"%d",resolution);
-    strcat(table_path,char_tmp);
-    strcat(table_path,"_");
-    sprintf(char_tmp,"%d",Table_Size);
-    strcat(table_path,char_tmp);
-    strcat(table_path,"/table");
-    printf("%s\n",table_path);
+    char table_path[TMP_CHAR_LEN];
+    
+    
     for(int i=0;i<table_amount;++i)
     {
         
         FILE *tb;
-        
-        char table_path_tmp[60];
-        strcpy(table_path_tmp,table_path);
-        char num[4];
-        sprintf(num,"%d",i);
-        strcat(table_path_tmp,num);
-        strcat(table_path_tmp,".txt");
-                
-        if(!(tb = fopen(table_path_tmp,"r")))
+    
+        sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i);                
+        if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
             exit(0);
@@ -125,33 +114,21 @@ void import_inverse_cdf_stage50_table(uint16_t table_amount,int num)
 {
     
 
-    char tmp[20];
-	
 
 	
-    char table_path[100] = {"tables/inverse_table/inverse_table_16384_"};
-    sprintf(tmp,"%d",num);
-    strcat(table_path,tmp);
-    strcat(table_path,"/table_");
-    strcat(table_path,tmp);
-    strcat(table_path,"_");
+    char table_path[TMP_CHAR_LEN];
     
-    char TXT[5]={".txt"};
-
     
     for(int i=0;i<table_amount;++i)
     {
+    
+        sprintf(table_path,"tables/inverse_table/inverse_table_16384_%d/table_%d_%d.txt",num,num,i);                
         IC_Entry = 1;
         FILE *tb;
-        char table_path_tmp[100];
-        strcpy(table_path_tmp,table_path);
-        char tmp[4];
-        sprintf(tmp,"%d",i);
-
-        strcat(table_path_tmp,tmp);
-        strcat(table_path_tmp,TXT);
+        
+        
                 
-        if(!(tb = fopen(table_path_tmp,"r")))
+        if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
             exit(0);
@@ -172,35 +149,17 @@ void import_inverse_cdf_stage50_table(uint16_t table_amount,int num)
 
 void import_inverse_cdf_stage100_table(uint16_t table_amount,int num)
 {
+        
+    char table_path[TMP_CHAR_LEN];
     
-
-    char tmp[20];
-	
-
-	
-    char table_path[100] = {"tables/inverse_table/inverse_table_16384_"};
-    sprintf(tmp,"%d",num);
-    strcat(table_path,tmp);
-    strcat(table_path,"/table_");
-    strcat(table_path,tmp);
-    strcat(table_path,"_");
-    
-    char TXT[5]={".txt"};
-
-    
+   
     for(int i=0;i<table_amount;++i)
     {
         IC_Entry = 1;
         FILE *tb;
-        char table_path_tmp[100];
-        strcpy(table_path_tmp,table_path);
-        char tmp[4];
-        sprintf(tmp,"%d",i);
-
-        strcat(table_path_tmp,tmp);
-        strcat(table_path_tmp,TXT);
-                
-        if(!(tb = fopen(table_path_tmp,"r")))
+        
+        sprintf(table_path,"tables/inverse_table/inverse_table_16384_%d/table_%d_%d.txt",num,num,i);                                
+        if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
             exit(0);
@@ -221,22 +180,15 @@ void import_inverse_cdf_stage100_table(uint16_t table_amount,int num)
 
 void import_inverse_cdf_single_table(uint32_t index)
 {
-    char table_path[100] = {"tables/inverse_table/inverse_table_16384_100/table_100_"};
-    char TXT[5]={".txt"};
+    char table_path[TMP_CHAR_LEN];
 
-    
+    sprintf(table_path,"tables/inverse_table/inverse_table_16384_100/table_100_%d.txt",index);                
     Table_Amount = 1;
     IC_Entry = 1;
     FILE *tb;
-    char table_path_tmp[100];
-    strcpy(table_path_tmp,table_path);
-    char num[4];
-    sprintf(num,"%d",index);
-
-    strcat(table_path_tmp,num);
-    strcat(table_path_tmp,TXT);
+    
             
-    if(!(tb = fopen(table_path_tmp,"r")))
+    if(!(tb = fopen(table_path,"r")))
     {
         printf("load inverse table file fail\n");
         exit(0);
@@ -257,26 +209,17 @@ void import_inverse_cdf_single_table(uint32_t index)
 void import_optimized_cdf_table(uint16_t table_amount)
 {
     
-    char table_size_char[10];
-    char table_path[60] = {"tables/inverse_table/opt_inverse_table_"};
-    
-    sprintf(table_size_char,"%d",Table_Size);
-    strcat(table_path,table_size_char);
-    strcat(table_path,"/table");
+
+    char table_path[TMP_CHAR_LEN];
     for(int i=0;i<table_amount;++i)
     {
         
         FILE *tb;
         
         IC_Entry =0;
-        char table_path_tmp[60];
-        strcpy(table_path_tmp,table_path);
-        char num[4];
-        sprintf(num,"%d",i);
-        strcat(table_path_tmp,num);
-        strcat(table_path_tmp,".txt");
-                
-        if(!(tb = fopen(table_path_tmp,"r")))
+        
+        sprintf(table_path,"tables/inverse_table/opt_inverse_table_%d/table%d.txt",Table_Size,i);                                
+        if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
             exit(0);
@@ -303,7 +246,7 @@ void import_optimized_cdf_table(uint16_t table_amount)
 // normal HT table ,there is no parameter can choose other table
 void import_HeadTail_table()
 {
-    char table_path[60] = {"tables/ht_table/HT_Table.txt"};
+    char table_path[TMP_CHAR_LEN] = {"tables/ht_table/HT_Table.txt"};
     
     HT_Table_Entry  = 1;
     FILE *tb;

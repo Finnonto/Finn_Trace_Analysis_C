@@ -229,6 +229,7 @@ void Checkargument(int  argc, char** argv)
         else if(strcmp(argv[1],"trace")==0) {
                 uint16_t arg_num=3;
                 // tace analysis mode parameters default value 
+                sprintf(TraceName,"%s",argv[2]);
                 TRACE = 1;                
                 // to init the time interval
                 next_report_time = 0;
@@ -239,11 +240,7 @@ void Checkargument(int  argc, char** argv)
                 Table_Size = 16384; // inverse table size             
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
-                
-                        
-
-                
-
+                                     
                 
                 while(arg_num<argc){
                         //-------intervalTime-------// (seconds)

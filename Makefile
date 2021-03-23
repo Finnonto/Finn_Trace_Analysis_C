@@ -35,7 +35,7 @@ sim:
 	
 trace:
 
-	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf.gz -a 2 Clifford PingLi -resolution MAX
+	./bin/Finn_trace_analysis trace ~/Desktop/libtrace_tutorial/traces/2minutes.erf -a 1 Clifford_cdf -resolution MAX
 
 
 clean:

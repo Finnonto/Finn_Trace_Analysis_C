@@ -162,7 +162,8 @@ void create_folder()
         
         //to create a subfolder for different trace
         char *tmp1,*tmp2;
-        tmp1 = strtok(Trace_Path,"/");
+        
+		tmp1 = strtok(Trace_Path,"/");
         while(tmp2!=NULL)
         {
             tmp1 = tmp2;
@@ -254,7 +255,7 @@ void Output_Trace()
    
 	
     
-	sprintf(filename,"%d_sec_%d.csv",intervalTime,resolution);
+	sprintf(filename,"%d_sec_%d_%d.csv",intervalTime,resolution,Table_Size);
 	
     //output 5 tuple 
     
@@ -290,6 +291,7 @@ void Output_log()
    		fp = fopen(logfilename,"w");
 	}
 	
+	fprintf(fp,"\n");
 	fprintf(fp,"\n");
 	if(SIMULATION){
 		
@@ -348,6 +350,7 @@ void Output_log()
 		fprintf(fp,"trace mode \n");
 		fprintf(fp,"resolution:%d\n",resolution);
 		fprintf(fp,"Timeinval:%d\n",intervalTime);
+		fprintf(fp,"Trace: %s\n",TraceName);
 		fprintf(fp,"Table Size:%d it:%d K_vlaue:%d PA:%lf\n",Table_Size,it,K_Value,pingli_alpha);
 		fprintf(fp,"algorithm:");
 		fprintf(fp,"algorithm:");
