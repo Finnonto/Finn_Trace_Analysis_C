@@ -39,8 +39,6 @@ void invoke_algorithms(tree_t *Stream,int index)
 	exact_entropy[index][ent_cnt] = entropy_info->entropy;
 	StreamDistinct[index][ent_cnt] =entropy_info->distinct;
 	StreamLength[index][ent_cnt] =entropy_info->total_count;
-	printf("\n");
-	printf("exact %f %d %d\n",entropy_info->entropy,entropy_info->distinct,entropy_info->total_count);
 	//choosing algorithm
 	for(int j=1;j<MAX_ALG;j++)
 	{
@@ -50,8 +48,6 @@ void invoke_algorithms(tree_t *Stream,int index)
 				case 1:
 					entropy_info = Clifford_est(Stream);
 					Clifford_entropy[index][ent_cnt] = entropy_info->entropy;
-					printf("\n");
-					printf("clifford %f %d %d\n",entropy_info->entropy,entropy_info->distinct,entropy_info->total_count);
 					break;
 				
 				case 2:
@@ -235,11 +231,10 @@ void per_packet(libtrace_packet_t *packet)
 
 	
 	 
-	while(ts.tv_sec >next_report_time || trace_packet_cnt==2133034 )
+	while(ts.tv_sec >next_report_time)
 	{   
 		// when time interval is over ,we do Items processing
 		Items_processing();
-		printf("pkt_cnt :%d\n",trace_packet_cnt);
 		//to make sure that next_report_time is over ts.tv_sec
 		while(ts.tv_sec>next_report_time)
 		{

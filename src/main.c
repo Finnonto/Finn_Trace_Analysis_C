@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
-                printf("go\n");
+                printf("trace analysis start: k:%d PA:%g Timeinval:%d it:%d Table Size:%d resolution:%d\n",K_Value,pingli_alpha,intervalTime,it,Table_Size,resolution);
                 Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation
