@@ -339,7 +339,10 @@ void Checkargument(int  argc, char** argv)
                 } 
 
         }
-        
+        else{
+                fprintf(stderr,"'simulation' or 'trace' ?");
+                exit(0);
+        }
 }
 
 int main(int argc, char *argv[])

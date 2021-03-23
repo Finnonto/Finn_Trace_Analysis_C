@@ -35,7 +35,7 @@ sim:
 	
 trace:
 
-	./bin/Finn_trace_analysis trace ~/Desktop/202004080000.pcap -a 1  Clifford -resolution 16
+	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf.gz -a 2 Clifford PingLi -resolution MAX
 
 
 clean:

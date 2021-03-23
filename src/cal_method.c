@@ -1608,8 +1608,14 @@ trace_info_t *PingLi_est(tree_t *item)
         // entropy evaluation variables
           
     double h_1 ,h_2_1 ,h_2_2 ,h_2_3 ,h_2 ;
-    
-    
+    /*
+    for(int i = 0 ;i<K_Value;i++)
+    {
+        printf("%f\n",k_register[i]);
+    }
+    */
+
+
 	mpd_t *a, *b, *c;
 	mpd_t *result;
     char a_s[64],b_s[64],c_s[64];
@@ -1627,26 +1633,27 @@ trace_info_t *PingLi_est(tree_t *item)
     
 
     // estimate the entropy
-    
     sprintf(a_s,"%lf",alpha);
     sprintf(b_s,"%lf",delta);
     mpd_set_string(a, a_s, &ctx);//a = alpha
     mpd_set_string(b, b_s, &ctx);//b = delta
-
     //alt_pow = -(alpha/delta);
     mpd_div(result,a,b,&ctx);//result = alt_pow
     mpd_minus(result,result,&ctx);//result = -alt_pow
-	// init j2 ,j_2 = 0;
+
+    // init j2 ,j_2 = 0;
     sprintf(c_s,"%lf",0.0);
     mpd_set_string(c, c_s, &ctx);//c = j2
-
+    
     for (int i=0;i<K_Value;++i)
     {
         sprintf(a_s,"%lf",k_register[i]);// a =k_register
         mpd_set_string(a, a_s, &ctx);
         mpd_pow(b,a,result,&ctx); //b= power result
         mpd_add(c,c,b,&ctx);//c = j2
+
     }
+
     //j2 = b;
     // init j_1 ,j_1 = delta / K_Value;
     sprintf(a_s,"%lf",delta);//a= delta
@@ -1654,7 +1661,7 @@ trace_info_t *PingLi_est(tree_t *item)
     mpd_set_string(a, a_s, &ctx);
     mpd_set_string(b, b_s, &ctx);
     mpd_div(result,a,b,&ctx);//result = j1 =delta/K
-    
+
     //rstring = mpd_to_sci(c, 1);
 	//printf("%s\n", rstring);
 

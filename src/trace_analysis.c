@@ -149,6 +149,8 @@ void Items_processing()
 
 void Trace_processing(char* trace_path)
 {
+	mpd_init(&ctx, 38);
+
 	libtrace_t *trace = NULL;
 	libtrace_packet_t *packet = NULL;
 	packet = trace_create_packet();

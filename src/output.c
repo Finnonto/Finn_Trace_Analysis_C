@@ -275,3 +275,8 @@ void Output_Trace()
 
 }
 
+
+void Output_log()
+{
+	
+}
