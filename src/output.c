@@ -20,8 +20,8 @@ void Output_write_file(char* Output_filename,int index)
 				switch (i)
 				{
 					case 1:
-					fprintf(fp,"Clifford_entropy,");
-					break;
+						fprintf(fp,"Clifford_entropy,");
+						break;
 				
 					case 2:
 						fprintf(fp,"Clifford_cdf_entropy,");
@@ -278,5 +278,128 @@ void Output_Trace()
 
 void Output_log()
 {
+	FILE* fp;
+    
+	char logfilename[CHAR_LEN]	= "./ArgLog.txt";
+    if( access( logfilename, F_OK ) == 0 ) 
+	{
+    	fp = fopen(logfilename,"a");
+	} 	
+	else 
+	{
+   		fp = fopen(logfilename,"w");
+	}
 	
+	fprintf(fp,"\n");
+	if(SIMULATION){
+		
+		fprintf(fp,"simulation mode \n");
+		fprintf(fp,"resolution:%d\n",resolution);
+		fprintf(fp,"z:%g length:%d range:%d offset:%d \n",zipf_par,zipf_slen,zipf_range,zipf_offset);
+		fprintf(fp,"Table Size:%d it:%d K_vlaue:%d\n",Table_Size,it,K_Value);
+		fprintf(fp,"algorithm:");
+		for(int i=0;i<MAX_ALG;i++){
+			if(ALG_flag[i]==1){
+				switch (i)
+				{
+				case 0:
+					fprintf(fp,"exact,");
+					break;
+				case 1:
+					fprintf(fp,"Clifford,");
+					break;
+				case 2:
+					fprintf(fp,"Clifford_cdf,");
+					break;
+				case 3:
+					fprintf(fp,"Clifford_cdf_stage50,");
+					break;
+				case 4:
+					fprintf(fp,"Clifford_cdf_stage100,");
+					break;
+				case 5:
+					fprintf(fp,"Clifford_cdf_opt,");
+					break;
+				case 6:
+					fprintf(fp,"Clifford_HT,");
+					break;
+				case 7:
+					fprintf(fp,"Clifford_HTo,");
+					break;
+				case 8:
+					fprintf(fp,"Clifford_HTo_65536,");
+					break;
+				case 9:
+					fprintf(fp,"Clifford_HTo_interpolation,");
+					break;
+				case 10:
+					fprintf(fp,"Clifford_HTo_interpolation_65536,");
+					break;
+				case 11:
+					fprintf(fp,"PingLi\n");
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	else if(TRACE){
+		fprintf(fp,"trace mode \n");
+		fprintf(fp,"resolution:%d\n",resolution);
+		fprintf(fp,"Timeinval:%d\n",intervalTime);
+		fprintf(fp,"Table Size:%d it:%d K_vlaue:%d PA:%lf\n",Table_Size,it,K_Value,pingli_alpha);
+		fprintf(fp,"algorithm:");
+		fprintf(fp,"algorithm:");
+		for(int i=0;i<MAX_ALG;i++){
+			if(ALG_flag[i]==1){
+				switch (i)
+				{
+				case 0:
+					fprintf(fp,"exact,");
+					break;
+				case 1:
+					fprintf(fp,"Clifford,");
+					break;
+				case 2:
+					fprintf(fp,"Clifford_cdf,");
+					break;
+				case 3:
+					fprintf(fp,"Clifford_cdf_stage50,");
+					break;
+				case 4:
+					fprintf(fp,"Clifford_cdf_stage100,");
+					break;
+				case 5:
+					fprintf(fp,"Clifford_cdf_opt,");
+					break;
+				case 6:
+					fprintf(fp,"Clifford_HT,");
+					break;
+				case 7:
+					fprintf(fp,"Clifford_HTo,");
+					break;
+				case 8:
+					fprintf(fp,"Clifford_HTo_65536,");
+					break;
+				case 9:
+					fprintf(fp,"Clifford_HTo_interpolation,");
+					break;
+				case 10:
+					fprintf(fp,"Clifford_HTo_interpolation_65536,");
+					break;
+				case 11:
+					fprintf(fp,"PingLi\n");
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	
+	printf("log done \n");
+
 }
+
+

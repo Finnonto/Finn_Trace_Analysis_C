@@ -55,4 +55,6 @@ void Output_Simulation();
 
 void Output_Trace();
 
+void Output_log();
+
 #endif

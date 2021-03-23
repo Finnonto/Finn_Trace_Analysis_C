@@ -354,7 +354,7 @@ int main(int argc, char *argv[])
                 "%s compiled at %s, %s\n", __FILE__, __TIME__, __DATE__);
                
         Checkargument(argc,argv);
-        
+        Output_log();
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
