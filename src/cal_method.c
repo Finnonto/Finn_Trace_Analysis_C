@@ -2,10 +2,10 @@
 
 
 #define TMP_CHAR_LEN 200
-// generate a double number between 0 and 1
+// generate a double number (0,1)
 double RandInRnage()
 {   
-    rand_tmp = rand()%resolution;
+    rand_tmp = rand()&(resolution-1);
     
     
     if(rand_tmp == 0)
