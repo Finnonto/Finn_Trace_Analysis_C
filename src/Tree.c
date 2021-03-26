@@ -293,6 +293,7 @@ static void _tree_to_list(node_t* node)
     }
    
 }
+
 void tree_to_list(tree_t *self)
 {
     assert(self);
@@ -327,6 +328,70 @@ bool tree_flatten_check(tree_t *self)
     return _tree_flatten_check(self->root);
 
 }
+/*
+node_t* tree_sort(tree_t *self)
+{
+    node_t* tail = node_create(0);
+    tail->cnt = 0;
+
+    return  _tree_sort(self->root,tail);
+
+}
+
+node_t* _tree_sort(node_t *node,node_t* tail)
+{
+    if(!node)return NULL;
+    
+    
+    node_t* return_nd;
+    if((return_nd =_tree_sort(node->left,tail)))
+    {
+       if((return_nd =_tree_sort(node->right,return_nd)))
+       {
+           return node_sort(return_nd,node);
+       }
+    }
+    else if((return_nd =_tree_sort(node->right,tail)))
+    {
+        return node_sort(return_nd,node);
+    }
+    else 
+    {
+        return node_sort(tail,node);
+    }
+}
+
+node_t* node_sort(node_t* cmp,node_t* insert_nd)
+{
+    node_t *last ;
+    if(!(cmp->left))return insert_nd;
+    if(cmp->cnt <insert_nd->cnt){
+
+        insert_nd->left = cmp->left;
+        insert_nd->right = cmp;
+        cmp->left = insert_nd;
+        cmp->right = NULL;
+        last = cmp;
+        cmp = insert_nd->right;
+    }
+    else{
+        insert_nd->left = cmp ;
+        cmp->
+        return insert_nd;
+    } 
+    
 
 
+    while(cmp->cnt <insert_nd->cnt)
+    {
+        insert_nd->left = cmp->left;
+        cmp ->right = insert_nd->right;
+        insert_nd->right = cmp;
+        cmp->left = insert_nd;
+        cmp = insert_nd->left;
+    }
+    
+    return last;
+}
 
+*/

@@ -15,11 +15,23 @@ double RandInRnage()
     else if (rand_tmp == resolution)
     {
         rand_tmp = resolution -1 ;
-        
     }
     
     return (double)rand_tmp /resolution;
 }
+
+
+double cal_MAPE(double* exact,double* est,int entry)
+{
+    double cnt = 0;
+    for(int i=0;i<entry;i++)
+    {   
+        cnt += fabs(exact[i]-est[i])/exact[i];   
+    }
+    
+    return cnt/entry;
+}
+
 
 // hash to get random number set
 static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result)
@@ -313,7 +325,6 @@ trace_info_t *exact(tree_t *item)
 
 trace_info_t *Clifford_est(tree_t *item)
 {   
-    
     //return info init
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
@@ -323,11 +334,9 @@ trace_info_t *Clifford_est(tree_t *item)
     uint32_t total_item_cnt = 0;
     double entropy = 0;
     uint32_t distinct = 0;
-
     //init node
     node_t *current_node;
     current_node = item->root;
-    
     //Clifford param
     double k_register[K_Value];
     double u1=0;
@@ -337,63 +346,36 @@ trace_info_t *Clifford_est(tree_t *item)
     double ran1=0;
     double ran2=0;
     double ran = 0;
-    
-
-
     memset(k_register, 0, sizeof(double) * K_Value);
-
-
     while(current_node)
     {
-        
         total_item_cnt += current_node->cnt;
         distinct++;
-        srand(current_node->data + Deviation);
-
+        srand(current_node->data);
         for(uint32_t i=0;i<K_Value;i++)
         {
-
             u1 = RandInRnage();
-            
             u2 = RandInRnage();
-            
             // Alpha stable 
             w1 = PI*(u1-0.5);
             w2 = -log(u2);
-            
             ran1 = tan(w1) * (PI/2 - w1);
             ran2 = log(w2 * cos(w1) / (PI/2-w1) );
             ran = ran1 + ran2;
-
             // store k value
-
             k_register[i] += ran * current_node->cnt;
-            
-            
         }
-        
 	    current_node = current_node->right;
-
     }
-    
     if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
     else{
-
         for(uint32_t i=0;i<K_Value;i++){
-
-            k_register[i] /= total_item_cnt;
+            k_register[i] /= (double)total_item_cnt;
             entropy += exp(k_register[i]);
-            
         }
-
-        
         entropy /= K_Value;
-        
-        
-
         entropy = -log(entropy);
     }
-    
     // set info member
     info->entropy = entropy;
     info->total_count = total_item_cnt;

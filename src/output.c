@@ -405,4 +405,123 @@ void Output_log()
 
 }
 
+void Output_MAPE()
+{
+	FILE* fp;
+	sprintf(MAPE_filename,"./output/Simulation/MAPE_%d_%.1f_%d_%d.csv",zipf_slen,zipf_par,zipf_range,resolution);
+	if( access( MAPE_filename, F_OK ) == 0 ) 
+	{
+    	fp = fopen(MAPE_filename,"a");
+	} 	
+	else 
+	{
+   		fp = fopen(MAPE_filename,"w");
+	}
+
+	for(int i=1;i<MAX_ALG;i++)
+	{
+		if(ALG_flag[i]==1)
+		{
+			switch (i)
+			{
+				case 1:
+					fprintf(fp,"Clifford_MAPE,");
+					break;
+			
+				case 2:
+					fprintf(fp,"Clifford_cdf_MAPE,");
+					break;
+				
+				case 3:
+					fprintf(fp,"Clifford_cdf_stage50_MAPE,");
+					break;
+				
+				case 4:
+					fprintf(fp,"Clifford_cdf_stage100_MAPE,");
+					break;
+				
+				case 5:
+					fprintf(fp,"Clifford_cdf_opt_MAPE,");
+					break;
+				
+				case 6:
+					fprintf(fp,"Clifford_HT_MAPE,");
+					break;
+				
+				case 7:
+					fprintf(fp,"Clifford_HTo_MAPE,");
+					break;
+				
+				case 8:
+					fprintf(fp,"Clifford_HTo_65536_MAPE,");
+					break;
+				
+				case 9:
+					fprintf(fp,"Clifford_HTo_interpolation_MAPE,");
+					break;
+				
+				case 10:
+					fprintf(fp,"Clifford_HTo_interpolation_65536_MAPE,");
+					break;
+				
+				case 11:
+					fprintf(fp,"PingLi_MAPE,");
+					break;
+			}
+		}
+	}
+
+	fprintf(fp,"\n");
+
+	for(int j=1;j<MAX_ALG;j++)
+	{
+		if(ALG_flag[j]==1)
+		{
+			switch (j)
+			{
+				case 0:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 1:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 2:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 3:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 4:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 5:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 6:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 7:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 8:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 9:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 10:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+				case 11:
+					fprintf(fp,"%.30lf,",MAPE[0][j]);
+					break;
+			}
+		}
+	}
+	fprintf(fp,"\n");
+
+	fclose(fp);
+}
+
+
 

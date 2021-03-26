@@ -10,13 +10,14 @@
 #include "trace_analysis.h"
 #include "simulation.h"
 
-#define ENT_MAX 1000
+#define ENT_MAX 3000
 #define CHAR_LEN 200
 
 
 char TraceName[CHAR_LEN];
 char filename[CHAR_LEN];
 char Trace_Path[CHAR_LEN];
+char MAPE_filename[CHAR_LEN];
 char Output_SrcIPName[CHAR_LEN];
 char Output_DstIPName[CHAR_LEN];
 char Output_SrcPortName[CHAR_LEN];
@@ -33,6 +34,7 @@ int ent_cnt;
 trace_info_t *entropy_info;
 int    StreamDistinct[5][ENT_MAX];
 int    StreamLength[5][ENT_MAX];
+double MAPE[5][MAX_ALG];
 double exact_entropy[5][ENT_MAX];
 double Clifford_entropy[5][ENT_MAX];
 double Clifford_cdf_entropy[5][ENT_MAX];
@@ -56,5 +58,7 @@ void Output_Simulation();
 void Output_Trace();
 
 void Output_log();
+
+void Output_MAPE();
 
 #endif

@@ -46,6 +46,9 @@ bool tree_return_all(tree_t *self);
 void tree_to_list(tree_t *self);
 
 bool tree_flatten_check(tree_t *self);
+/*
+node_t* _tree_sort(node_t *node,node_t* tail);
 
-
+node_t* node_sort(node_t* cmp,node_t* insert_nd);
+*/
 #endif

@@ -169,7 +169,53 @@ void Simulation_processing()
 		tree_delete(Sim_tree);
 
 	}
+	
 	printf("\n");
+	for(int j=1;j<MAX_ALG;j++)
+	{
+		if(ALG_flag[j]==1)
+		{
+			switch (j){
+				case 1:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_entropy[0],sim_times);
+					break;
+				case 2:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_entropy[0],sim_times);
+					break;
+				case 3:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_stage50_entropy[0],sim_times);
+					break;
+				case 4:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_stage100_entropy[0],sim_times);
+					break;
+				case 5:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_opt_entropy[0],sim_times);
+					break;
+				case 6:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HT_entropy[0],sim_times);
+					break;
+				case 7:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_entropy[0],sim_times);
+					break;
+				case 8:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_65536_entropy[0],sim_times);
+					break;
+				case 9:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_interpolation_entropy[0],sim_times);
+					break;
+				case 10:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_interpolation_65536_entropy[0],sim_times);
+					break;
+				case 11:
+					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&PingLi_entropy[0],sim_times);
+					break;
+				default:
+					fprintf(stderr,"invoke algorthm error!\n");
+					exit(0);
+			}
+		}
+	}
+	Output_MAPE();
 	Output_Simulation();
 		
 	

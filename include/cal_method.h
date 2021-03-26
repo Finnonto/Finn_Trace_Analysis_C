@@ -92,7 +92,7 @@ double pingli_alpha;
 // entropy calculate storage 
 
 
-
+double cal_MAPE(double* exact,double* est,int entry);
 
 void import_inverse_cdf_table(uint16_t table_amount);
 
