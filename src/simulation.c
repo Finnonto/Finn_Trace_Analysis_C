@@ -36,6 +36,15 @@ void CreateStream(tree_t * container ,int length, float z,int range,int offset)
 
 }
 
+void CreateAllDifferentStream(tree_t * container,int length,int offset)
+{
+	for(int i=length*offset+1;i<=length+length*offset;i++)
+	{
+		tree_insert(container,i);
+	}
+	tree_to_list(container);
+}
+
 void Simulation_processing()
 {
 	//import tables 
@@ -70,7 +79,15 @@ void Simulation_processing()
 
 		tree_t* Sim_tree;
 		Sim_tree = tree_create();
-		CreateStream(Sim_tree,zipf_slen,zipf_par,zipf_range,sim);
+		if(zipf_par == 0)
+		{
+			CreateAllDifferentStream(Sim_tree,zipf_slen,sim);
+		}
+		else
+		{
+			CreateStream(Sim_tree,zipf_slen,zipf_par,zipf_range,sim);
+		}
+		
 		
 		
 		// flatten the tree to linked list 
@@ -84,7 +101,6 @@ void Simulation_processing()
 		exact_entropy[0][sim] = entropy_info->entropy;
 		StreamDistinct[0][sim] =entropy_info->distinct;
 		StreamLength[0][sim] =entropy_info->total_count;
-
 		//choosing algorithm
 		for(int j=1;j<MAX_ALG;j++)
 		{

@@ -373,7 +373,7 @@ trace_info_t *Clifford_est(tree_t *item)
             k_register[i] /= (double)total_item_cnt;
             entropy += exp(k_register[i]);
         }
-        entropy /= K_Value;
+        entropy /= (double)K_Value;
         entropy = -log(entropy);
     }
     // set info member

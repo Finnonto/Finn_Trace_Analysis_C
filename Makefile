@@ -34,6 +34,8 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 sim:
 	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
 
+sim_AD:
+	./bin/Finn_trace_analysis simulation -l 100000 -r 30000  -k 20 -z 0 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
 
 	
 trace:
