@@ -38,11 +38,17 @@ void CreateStream(tree_t * container ,int length, float z,int range,int offset)
 
 void CreateAllDifferentStream(tree_t * container,int length,int offset)
 {
-	for(int i=length*offset+1;i<=length+length*offset;i++)
+	container->root = node_create(length*offset);
+	node_t * current_node = container->root;
+
+	for(int i=length*offset+1;i<length+length*offset;i++)
 	{
-		tree_insert(container,i);
+		
+		current_node->right = node_create(i);
+		current_node = current_node->right;
+		
 	}
-	tree_to_list(container);
+	
 }
 
 void CreateAllSameStream(tree_t * container,int length,int offset)
