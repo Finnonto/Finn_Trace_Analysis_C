@@ -45,6 +45,15 @@ void CreateAllDifferentStream(tree_t * container,int length,int offset)
 	tree_to_list(container);
 }
 
+void CreateAllSameStream(tree_t * container,int length,int offset)
+{
+	for(int i=0;i<length;i++)
+	{
+		tree_insert(container,offset);
+	}
+	tree_to_list(container);
+}
+
 void Simulation_processing()
 {
 	//import tables 
@@ -82,6 +91,10 @@ void Simulation_processing()
 		if(zipf_par == 0)
 		{
 			CreateAllDifferentStream(Sim_tree,zipf_slen,sim);
+		}
+		else if (zipf_par == -1 )
+		{
+			CreateAllSameStream(Sim_tree,zipf_slen,sim);
 		}
 		else
 		{
