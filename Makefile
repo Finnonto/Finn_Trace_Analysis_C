@@ -35,10 +35,10 @@ sim:
 	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
 
 sim_AD:
-	./bin/Finn_trace_analysis simulation -l 1000000 -r 30000  -k 20 -z 0 -t  60 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
+	./bin/Finn_trace_analysis simulation -l 10000000 -r 30000  -k 20 -z 1 -t  1 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
 
 sim_AS:
-	./bin/Finn_trace_analysis simulation -l 1000000 -r 30000  -k 20 -z -1 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 16
+	./bin/Finn_trace_analysis simulation -l 1000000 -r 30000  -k 20 -z 0 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 16
 
 
 trace:
