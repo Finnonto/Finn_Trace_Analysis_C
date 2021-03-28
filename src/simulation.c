@@ -98,7 +98,7 @@ void Simulation_processing()
 		{
 			CreateAllDifferentStream(Sim_tree,zipf_slen,sim);
 		}
-		else if (zipf_par == -1 )
+		else if (zipf_par == 0 )
 		{
 			CreateAllSameStream(Sim_tree,zipf_slen,sim);
 		}
