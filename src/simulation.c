@@ -94,7 +94,7 @@ void Simulation_processing()
 
 		tree_t* Sim_tree;
 		Sim_tree = tree_create();
-		if(zipf_par == 1)
+		if(zipf_par == -1)
 		{
 			CreateAllDifferentStream(Sim_tree,zipf_slen,sim);
 		}
