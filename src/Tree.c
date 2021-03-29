@@ -269,7 +269,7 @@ bool tree_return_all(tree_t *self)
 
 static void _tree_to_list(node_t* node)
 {
-    while(node->right)
+    while(node)
     {
 
         if(node->left)
