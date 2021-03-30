@@ -65,7 +65,7 @@ void Simulation_processing()
 	//import tables 
 	
 	if(resolution == 4096 || resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){
-		printf("importing table ...\n");
+		printf("importing %d table ...\n",it);
 		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
 		//import_inverse_cdf_stage100_table(it,100);
