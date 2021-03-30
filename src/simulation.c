@@ -64,7 +64,7 @@ void Simulation_processing()
 {
 	//import tables 
 	
-	if(resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){
+	if(resolution == 4096 || resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){
 		printf("importing table ...\n");
 		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
@@ -212,37 +212,37 @@ void Simulation_processing()
 		{
 			switch (j){
 				case 1:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_entropy,0,sim_times);
 					break;
 				case 2:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_entropy,0,sim_times);
 					break;
 				case 3:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_stage50_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_stage50_entropy,0,sim_times);
 					break;
 				case 4:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_stage100_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_stage100_entropy,0,sim_times);
 					break;
 				case 5:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_cdf_opt_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_opt_entropy,0,sim_times);
 					break;
 				case 6:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HT_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HT_entropy,0,sim_times);
 					break;
 				case 7:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_entropy,0,sim_times);
 					break;
 				case 8:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_65536_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_65536_entropy,0,sim_times);
 					break;
 				case 9:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_interpolation_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_interpolation_entropy,0,sim_times);
 					break;
 				case 10:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&Clifford_HTo_interpolation_65536_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_interpolation_65536_entropy,0,sim_times);
 					break;
 				case 11:
-					MAPE[0][j] = cal_MAPE(&exact_entropy[0],&PingLi_entropy[0],sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*PingLi_entropy,0,sim_times);
 					break;
 				default:
 					fprintf(stderr,"invoke algorthm error!\n");

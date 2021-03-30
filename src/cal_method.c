@@ -21,12 +21,12 @@ double RandInRnage()
 }
 
 
-double cal_MAPE(double* exact,double* est,int entry)
+double cal_MAPE(double* exact,double* est,int index ,int entry)
 {
     double cnt = 0;
     for(int i=0;i<entry;i++)
     {   
-        cnt += fabs(exact[i]-est[i])/exact[i];   
+        cnt += fabs(*((exact+index)+i)-*((est+index)+i))/ *((exact+index)+i);   
     }
     
     return cnt/entry;
@@ -438,7 +438,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
         for(int i=0;i<K_Value;i++)
         {
             k_register[i] /= total_item_cnt;
-            
+    
             entropy += exp(k_register[i]);
         }
 
