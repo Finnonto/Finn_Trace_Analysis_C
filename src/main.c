@@ -207,7 +207,7 @@ void Checkargument(int  argc, char** argv)
                         /*************CDF table size********/
                         else if(strcmp(argv[arg_num],"-Tbs")==0){
                                 int tmp = atoi(argv[++arg_num]);
-                                if(tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096)Table_Size = tmp;
+                                if( tmp == 1024 || tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096)Table_Size = tmp;
                                 else {fprintf(stderr, "Table size errror 4096 16384 ,65536,32768"); exit(0);}
                                 arg_num++;
                         }

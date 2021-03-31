@@ -157,7 +157,7 @@ void Trace_processing(char* trace_path)
 		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
 		//import_inverse_cdf_stage100_table(it,100);
-		import_inverse_cdf_table(it);
+		import_inverse_cdf_table(it,TableIndex);
 		//import_HeadTail_table();
 		printf("import table done!\n");
 	}
