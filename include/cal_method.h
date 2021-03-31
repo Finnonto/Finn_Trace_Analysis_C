@@ -76,7 +76,6 @@ ICoptTable_list Inverse_opt_table[10];
 
 
 //for Clifford_est srand deviate
-uint32_t Deviation;
 uint32_t TableIndex;
 
 //for head and tail 
@@ -94,7 +93,7 @@ double pingli_alpha;
 
 double cal_MAPE(double* exact,double* est,int index,int entry);
 
-void import_inverse_cdf_table(uint16_t table_amount);
+void import_inverse_cdf_table(uint16_t table_amount,uint16_t index);
 
 void import_inverse_cdf_stage50_table(uint16_t table_amount,int num);
 

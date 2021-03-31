@@ -89,33 +89,23 @@ static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *
 
 
 // normal cdf table use -Tbs parameter to get different size of table
-void import_inverse_cdf_table(uint16_t table_amount)
+void import_inverse_cdf_table(uint16_t table_amount,uint16_t index)
 {
-    
-
-    
-    char table_path[TMP_CHAR_LEN];
-    
-    
-    for(int i=0;i<table_amount;++i)
+    char table_path[TMP_CHAR_LEN];   
+    for(int i=index;i<index+table_amount;++i)
     {
-        
         FILE *tb;
-    
-        sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i);                
+        sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
+        printf("%s\n",table_path);
         if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
             exit(0);
         }
-        
-        
         for(int j = 0;j<Table_Size;j++)
         {
             fscanf(tb,"%lf",&Inverse_table[i].Table[j]);
-
         }
-
         CDF_Table_Entry_list[i] = Table_Size;
         fclose(tb);
     }
@@ -405,7 +395,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     
     
     
-    for(int tn = 0 ;tn< Table_Amount; tn++)
+    for(int tn = TableIndex ;tn< TableIndex+Table_Amount; tn++)
     {
         
         total_item_cnt = 0;
@@ -428,7 +418,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
             
             for(int i=0; i<K_Value; i++)
             {
-                k_register[i] += Inverse_table[tn].Table[hash_result[i]] * current_node->cnt;	
+                k_register[i] += Inverse_table[tn%10].Table[hash_result[i]] * current_node->cnt;	
             }
             current_node = current_node->right;
         }
@@ -443,7 +433,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
         }
 
         entropy /= K_Value;
-        entropy_list[tn] = -log(entropy);
+        entropy_list[tn-TableIndex] = -log(entropy);
     }
     // get the mean of entropy list 
 

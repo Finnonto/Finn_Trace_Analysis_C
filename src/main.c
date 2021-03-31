@@ -55,6 +55,7 @@ void Checkargument(int  argc, char** argv)
                 
                 // algorithm parameter
                 it = 1;  //inverse table amount 
+                TableIndex = 0 ;//Table index
                 Table_Size = 16384; // inverse table size             
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
@@ -216,6 +217,12 @@ void Checkargument(int  argc, char** argv)
                                 if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1"); exit(0);}
                                 arg_num++;
                         }
+                        /*************PingLi alpha ********/
+                        else if(strcmp(argv[arg_num],"-tbidx")==0){
+                                TableIndex = atoi(argv[++arg_num]);
+                                if (TableIndex>10 || TableIndex<0){fprintf(stderr, "Table index must be between 0,1"); exit(0);}
+                                arg_num++;
+                        }
                         /*************raising exception********/
                         else 
                         {
@@ -355,13 +362,13 @@ int main(int argc, char *argv[])
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
-                printf("trace analysis start: k:%d PA:%g Timeinval:%d it:%d Table Size:%d resolution:%d\n",K_Value,pingli_alpha,intervalTime,it,Table_Size,resolution);
+                printf("trace analysis start: k:%d PA:%g Timeinval:%d it:%d Table Index: %d Table Size:%d resolution:%d\n",K_Value,pingli_alpha,intervalTime,it,TableIndex,Table_Size,resolution);
                 Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)
         {
-                printf("sim start: z:%g length:%d range:%d offset:%d Table Size:%d resolution:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,Table_Size,resolution);
+                printf("sim start: z:%g length:%d range:%d offset:%d %dTables Table Index:%d Table Size:%d resolution:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,it,TableIndex,Table_Size,resolution);
         
                 Simulation_processing();
 
