@@ -181,7 +181,7 @@ void Checkargument(int  argc, char** argv)
                                         if(strcmp(argv[arg_num],"exact")==0){ALG_flag[0]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage100")==0){ALG_flag[4]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_stage50")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
@@ -201,7 +201,7 @@ void Checkargument(int  argc, char** argv)
                         }
                         /*************inverse table amount********/
                         else if(strcmp(argv[arg_num],"-it")==0){
-                                if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
+                                if(atoi(argv[arg_num+1])<21 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
                                 else {fprintf(stderr, "it_error"); exit(0);}
                                 arg_num++;
                         }

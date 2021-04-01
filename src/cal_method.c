@@ -90,16 +90,20 @@ static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *
 
 // normal cdf table use -Tbs parameter to get different size of table
 void import_inverse_cdf_table(uint16_t table_amount,uint16_t index,int integer){
-    char table_path[TMP_CHAR_LEN];   
-    for(int i=index;i<index+table_amount;++i){
-        FILE *tb;
-        if(!integer){
-            sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
+    char table_path[TMP_CHAR_LEN]; 
+    if(!integer){
             printf("loading %d floating-point CDF table\n",table_amount);
         }
         else if(integer){
-            sprintf(table_path,"tables/inverse_table/inverse_int_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
             printf("loading %d integer CDF table\n",table_amount);
+        }
+    for(int i=index;i<index+table_amount;++i){
+        FILE *tb;
+        if(!integer){
+            sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i%20);  
+        }
+        else if(integer){
+            sprintf(table_path,"tables/inverse_table/inverse_int_table_%d_%d/table%d.txt",resolution,Table_Size,i%20);  
         }
         if(!(tb = fopen(table_path,"r"))){
             printf("load inverse table file fail\n");
@@ -439,10 +443,6 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
         entropy_list[tn-TableIndex] = -log(entropy);
     }
     // get the mean of entropy list 
-
-
-
-
     for(int i =0 ;i<Table_Amount;i++)
     {
         
@@ -454,9 +454,63 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     info->distinct = distinct;
 
     return info;	
+}
 
+trace_info_t *Clifford_cdf_parallel_est(tree_t *item){
+    //return info init
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    Table_Amount = it;
+    
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    uint32_t hash_result[K_Value];
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    node_t *current_node;
 
+    total_item_cnt = 0;
+    distinct = 0;
+    current_node = item->root;
 
+    memset(k_register, 0, sizeof(double) * K_Value);
+    memset(hash_result, 0, sizeof(uint32_t) * K_Value);
+    // create inverse cdf table
+    
+    // calculate elements within the time interval
+    while(current_node)
+    {
+        // total cnt
+        total_item_cnt += current_node->cnt;
+        distinct++;
+        // store k value
+        
+        hash_affine_20para(current_node->data , Table_Size , hash_result);
+        
+        for(int i=0; i<K_Value; i++)
+        {
+            k_register[i] += Inverse_table[i].Table[hash_result[i]] * current_node->cnt;	
+        }
+        current_node = current_node->right;
+    }
+    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    else{
+        for(uint32_t i=0;i<K_Value;i++){
+            k_register[i] /= (double)total_item_cnt;
+            entropy += exp(k_register[i]);
+        }
+        entropy /= (double)K_Value;
+        entropy = -log(entropy);
+    }
+    // set info member
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+    return info;	
 }
 
 trace_info_t *Clifford_cdf_stage50_est(tree_t *item)

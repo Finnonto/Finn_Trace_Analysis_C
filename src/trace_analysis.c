@@ -61,8 +61,8 @@ void invoke_algorithms(tree_t *Stream,int index)
 					break;
 				
 				case 4:
-					entropy_info = Clifford_cdf_stage100_est(Stream);
-					Clifford_cdf_stage100_entropy[index][ent_cnt] = entropy_info->entropy;
+					entropy_info = Clifford_cdf_parallel_est(Stream);
+					Clifford_cdf_parallel_entropy[index][ent_cnt] = entropy_info->entropy;
 					break;
 				
 				case 5:
@@ -154,7 +154,7 @@ void Trace_processing(char* trace_path)
 
 	if(resolution == 4096 || resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
-		//import_inverse_cdf_stage100_table(it,100);
+		//import_inverse_cdf_parallel_table(it,100);
 		import_inverse_cdf_table(it,TableIndex,TableINT);
 		//import_HeadTail_table();
 	}

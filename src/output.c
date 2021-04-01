@@ -32,7 +32,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 4:
-						fprintf(fp,"Clifford_cdf_stage100_entropy,");
+						fprintf(fp,"Clifford_cdf_parallel_entropy,");
 						break;
 					
 					case 5:
@@ -95,7 +95,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 4:
-						fprintf(fp,"%.30lf,",Clifford_cdf_stage100_entropy[index][i]);
+						fprintf(fp,"%.30lf,",Clifford_cdf_parallel_entropy[index][i]);
 						break;
 					
 					case 5:
@@ -317,7 +317,7 @@ void Output_log()
 					fprintf(fp,"Clifford_cdf_stage50,");
 					break;
 				case 4:
-					fprintf(fp,"Clifford_cdf_stage100,");
+					fprintf(fp,"Clifford_cdf_parallel,");
 					break;
 				case 5:
 					fprintf(fp,"Clifford_cdf_opt,");
@@ -371,7 +371,7 @@ void Output_log()
 					fprintf(fp,"Clifford_cdf_stage50,");
 					break;
 				case 4:
-					fprintf(fp,"Clifford_cdf_stage100,");
+					fprintf(fp,"Clifford_cdf_parallel,");
 					break;
 				case 5:
 					fprintf(fp,"Clifford_cdf_opt,");
@@ -437,7 +437,7 @@ void Output_MAPE()
 					break;
 				
 				case 4:
-					fprintf(fp,"Clifford_cdf_stage100_MAPE,");
+					fprintf(fp,"Clifford_cdf_parallel_MAPE,");
 					break;
 				
 				case 5:

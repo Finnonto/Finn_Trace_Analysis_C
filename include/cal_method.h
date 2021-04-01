@@ -15,7 +15,7 @@
 #endif
 
 #define MAX_ALG 12
-
+#define MAX_TABLE 20
 typedef struct Trace_info
 {
     double entropy;
@@ -47,7 +47,7 @@ uint32_t TableIndex;
 int TableINT;
 
 uint32_t IC_Entry;
-uint32_t CDF_Table_Entry_list[10];
+uint32_t CDF_Table_Entry_list[MAX_TABLE];
 //
 typedef struct ICTable_list
 {
@@ -55,16 +55,16 @@ typedef struct ICTable_list
     uint32_t point[1000];
 }ICTable_list;
 
-ICTable_list Inverse_table[10];
+ICTable_list Inverse_table[MAX_TABLE];
 
 
-uint32_t CDF_Stage50_Table_Entry_list[10];
-ICTable_list Inverse_Stage50_table[10];
-ICTable_list Inverse_Stage50_point[10];
+uint32_t CDF_Stage50_Table_Entry_list[MAX_TABLE];
+ICTable_list Inverse_Stage50_table[MAX_TABLE];
+ICTable_list Inverse_Stage50_point[MAX_TABLE];
 
-uint32_t CDF_Stage100_Table_Entry_list[10];
-ICTable_list Inverse_Stage100_table[10];
-ICTable_list Inverse_Stage100_point[10];
+uint32_t CDF_Stage100_Table_Entry_list[MAX_TABLE];
+ICTable_list Inverse_Stage100_table[MAX_TABLE];
+ICTable_list Inverse_Stage100_point[MAX_TABLE];
 
 typedef struct ICoptTable_list
 {
@@ -73,8 +73,8 @@ typedef struct ICoptTable_list
 }ICoptTable_list;
 
 
-uint32_t CDF_opt_Table_Entry_list[10];
-ICoptTable_list Inverse_opt_table[10];
+uint32_t CDF_opt_Table_Entry_list[MAX_TABLE];
+ICoptTable_list Inverse_opt_table[MAX_TABLE];
 
 
 
@@ -111,6 +111,8 @@ trace_info_t *exact(tree_t *item);
 trace_info_t *Clifford_est(tree_t *item);
 
 trace_info_t *Clifford_cdf_est(tree_t *item);
+
+trace_info_t *Clifford_cdf_parallel_est(tree_t *item);
 
 trace_info_t *Clifford_cdf_stage50_est(tree_t *item);
 

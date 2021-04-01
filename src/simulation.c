@@ -68,7 +68,7 @@ void Simulation_processing()
 		
 		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
-		//import_inverse_cdf_stage100_table(it,100);
+		//import_inverse_cdf_parallel_table(it,100);
 		import_inverse_cdf_table(it,TableIndex,TableINT);
 		//import_HeadTail_table();
 		
@@ -142,8 +142,8 @@ void Simulation_processing()
 						break;
 					
 					case 4:
-						entropy_info = Clifford_cdf_stage100_est(Sim_tree);
-						Clifford_cdf_stage100_entropy[0][sim] = entropy_info->entropy;
+						entropy_info = Clifford_cdf_parallel_est(Sim_tree);
+						Clifford_cdf_parallel_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 5:
@@ -221,7 +221,7 @@ void Simulation_processing()
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_stage50_entropy,0,sim_times);
 					break;
 				case 4:
-					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_stage100_entropy,0,sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_parallel_entropy,0,sim_times);
 					break;
 				case 5:
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_opt_entropy,0,sim_times);

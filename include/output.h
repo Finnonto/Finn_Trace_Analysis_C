@@ -38,6 +38,7 @@ double MAPE[5][MAX_ALG];
 double exact_entropy[5][ENT_MAX];
 double Clifford_entropy[5][ENT_MAX];
 double Clifford_cdf_entropy[5][ENT_MAX];
+double Clifford_cdf_parallel_entropy[5][ENT_MAX];
 double Clifford_cdf_stage50_entropy[5][ENT_MAX];
 double Clifford_cdf_stage100_entropy[5][ENT_MAX];
 double Clifford_cdf_opt_entropy[5][ENT_MAX];
