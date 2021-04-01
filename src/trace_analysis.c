@@ -152,14 +152,11 @@ void Trace_processing(char* trace_path)
 	mpd_init(&ctx, 38);
 
 
-	if(resolution != 4096){
-		printf("importing table ...\n");
-		//import_optimized_cdf_table(it);
+	if(resolution == 4096 || resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
 		//import_inverse_cdf_stage100_table(it,100);
-		import_inverse_cdf_table(it,TableIndex);
+		import_inverse_cdf_table(it,TableIndex,TableINT);
 		//import_HeadTail_table();
-		printf("import table done!\n");
 	}
 
 	libtrace_t *trace = NULL;

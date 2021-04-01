@@ -89,28 +89,30 @@ static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *
 
 
 // normal cdf table use -Tbs parameter to get different size of table
-void import_inverse_cdf_table(uint16_t table_amount,uint16_t index)
-{
+void import_inverse_cdf_table(uint16_t table_amount,uint16_t index,int integer){
     char table_path[TMP_CHAR_LEN];   
-    for(int i=index;i<index+table_amount;++i)
-    {
+    for(int i=index;i<index+table_amount;++i){
         FILE *tb;
-        sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
-        printf("%s\n",table_path);
-        if(!(tb = fopen(table_path,"r")))
-        {
+        if(!integer){
+            sprintf(table_path,"tables/inverse_table/inverse_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
+            printf("loading %d floating-point CDF table\n",table_amount);
+        }
+        else if(integer){
+            sprintf(table_path,"tables/inverse_table/inverse_int_table_%d_%d/table%d.txt",resolution,Table_Size,i%10);  
+            printf("loading %d integer CDF table\n",table_amount);
+        }
+        if(!(tb = fopen(table_path,"r"))){
             printf("load inverse table file fail\n");
             fclose(tb);
             exit(0);
         }
-        for(int j = 0;j<Table_Size;j++)
-        {
+        for(int j = 0;j<Table_Size;j++){
             fscanf(tb,"%lf",&Inverse_table[i].Table[j]);
         }
         CDF_Table_Entry_list[i] = Table_Size;
         fclose(tb);
     }
-    
+    printf("import CDF table done!\n");
 }
 
 void import_inverse_cdf_stage50_table(uint16_t table_amount,int num)

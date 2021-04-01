@@ -56,7 +56,8 @@ void Checkargument(int  argc, char** argv)
                 // algorithm parameter
                 it = 1;  //inverse table amount 
                 TableIndex = 0 ;//Table index
-                Table_Size = 16384; // inverse table size             
+                Table_Size = 16384; // inverse table size    
+                TableINT = 0;         
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
                 //   algoritm flags init value
@@ -217,10 +218,17 @@ void Checkargument(int  argc, char** argv)
                                 if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1"); exit(0);}
                                 arg_num++;
                         }
-                        /*************PingLi alpha ********/
+                        /*************table index to start loading table ********/
                         else if(strcmp(argv[arg_num],"-tbidx")==0){
                                 TableIndex = atoi(argv[++arg_num]);
                                 if (TableIndex>10 || TableIndex<0){fprintf(stderr, "Table index must be between 0,1"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************index to choose integer table********/
+                        else if(strcmp(argv[arg_num],"-tbint")==0){
+                                TableINT = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
                                 arg_num++;
                         }
                         /*************raising exception********/
