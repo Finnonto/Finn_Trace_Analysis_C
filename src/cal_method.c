@@ -100,6 +100,7 @@ void import_inverse_cdf_table(uint16_t table_amount,uint16_t index)
         if(!(tb = fopen(table_path,"r")))
         {
             printf("load inverse table file fail\n");
+            fclose(tb);
             exit(0);
         }
         for(int j = 0;j<Table_Size;j++)
