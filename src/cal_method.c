@@ -559,8 +559,13 @@ trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
         {
             if(hash_result[i] <= pow(2,interpolation_threshold)){
                 key_span = hash_result[i]/4;
-                key_span *= 4;
-                k_register[i] += Inverse_table[i].Table[key_span] * current_node->cnt;	    
+                
+                x1 = key_span*4;
+                x2 = (key_span+1)*4;
+                y1 = Inverse_table[i].Table[(int)x1];
+                y2 = Inverse_table[i].Table[(int)x2];
+                inter_value = y1+((y2-y1)/(x1+1))*(hash_result[i]-x1);
+                k_register[i] += inter_value * current_node->cnt;
             }
             else{ //interpolation 
                 //check bit-1 ,we only need to know the power factor of 2
