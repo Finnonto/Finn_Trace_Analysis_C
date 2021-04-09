@@ -391,7 +391,7 @@ int main(int argc, char *argv[])
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)
         {
-                printf("sim start: z:%g length:%d range:%d offset:%d %dTables Table Index:%d Table Size:%d resolution:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,it,TableIndex,Table_Size,resolution);
+                printf("sim start: z:%g length:%d range:%d offset:%d %dTables Table Index:%d Table Size:%d resolution:%d interth:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,it,TableIndex,Table_Size,resolution,interpolation_threshold);
         
                 Simulation_processing();
 

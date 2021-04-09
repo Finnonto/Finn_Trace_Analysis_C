@@ -32,7 +32,7 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 .PHONY:clean
 
 sim:
-	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3 -PA 0.999999 -a 4  Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation -it 20 -tbint 0 -tbidx 4 -Tbs 1024 -resolution 16
+	./bin/Finn_trace_analysis simulation -l 500000 -r 30000  -k 20 -z 1.4 -t  3 -PA 0.999999 -a 4  Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation -it 20 -tbint 0 -tbidx 4 -Tbs 1024 -resolution 16 -interth 8
 
 sim_AD:
 	./bin/Finn_trace_analysis simulation -l 10000000 -r 30000  -k 20 -z 1 -t  1 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 2
