@@ -88,6 +88,8 @@ uint32_t HT_Table_Entry ;
 
 mpd_context_t ctx;
 double pingli_alpha;
+//parallel interpolation
+int interpolation_threshold; // bit num
 
 // entropy calculate storage 
 
@@ -113,6 +115,8 @@ trace_info_t *Clifford_est(tree_t *item);
 trace_info_t *Clifford_cdf_est(tree_t *item);
 
 trace_info_t *Clifford_cdf_parallel_est(tree_t *item);
+
+trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item);
 
 trace_info_t *Clifford_cdf_stage50_est(tree_t *item);
 

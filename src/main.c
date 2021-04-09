@@ -60,6 +60,7 @@ void Checkargument(int  argc, char** argv)
                 TableINT = 0;         
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
+                interpolation_threshold = 10;
                 //   algoritm flags init value
                 memset(ALG_flag, 0, sizeof(int) * MAX_ALG);
                 
@@ -182,7 +183,7 @@ void Checkargument(int  argc, char** argv)
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage50")==0){ALG_flag[3]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
@@ -227,6 +228,13 @@ void Checkargument(int  argc, char** argv)
                         /*************index to choose integer table********/
                         else if(strcmp(argv[arg_num],"-tbint")==0){
                                 TableINT = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************threshold of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interth")==0){
+                                interpolation_threshold = atoi(argv[++arg_num]);
                                 
                                 //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
                                 arg_num++;
@@ -315,7 +323,7 @@ void Checkargument(int  argc, char** argv)
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_stage100")==0){ALG_flag[4]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage50")==0){ALG_flag[3]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
@@ -342,6 +350,13 @@ void Checkargument(int  argc, char** argv)
                                         resolution = pow(2,atoi(argv[arg_num]));
                                 }                
                                 if (resolution<=0){fprintf(stderr, "resolution must be positive integer"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************threshold of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interth")==0){
+                                interpolation_threshold = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
                                 arg_num++;
                         }
                         else {

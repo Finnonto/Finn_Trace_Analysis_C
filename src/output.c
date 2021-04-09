@@ -28,7 +28,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 3:
-						fprintf(fp,"Clifford_cdf_stage50_entropy,");
+						fprintf(fp,"Clifford_cdf_parallel_interpolation_entropy,");
 						break;
 					
 					case 4:
@@ -91,7 +91,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 3:
-						fprintf(fp,"%.30lf,",Clifford_cdf_stage50_entropy[index][i]);
+						fprintf(fp,"%.30lf,",Clifford_cdf_parallel_interpolation_entropy[index][i]);
 						break;
 					
 					case 4:

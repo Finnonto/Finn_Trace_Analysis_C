@@ -56,8 +56,8 @@ void invoke_algorithms(tree_t *Stream,int index)
 					break;
 				
 				case 3:
-					entropy_info = Clifford_cdf_stage50_est(Stream);
-					Clifford_cdf_stage50_entropy[index][ent_cnt] = entropy_info->entropy;
+					entropy_info = Clifford_cdf_parallel_interpolation_est(Stream);
+					Clifford_cdf_parallel_interpolation_entropy[index][ent_cnt] = entropy_info->entropy;
 					break;
 				
 				case 4:
