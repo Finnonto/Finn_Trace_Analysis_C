@@ -361,8 +361,28 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /*************threshold of interpolation********/
+                        e else if(strcmp(argv[arg_num],"-tbidx")==0){
+                                TableIndex = atoi(argv[++arg_num]);
+                                if (TableIndex>10 || TableIndex<0){fprintf(stderr, "Table index must be between 0,1"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************index to choose integer table********/
+                        else if(strcmp(argv[arg_num],"-tbint")==0){
+                                TableINT = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************threshold of interpolation********/
                         else if(strcmp(argv[arg_num],"-interth")==0){
                                 interpolation_threshold = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************span value of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interspan")==0){
+                                interpolation_span = atoi(argv[++arg_num]);
                                 
                                 //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
                                 arg_num++;
