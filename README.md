@@ -38,9 +38,16 @@ to make simple test.
 "Clifford_cdf",
 "Clifford_HT",
 "PingLi"  
-`-it` :   amount of inverse cdf table of clifford  [positive integer max:10]    
-`-Tbs` : size of CDF table [16384,32768,65536]
-`-PA` : alpha of PingLi
+`-it` :   amount of inverse cdf table of clifford  [positive integer max:20] , default to 10   
+`-Tbs` : size of CDF table [4096,,16384,32768,65536], default to 16384  
+`-PA` : alpha of PingLi [positive float less than 1], default to 0.9  
+`-resolution` : resolution of discrete number or table ,is power facter of 2 [positive intger]eg. -resolution 2 >2^-2, default to RAND_MAX  
+`-tbint` : use integer or floating-point entries of cdf table[positive intger], default to 0  
+`-tbidx` : choose the number of table which is first to load ,if exceed the table index upper limit will wrap around to 0[positive intger], default to 0  
+`-interth` : the threshold of clifford cdf parallel interpolation algo, is power factor of 2[positive intger],default to 10  
+`-interspan` : the span size of clifford  cdf parallel interpolation algo[positive intger], default to 4  
+
+
 
 ### Trace:
 We can calculate specific Trace.pcap file whether it's zipped or not, and use parameter <trace> to enable this method.
