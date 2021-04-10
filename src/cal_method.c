@@ -564,7 +564,7 @@ trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
                 x2 = (key_span+1)*interpolation_span;
                 y1 = Inverse_table[i].Table[(int)x1];
                 y2 = Inverse_table[i].Table[(int)x2];
-                inter_value = y1+((y2-y1)/(x1+1))*(hash_result[i]-x1);
+                inter_value = y1+((y2-y1)/(x1-x2))*(hash_result[i]-x1);
                 k_register[i] += inter_value * current_node->cnt;
             }
             else{ //interpolation 
