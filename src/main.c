@@ -61,6 +61,7 @@ void Checkargument(int  argc, char** argv)
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
                 interpolation_threshold = 10;
+                interpolation_span = 4;
                 //   algoritm flags init value
                 memset(ALG_flag, 0, sizeof(int) * MAX_ALG);
                 
@@ -239,6 +240,13 @@ void Checkargument(int  argc, char** argv)
                                 //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
                                 arg_num++;
                         }
+                        /*************span value of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interspan")==0){
+                                interpolation_span = atoi(argv[++arg_num]);
+                                
+                                //if (TableINT !=1 || TableINT !=0){fprintf(stderr, "Table INT index must be 0 or 1\n"); exit(0);}
+                                arg_num++;
+                        }
                         /*************raising exception********/
                         else 
                         {
@@ -391,7 +399,8 @@ int main(int argc, char *argv[])
         // if SIMULATION flag is enabled ,do zipf distribution simulation
         else if(SIMULATION)
         {
-                printf("sim start: z:%g length:%d range:%d offset:%d %dTables Table Index:%d Table Size:%d resolution:%d interth:%d\n",zipf_par,zipf_slen,zipf_range,zipf_offset,it,TableIndex,Table_Size,resolution,interpolation_threshold);
+                printf("sim start: z:%g length:%d range:%d offset:%d %dTables Table Index:%d Table Size:%d resolution:%d interth:%d interspan:%d\n"
+                ,zipf_par,zipf_slen,zipf_range,zipf_offset,it,TableIndex,Table_Size,resolution,interpolation_threshold,interpolation_span);
         
                 Simulation_processing();
 

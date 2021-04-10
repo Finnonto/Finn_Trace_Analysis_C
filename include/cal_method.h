@@ -90,7 +90,7 @@ mpd_context_t ctx;
 double pingli_alpha;
 //parallel interpolation
 int interpolation_threshold; // bit num
-
+int interpolation_span;
 // entropy calculate storage 
 
 

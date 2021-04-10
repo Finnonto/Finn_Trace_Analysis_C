@@ -66,7 +66,7 @@ void Output_write_file(char* Output_filename,int index)
 			}
 		}	
         
-        fprintf(fp,"Distinct Count,Total Len,Table Size,resolution\n");
+        fprintf(fp,"Distinct Count,Total Len,Table Size,resolution,interth,interspan\n");
         
 		}
 
@@ -129,11 +129,13 @@ void Output_write_file(char* Output_filename,int index)
 			}
 		}
     
-		fprintf(fp,"%d,%d,%d,%d \n",
+		fprintf(fp,"%d,%d,%d,%d,%d,%d \n",
 								StreamDistinct[index][i],
 								StreamLength[index][i],
 								Table_Size,
-								resolution
+								resolution,
+								interpolation_threshold,
+								interpolation_span
 								);	
 	}
 
@@ -299,6 +301,7 @@ void Output_log()
 		fprintf(fp,"resolution:%d\n",resolution);
 		fprintf(fp,"z:%g length:%d range:%d offset:%d \n",zipf_par,zipf_slen,zipf_range,zipf_offset);
 		fprintf(fp,"Table Size:%d it:%d K_vlaue:%d\n",Table_Size,it,K_Value);
+		fprintf(fp,"interth:%d\n",interpolation_threshold);
 		fprintf(fp,"algorithm:");
 		for(int i=0;i<MAX_ALG;i++){
 			if(ALG_flag[i]==1){
@@ -352,6 +355,7 @@ void Output_log()
 		fprintf(fp,"Timeinval:%d\n",intervalTime);
 		fprintf(fp,"Trace: %s\n",TraceName);
 		fprintf(fp,"Table Size:%d it:%d K_vlaue:%d PA:%lf\n",Table_Size,it,K_Value,pingli_alpha);
+		fprintf(fp,"interth:%d\n",interpolation_threshold);
 		fprintf(fp,"algorithm:");
 		fprintf(fp,"algorithm:");
 		for(int i=0;i<MAX_ALG;i++){
