@@ -513,6 +513,104 @@ trace_info_t *Clifford_cdf_parallel_est(tree_t *item){
     return info;	
 }
 
+trace_info_t *Clifford_cdf_parallel_interpolation_2th_est(tree_t *item){
+    //return info init
+    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+    info->entropy = 0;
+    info->total_count = 0;
+    info->distinct = 0;
+    //cal value init
+    Table_Amount = it;
+    
+    
+    double k_register[K_Value];    
+    double entropy = 0;
+    uint32_t hash_result[K_Value];
+    uint32_t total_item_cnt = 0;
+    uint32_t distinct = 0;
+    node_t *current_node;
+
+    //to calculate the interpolation
+    int  key_bit = 0;//for exp
+    int  key_span = 0;// for span
+    double inter_value = 0;
+    double x1,x2,y1,y2;
+    
+
+    total_item_cnt = 0;
+    distinct = 0;
+    current_node = item->root;
+
+    memset(k_register, 0, sizeof(double) * K_Value);
+    memset(hash_result, 0, sizeof(uint32_t) * K_Value);
+    
+    
+
+    // calculate elements within the time interval
+    while(current_node)
+    {
+        // total cnt
+        total_item_cnt += current_node->cnt;
+        distinct++;
+        // store k value
+        
+        hash_affine_20para(current_node->data , Table_Size , hash_result);
+        
+        for(int i=0; i<K_Value; i++)
+        {
+            if(hash_result[i] < pow(2,interpolation_threshold)){//span 
+                
+                key_span = hash_result[i]/interpolation_span;//query key bit
+                
+                x1 = key_span*interpolation_span;
+                x2 = (key_span+1)*interpolation_span;
+                y1 = Inverse_table[i].Table[(int)x1];
+                y2 = Inverse_table[i].Table[(int)x2];
+                inter_value = y1+((y2-y1)/(x2-x1))*(hash_result[i]-x1);
+                k_register[i] += inter_value * current_node->cnt;
+                continue;
+            }
+            if(hash_result[i] >=pow(2,interpolation_threshold) && hash_result[i] < pow(2,interpolation_threshold2)){//interpolation 
+                //check bit-1 ,we only need to know the power factor of 2
+                
+                key_bit =(int)floor(log2((double)hash_result[i]));//query key bit
+                x1 = pow(2,key_bit);
+                x2 = pow(2,key_bit+1);
+                y1 = Inverse_table[i].Table[(int)x1];
+                y2 = Inverse_table[i].Table[(int)x2];
+                inter_value = y1+((y2-y1)/(x2-x1))*(hash_result[i]-x1);
+                k_register[i] += inter_value * current_node->cnt;
+                continue;
+            }
+            if(hash_result[i] >= pow(2,interpolation_threshold2)){//span 
+                int key_bit =hash_result[i]==Table_Size-1?0:(int)floor(log2((double)(hash_result[i]^(Table_Size-1))));//query key bit 1's complement 
+                x2 = (Table_Size-1)^(uint32_t)(pow(2,key_bit));
+	            x1 = (Table_Size-1)^(uint32_t)(pow(2,key_bit+1));
+                y1 = Inverse_table[i].Table[(int)x1];
+                y2 = Inverse_table[i].Table[(int)x2];
+                inter_value = y1+((y2-y1)/(x2-x1))*(hash_result[i]-x1);
+                k_register[i] += inter_value * current_node->cnt;
+                continue;
+            }
+        }
+        current_node = current_node->right;
+    }
+    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    else{
+        for(uint32_t i=0;i<K_Value;i++){
+            k_register[i] /= (double)total_item_cnt;
+            entropy += exp(k_register[i]);
+        }
+        entropy /= (double)K_Value;
+        entropy = -log(entropy);
+    }
+    // set info member
+    info->entropy = entropy;
+    info->total_count = total_item_cnt;
+    info->distinct = distinct;
+    return info;	
+}
+
 trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
     //return info init
     trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));

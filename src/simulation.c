@@ -157,8 +157,8 @@ void Simulation_processing()
 						break;
 					
 					case 7:
-						entropy_info = Clifford_HTo_est(Sim_tree);
-						Clifford_HTo_entropy[0][sim] = entropy_info->entropy;
+						entropy_info = Clifford_cdf_parallel_interpolation_2th_est(Sim_tree);
+						Clifford_cdf_parallel_interpolation_2th_entropy[0][sim] = entropy_info->entropy;
 						break;
 					
 					case 8:
@@ -230,7 +230,7 @@ void Simulation_processing()
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HT_entropy,0,sim_times);
 					break;
 				case 7:
-					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_entropy,0,sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_parallel_interpolation_2th_entropy,0,sim_times);
 					break;
 				case 8:
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HTo_65536_entropy,0,sim_times);

@@ -44,7 +44,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 7:
-						fprintf(fp,"Clifford_HTo_entropy,");
+						fprintf(fp,"Clifford_cdf_parallel_interpolation_2th_entropy,");
 						break;
 					
 					case 8:
@@ -107,7 +107,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 7:
-						fprintf(fp,"%.30lf,",Clifford_HTo_entropy[index][i]);
+						fprintf(fp,"%.30lf,",Clifford_cdf_parallel_interpolation_2th_entropy[index][i]);
 						break;
 					
 					case 8:
@@ -372,7 +372,7 @@ void Output_log()
 					fprintf(fp,"Clifford_cdf,");
 					break;
 				case 3:
-					fprintf(fp,"Clifford_cdf_stage50,");
+					fprintf(fp,"Clifford_cdf_parallel_interpolation,");
 					break;
 				case 4:
 					fprintf(fp,"Clifford_cdf_parallel,");
@@ -384,7 +384,7 @@ void Output_log()
 					fprintf(fp,"Clifford_HT,");
 					break;
 				case 7:
-					fprintf(fp,"Clifford_HTo,");
+					fprintf(fp,"Clifford_cdf_parallel_interpolation_2th,");
 					break;
 				case 8:
 					fprintf(fp,"Clifford_HTo_65536,");
@@ -437,7 +437,7 @@ void Output_MAPE()
 					break;
 				
 				case 3:
-					fprintf(fp,"Clifford_cdf_stage50_MAPE,");
+					fprintf(fp,"Clifford_cdf_parallel_interpolation_MAPE,");
 					break;
 				
 				case 4:
@@ -453,7 +453,7 @@ void Output_MAPE()
 					break;
 				
 				case 7:
-					fprintf(fp,"Clifford_HTo_MAPE,");
+					fprintf(fp,"Clifford_cdf_parallel_interpolation_2th_MAPE,");
 					break;
 				
 				case 8:
