@@ -43,7 +43,7 @@ sim_AS:
 
 trace:
 
-	./bin/Finn_trace_analysis trace ~/Desktop/libtrace_tutorial/traces/2minutes.erf -a 1 Clifford_cdf -resolution MAX
+	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf -a 4  Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation -resolution MAX
 
 
 clean:

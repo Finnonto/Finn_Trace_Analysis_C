@@ -268,9 +268,13 @@ void Checkargument(int  argc, char** argv)
 
                 // algorithm parameter
                 it = 1;  //inverse table amount 
-                Table_Size = 16384; // inverse table size             
+                TableIndex = 0 ;//Table index
+                Table_Size = 16384; // inverse table size    
+                TableINT = 0;         
                 alg_cnt = 0; //               
                 pingli_alpha = 0.9;
+                interpolation_threshold = 10;
+                interpolation_span = 4;
                                      
                 
                 while(arg_num<argc){
@@ -296,7 +300,7 @@ void Checkargument(int  argc, char** argv)
                         }
                         //-------table--------// must be greater than 1 ,at least 1 external table 
                         else if(strcmp(argv[arg_num],"-it")==0){
-                                if(atoi(argv[arg_num+1])<11 && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
+                                if(atoi(argv[arg_num+1])<21 && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
                                 else {fprintf(stderr, "it_error\n"); exit(0);}
                                 arg_num+=2;
                         }
@@ -330,7 +334,7 @@ void Checkargument(int  argc, char** argv)
                                         if(strcmp(argv[arg_num],"exact")==0){ALG_flag[0]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation_65536")==0){ALG_flag[10]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_stage100")==0){ALG_flag[4]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
@@ -361,7 +365,7 @@ void Checkargument(int  argc, char** argv)
                                 arg_num++;
                         }
                         /*************threshold of interpolation********/
-                        e else if(strcmp(argv[arg_num],"-tbidx")==0){
+                        else if(strcmp(argv[arg_num],"-tbidx")==0){
                                 TableIndex = atoi(argv[++arg_num]);
                                 if (TableIndex>10 || TableIndex<0){fprintf(stderr, "Table index must be between 0,1"); exit(0);}
                                 arg_num++;
@@ -413,7 +417,8 @@ int main(int argc, char *argv[])
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {
-                printf("trace analysis start: k:%d PA:%g Timeinval:%d it:%d Table Index: %d Table Size:%d resolution:%d\n",K_Value,pingli_alpha,intervalTime,it,TableIndex,Table_Size,resolution);
+                printf("trace analysis start: k:%d PA:%g Timeinval:%d it:%d Table Index: %d Table Size:%d resolution:%d interth:%d interspan:%d\n",
+                K_Value,pingli_alpha,intervalTime,it,TableIndex,Table_Size,resolution,interpolation_threshold,interpolation_span);
                 Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation
