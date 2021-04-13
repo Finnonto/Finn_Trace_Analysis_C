@@ -44,7 +44,7 @@ to make simple test.
 `-resolution` : resolution of discrete number or table ,is power facter of 2 [positive intger]eg. -resolution 2 >2^-2, default to RAND_MAX  
 `-tbint` : use integer or floating-point entries of cdf table[positive intger], default to 0  
 `-tbidx` : choose the number of table which is first to load ,if exceed the table index upper limit will wrap around to 0[positive intger], default to 0  
-`-interth` : the threshold of clifford cdf parallel interpolation algo, is power factor of 2[positive intger],default to 10  
+`-interth` : gives 2 values,the threshold1 and threshold2 of clifford cdf parallel interpolation algo, is power factor of 2[positive intger],default to 10 and 15 
 `-interspan` : the span size of clifford  cdf parallel interpolation algo[positive intger], default to 4  
 
 
