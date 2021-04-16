@@ -15,7 +15,7 @@
 #endif
 
 #define MAX_ALG 12
-#define MAX_TABLE 20
+#define MAX_TABLE 200
 typedef struct Trace_info
 {
     double entropy;

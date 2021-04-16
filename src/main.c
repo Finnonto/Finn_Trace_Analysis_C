@@ -194,7 +194,7 @@ void Checkargument(int  argc, char** argv)
                         }
                         /*************inverse table amount********/
                         else if(strcmp(argv[arg_num],"-it")==0){
-                                if(atoi(argv[arg_num+1])<21 && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
+                                if(atoi(argv[arg_num+1])<=MAX_TABLE && atoi(argv[arg_num+1])>0)it = atoi(argv[++arg_num]);
                                 else {fprintf(stderr, "it_error"); exit(0);}
                                 arg_num++;
                         }
@@ -295,7 +295,7 @@ void Checkargument(int  argc, char** argv)
                         }
                         //-------table--------// must be greater than 1 ,at least 1 external table 
                         else if(strcmp(argv[arg_num],"-it")==0){
-                                if(atoi(argv[arg_num+1])<21 && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
+                                if(atoi(argv[arg_num+1])<=MAX_TABLE && atoi(argv[arg_num+1])>0)it = atoi(argv[arg_num+1]);
                                 else {fprintf(stderr, "it_error\n"); exit(0);}
                                 arg_num+=2;
                         }
