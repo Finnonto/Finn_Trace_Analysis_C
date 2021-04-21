@@ -35,78 +35,112 @@ void invoke_algorithms(tree_t *Stream,int index)
 	// we apply function pointer to replace the
 	// entropy calculation,so that we can choose 
 	// specific entropy calculation by arguments
-	entropy_info = exact(Stream);
-	exact_entropy[index][ent_cnt] = entropy_info->entropy;
-	StreamDistinct[index][ent_cnt] =entropy_info->distinct;
-	StreamLength[index][ent_cnt] =entropy_info->total_count;
+	trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
+	exact(Stream,info);
+	exact_entropy[index][ent_cnt] = info->entropy;
+	StreamDistinct[index][ent_cnt] =info->distinct;
+	StreamLength[index][ent_cnt] =info->total_count;
 	//choosing algorithm
 	for(int j=1;j<MAX_ALG;j++)
-	{
-		if(ALG_flag[j]==1)
 		{
-			switch (j){
-				case 1:
-					entropy_info = Clifford_est(Stream);
-					Clifford_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 2:
-					entropy_info = Clifford_cdf_est(Stream);
-					Clifford_cdf_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 3:
-					entropy_info = Clifford_cdf_parallel_interpolation_est(Stream);
-					Clifford_cdf_parallel_interpolation_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 4:
-					entropy_info = Clifford_cdf_parallel_est(Stream);
-					Clifford_cdf_parallel_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 5:
-					entropy_info = Clifford_cdf_opt_est(Stream);
-					Clifford_cdf_opt_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 6:
-					entropy_info = Clifford_HT_est(Stream);
-					Clifford_HT_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 7:
-					entropy_info = Clifford_cdf_parallel_interpolation_2th_est(Stream);
-					Clifford_cdf_parallel_interpolation_2th_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 8:
-					entropy_info = Clifford_HTo_65536_est(Stream);
-					Clifford_HTo_65536_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 9:
-					entropy_info = Clifford_HTo_interpolation_est(Stream);
-					Clifford_HTo_interpolation_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 10:
-					entropy_info = Clifford_HTo_interpolation_65536_est(Stream);
-					Clifford_HTo_interpolation_65536_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
-				
-				case 11:
-					entropy_info = PingLi_est(Stream);
-					PingLi_entropy[index][ent_cnt] = entropy_info->entropy;
-					break;
+			if(ALG_flag[j]==1)
+			{
+				switch (j){
+					case 1:
+						if(Clifford_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 2:
+						if(Clifford_cdf_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 3:
+						if(Clifford_cdf_parallel_interpolation_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_interpolation_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 4:
+						if(Clifford_cdf_parallel_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 5:
+						if(Clifford_cdf_opt_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_opt_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 6:
+						if(Clifford_HT_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HT_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 7:
+						if(Clifford_cdf_parallel_interpolation_2th_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_interpolation_2th_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 8:
+						if(Clifford_HTo_65536_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_65536_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 9:
+						if(Clifford_HTo_interpolation_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_interpolation_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 10:
+						if(Clifford_HTo_interpolation_65536_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_interpolation_65536_entropy[index][ent_cnt] = info->entropy;
+						break;
+					
+					case 11:
+						if(PingLi_est(Stream,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						PingLi_entropy[index][ent_cnt] = info->entropy;
+						break;
 
-				default:
-					fprintf(stderr,"invoke algorthm error!\n");
-					exit(0);
+					default:
+						fprintf(stderr,"invoke algorthm error!\n");
+						exit(0);
+				}
 			}
 		}
-	}
-
+		free(info);
 }
 
 void Items_processing()

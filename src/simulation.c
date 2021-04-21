@@ -73,12 +73,8 @@ void Simulation_processing()
 		//import_HeadTail_table();
 		
 	}
-
 	//decimal init
 	mpd_init(&ctx, 20);
-	
-
-
 	// create  streams and use binary tree to classify
 	// if we only need to calculate the sketch entropy 
 	// just treat stream as a turnstile data stream is
@@ -87,11 +83,9 @@ void Simulation_processing()
 	//of these streams
 	// 
 	fprintf(stderr,"simulate %d sim_times\n",sim_times);
+	trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
 	for(int sim =0;sim<sim_times;sim++)
 	{
-
-		
-
 		tree_t* Sim_tree;
 		Sim_tree = tree_create();
 		if(zipf_par == -1)
@@ -106,20 +100,17 @@ void Simulation_processing()
 		{
 			CreateStream(Sim_tree,zipf_slen,zipf_par,zipf_range,sim);
 		}
-		
-		
-		
 		// flatten the tree to linked list 
-		
-		
 		//in this simulation we calculate the exact entropy
 		// and clifford entropy
-		
 		// exact entropy
-		entropy_info = exact(Sim_tree);
-		exact_entropy[0][sim] = entropy_info->entropy;
-		StreamDistinct[0][sim] =entropy_info->distinct;
-		StreamLength[0][sim] =entropy_info->total_count;
+		if(exact(Sim_tree,info)!=0){
+			fprintf(stderr,"simualtion fail\n");
+			exit(0);
+		}
+		exact_entropy[0][sim] = info->entropy;
+		StreamDistinct[0][sim] =info->distinct;
+		StreamLength[0][sim] =info->total_count;
 		//choosing algorithm
 		for(int j=1;j<MAX_ALG;j++)
 		{
@@ -127,58 +118,91 @@ void Simulation_processing()
 			{
 				switch (j){
 					case 1:
-						entropy_info = Clifford_est(Sim_tree);
-						Clifford_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 2:
-						entropy_info = Clifford_cdf_est(Sim_tree);
-						Clifford_cdf_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_cdf_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 3:
-						entropy_info = Clifford_cdf_parallel_interpolation_est(Sim_tree);
-						Clifford_cdf_parallel_interpolation_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_cdf_parallel_interpolation_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_interpolation_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 4:
-						entropy_info = Clifford_cdf_parallel_est(Sim_tree);
-						Clifford_cdf_parallel_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_cdf_parallel_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 5:
-						entropy_info = Clifford_cdf_opt_est(Sim_tree);
-						Clifford_cdf_opt_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_cdf_opt_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_opt_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 6:
-						entropy_info = Clifford_HT_est(Sim_tree);
-						Clifford_HT_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_HT_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HT_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 7:
-						entropy_info = Clifford_cdf_parallel_interpolation_2th_est(Sim_tree);
-						Clifford_cdf_parallel_interpolation_2th_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_cdf_parallel_interpolation_2th_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_cdf_parallel_interpolation_2th_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 8:
-						entropy_info = Clifford_HTo_65536_est(Sim_tree);
-						Clifford_HTo_65536_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_HTo_65536_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_65536_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 9:
-						entropy_info = Clifford_HTo_interpolation_est(Sim_tree);
-						Clifford_HTo_interpolation_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_HTo_interpolation_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_interpolation_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 10:
-						entropy_info = Clifford_HTo_interpolation_65536_est(Sim_tree);
-						Clifford_HTo_interpolation_65536_entropy[0][sim] = entropy_info->entropy;
+						if(Clifford_HTo_interpolation_65536_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						Clifford_HTo_interpolation_65536_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 11:
-						entropy_info = PingLi_est(Sim_tree);
-						PingLi_entropy[0][sim] = entropy_info->entropy;
+						if(PingLi_est(Sim_tree,info)!=0){
+							fprintf(stderr,"simualtion fail\n");
+							exit(0);
+						}
+						PingLi_entropy[0][sim] = info->entropy;
 						break;
 
 					default:
@@ -187,24 +211,15 @@ void Simulation_processing()
 				}
 			}
 		}
-
 		// if KLD is not started the we would not have an control group for 
 		// base entropy , so we will just measure the base entropy.
-		
-
-		
 		printf("Progress %0.1f%%\r",(float)(sim+1)/sim_times*100);
 		fflush(stdout);
 		ent_cnt = sim_times;
-		
-
-		
-		
-
 		tree_delete(Sim_tree);
 
 	}
-	
+	free(info);
 	printf("\n");
 	for(int j=1;j<MAX_ALG;j++)
 	{
@@ -252,15 +267,6 @@ void Simulation_processing()
 	}
 	Output_MAPE();
 	Output_Simulation();
-		
-	
-	//output 
-
-
-	
-	
-
-
-	
+	//output 	
 }
 

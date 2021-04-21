@@ -279,11 +279,10 @@ void import_HeadTail_table()
 
 
 
-trace_info_t *exact(tree_t *item)
+int exact(tree_t *item,trace_info_t *info)
 {
 
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -304,7 +303,7 @@ trace_info_t *exact(tree_t *item)
         current_node = current_node->right;
     }
     
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
 										
     entropy -= (total_item_cnt * log(total_item_cnt));
 									
@@ -315,15 +314,14 @@ trace_info_t *exact(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-    
-    return info;								
+        return 0;
+    								
     
 }
 
-trace_info_t *Clifford_est(tree_t *item)
+int Clifford_est(tree_t *item,trace_info_t *info)
 {   
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -364,7 +362,7 @@ trace_info_t *Clifford_est(tree_t *item)
         }
 	    current_node = current_node->right;
     }
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= (double)total_item_cnt;
@@ -377,13 +375,12 @@ trace_info_t *Clifford_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-    return info;
+        return 0;
 
 }
 
-trace_info_t *Clifford_cdf_est(tree_t *item){
+int Clifford_cdf_est(tree_t *item,trace_info_t *info){
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -430,7 +427,7 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
             current_node = current_node->right;
         }
 
-        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+        if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
         
         for(int i=0;i<K_Value;i++)
         {
@@ -452,13 +449,12 @@ trace_info_t *Clifford_cdf_est(tree_t *item){
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;	
+    return 0;
+    	
 }
 
-trace_info_t *Clifford_cdf_parallel_est(tree_t *item){
+int Clifford_cdf_parallel_est(tree_t *item,trace_info_t *info){
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -497,7 +493,7 @@ trace_info_t *Clifford_cdf_parallel_est(tree_t *item){
         }
         current_node = current_node->right;
     }
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= (double)total_item_cnt;
@@ -510,12 +506,11 @@ trace_info_t *Clifford_cdf_parallel_est(tree_t *item){
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-    return info;	
+    	    return 0;
 }
 
-trace_info_t *Clifford_cdf_parallel_interpolation_2th_est(tree_t *item){
+int Clifford_cdf_parallel_interpolation_2th_est(tree_t *item,trace_info_t *info){
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -595,7 +590,7 @@ trace_info_t *Clifford_cdf_parallel_interpolation_2th_est(tree_t *item){
         }
         current_node = current_node->right;
     }
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= (double)total_item_cnt;
@@ -608,12 +603,11 @@ trace_info_t *Clifford_cdf_parallel_interpolation_2th_est(tree_t *item){
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-    return info;	
+    	    return 0;
 }
 
-trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
+int Clifford_cdf_parallel_interpolation_est(tree_t *item,trace_info_t *info){
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -680,7 +674,7 @@ trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
         }
         current_node = current_node->right;
     }
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= (double)total_item_cnt;
@@ -693,13 +687,12 @@ trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item){
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-    return info;	
+    	    return 0;
 }
 
-trace_info_t *Clifford_cdf_stage50_est(tree_t *item)
+int Clifford_cdf_stage50_est(tree_t *item,trace_info_t *info)
 {
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -777,7 +770,7 @@ trace_info_t *Clifford_cdf_stage50_est(tree_t *item)
             current_node = current_node->right;
         }
 
-        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+        if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
         
         for(int i=0;i<K_Value;i++)
         {
@@ -805,14 +798,13 @@ trace_info_t *Clifford_cdf_stage50_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 }
 
-trace_info_t *Clifford_cdf_stage100_est(tree_t *item)
+int Clifford_cdf_stage100_est(tree_t *item,trace_info_t *info)
 {
     //return info init
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -890,7 +882,7 @@ trace_info_t *Clifford_cdf_stage100_est(tree_t *item)
             current_node = current_node->right;
         }
 
-        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+        if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
         
         for(int i=0;i<K_Value;i++)
         {
@@ -918,15 +910,14 @@ trace_info_t *Clifford_cdf_stage100_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 }
 
-trace_info_t *Clifford_cdf_opt_est(tree_t *item)
+int Clifford_cdf_opt_est(tree_t *item,trace_info_t *info)
 {
     //return info init
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -998,7 +989,7 @@ trace_info_t *Clifford_cdf_opt_est(tree_t *item)
             current_node = current_node->right;
         }
 
-        if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+        if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
 
         for(int tn = 0 ;tn< Table_Amount; tn++)
         {
@@ -1026,15 +1017,14 @@ trace_info_t *Clifford_cdf_opt_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 }
 
-trace_info_t *Clifford_HT_est(tree_t *item)
+int Clifford_HT_est(tree_t *item,trace_info_t *info)
 {
     uint32_t Tail_Threshold[13] = {104, 2154, 7507, 12230, 14702, 15742, 16144, 16295, 16351, 16372, 16380, 16383, 16384};
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1138,7 +1128,7 @@ trace_info_t *Clifford_HT_est(tree_t *item)
 
     }
 
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= total_item_cnt;
@@ -1157,16 +1147,15 @@ trace_info_t *Clifford_HT_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 
     }
 
-trace_info_t *Clifford_HTo_est(tree_t *item)
+int Clifford_HTo_est(tree_t *item,trace_info_t *info)
 {
     uint32_t Tail_Threshold[13] = {104, 2154, 7507, 12230, 14702, 15742, 16144, 16295, 16351, 16372, 16380, 16383, 16384};
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1275,7 +1264,7 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
 
     }
 
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= total_item_cnt;
@@ -1294,17 +1283,16 @@ trace_info_t *Clifford_HTo_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 
     }
 
-trace_info_t *Clifford_HTo_65536_est(tree_t *item)
+int Clifford_HTo_65536_est(tree_t *item,trace_info_t *info)
 {
     uint32_t Tail_Threshold[13] = {486, 10785, 33743, 51336, 59905, 63406, 64744, 65244, 65429, 65497, 65522, 65531, 65535}; 
 
 
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1408,7 +1396,7 @@ trace_info_t *Clifford_HTo_65536_est(tree_t *item)
 
     }
 
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= total_item_cnt;
@@ -1427,16 +1415,15 @@ trace_info_t *Clifford_HTo_65536_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 
     }
 
-trace_info_t *Clifford_HTo_interpolation_est(tree_t *item)
+int Clifford_HTo_interpolation_est(tree_t *item,trace_info_t *info)
 {
     uint32_t Tail_Threshold[13] = {104, 2154, 7507, 12230, 14702, 15742, 16144, 16295, 16351, 16372, 16380, 16383, 16384};
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1544,7 +1531,7 @@ trace_info_t *Clifford_HTo_interpolation_est(tree_t *item)
 
     }
 
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= total_item_cnt;
@@ -1563,16 +1550,15 @@ trace_info_t *Clifford_HTo_interpolation_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 
     }
 
-trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item)
+int Clifford_HTo_interpolation_65536_est(tree_t *item,trace_info_t *info)
 {
     uint32_t Tail_Threshold[13] = {486, 10785, 33743, 51336, 59905, 63406, 64744, 65244, 65429, 65497, 65522, 65531, 65535}; 
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1680,7 +1666,7 @@ trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item)
 
     }
 
-    if (total_item_cnt == 0 || total_item_cnt == 1)return NULL;
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
             k_register[i] /= total_item_cnt;
@@ -1699,15 +1685,14 @@ trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = total_item_cnt;
     info->distinct = distinct;
-
-    return info;
+    return 0;
+    
 
     }
 
-trace_info_t *PingLi_est(tree_t *item)
+int PingLi_est(tree_t *item,trace_info_t *info)
 {
     
-    trace_info_t *info = (trace_info_t*)malloc(sizeof(trace_info_t));
     info->entropy = 0;
     info->total_count = 0;
     info->distinct = 0;
@@ -1853,7 +1838,7 @@ trace_info_t *PingLi_est(tree_t *item)
     info->entropy = entropy;
     info->total_count = multiplicity;
     info->distinct = cardinality;
-    return info;
+        return 0;
     
 }
 

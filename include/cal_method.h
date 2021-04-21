@@ -109,35 +109,35 @@ void import_inverse_cdf_single_table(uint32_t index);
 
 void import_HeadTail_table();
 
-trace_info_t *exact(tree_t *item);
+int exact(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_est(tree_t *item);
+int Clifford_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_est(tree_t *item);
+int Clifford_cdf_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_parallel_est(tree_t *item);
+int Clifford_cdf_parallel_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_parallel_interpolation_est(tree_t *item);
+int Clifford_cdf_parallel_interpolation_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_parallel_interpolation_2th_est(tree_t *item);
+int Clifford_cdf_parallel_interpolation_2th_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_stage50_est(tree_t *item);
+int Clifford_cdf_stage50_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_stage100_est(tree_t *item);
+int Clifford_cdf_stage100_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_cdf_opt_est(tree_t *item);
+int Clifford_cdf_opt_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_HT_est(tree_t *item);
+int Clifford_HT_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_HTo_est(tree_t *item);
+int Clifford_HTo_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_HTo_65536_est(tree_t *item);
+int Clifford_HTo_65536_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_HTo_interpolation_est(tree_t *item);
+int Clifford_HTo_interpolation_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *Clifford_HTo_interpolation_65536_est(tree_t *item);
+int Clifford_HTo_interpolation_65536_est(tree_t *item,trace_info_t *info);
 
-trace_info_t *PingLi_est(tree_t *item);
+int PingLi_est(tree_t *item,trace_info_t *info);
 
 
 #endif
