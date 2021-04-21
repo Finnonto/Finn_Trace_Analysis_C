@@ -49,6 +49,13 @@ double Clifford_HTo_interpolation_entropy[5][ENT_MAX];
 double Clifford_HTo_interpolation_65536_entropy[5][ENT_MAX];
 double PingLi_entropy[5][ENT_MAX];
 
+//for branch res_AllDiff for parallel execute the experiment that 
+//I dont need generate a specific same stream multiple times
+#define RES_EXP 15    
+double Clifford_resalldiff_entropy[RES_EXP][ENT_MAX];
+int res_record[RES_EXP];
+
+
 
 void create_folder();
 

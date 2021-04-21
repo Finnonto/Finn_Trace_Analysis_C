@@ -70,7 +70,7 @@ void Output_write_file(char* Output_filename,int index)
         
 		}
 
-	
+	#ifndef RES_ALLDIFF
 	for(int i=0;i<ent_cnt;i++)
 	{
         
@@ -138,13 +138,33 @@ void Output_write_file(char* Output_filename,int index)
 								interpolation_span
 								);	
 	}
+	#endif
+	
+	#ifdef RES_ALLDIFF
+	for(int i =0;i<RES_EXP;++i){
 
+		for(int j=0;j<ent_cnt;j++){
+			fprintf(fp,"%.30lf,",exact_entropy[index][j]);
+			fprintf(fp,"%.30lf,",Clifford_resalldiff_entropy[i][j]);
+			fprintf(fp,"%d,%d,%d,%d,%d,%d \n",
+								StreamDistinct[index][j],
+								StreamLength[index][j],
+								Table_Size,
+								res_record[i],
+								interpolation_threshold,
+								interpolation_span
+								);	
+		}
+		
+	}
+	
+
+	#endif
 
 
 	fclose(fp);
 
 }
-
 
 void create_folder()
 {
@@ -236,7 +256,6 @@ void create_folder()
     
 }
 
-
 void Output_Simulation()
 {
     
@@ -249,7 +268,6 @@ void Output_Simulation()
     Output_write_file(Output_FolderName,0);
 
 }
-
 
 void Output_Trace()
 {
@@ -277,7 +295,6 @@ void Output_Trace()
     Output_write_file(Output_PktLenName,4);
 
 }
-
 
 void Output_log()
 {

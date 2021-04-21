@@ -12,6 +12,7 @@
 #include "prng.h"
 #include "massdal.h"
 
+#define RES_ALLDIFF
 
 
 //simulation mode parameters 

@@ -120,10 +120,13 @@ void Simulation_processing()
 			fprintf(stderr,"simualtion fail\n");
 			exit(0);
 		}
+
+		
 		exact_entropy[0][sim] = info->entropy;
 		StreamDistinct[0][sim] =info->distinct;
 		StreamLength[0][sim] =info->total_count;
 		//choosing algorithm
+		#ifndef RES_ALLDIFF
 		for(int j=1;j<MAX_ALG;j++)
 		{
 			if(ALG_flag[j]==1)
@@ -223,6 +226,26 @@ void Simulation_processing()
 				}
 			}
 		}
+		#endif
+
+		#ifdef RES_ALLDIFF
+			for(int i =0 ;i<RES_EXP-1;++i){
+				resolution = pow(2,(i+2)*2);
+				res_record[i] = (i+2)*2;
+				if(Clifford_est(Sim_tree,info)!=0){
+					fprintf(stderr,"simualtion fail\n");
+					exit(0);
+				}
+				Clifford_resalldiff_entropy[i][sim] = info->entropy;
+			}
+			resolution = RAND_MAX;
+			res_record[RES_EXP-1] = resolution;
+			if(Clifford_est(Sim_tree,info)!=0){
+				fprintf(stderr,"simualtion fail\n");
+				exit(0);
+			}
+			Clifford_resalldiff_entropy[RES_EXP-1][sim] = info->entropy;
+		#endif
 		// if KLD is not started the we would not have an control group for 
 		// base entropy , so we will just measure the base entropy.
 		printf("Progress %0.1f%%\r",(float)(sim+1)/sim_times*100);
