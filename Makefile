@@ -41,7 +41,7 @@ sim_AS:
 	./bin/Finn_trace_analysis simulation -l 1000000 -r 30000  -k 20 -z 0 -t  3 -PA 0.999999 -a 2  Clifford   PingLi  -it 10 -Tbs 16384 -resolution 16
 
 sim_ALLDIFF:
-	./bin/Finn_trace_analysis simulation -l 100 -k 20 -z -1 -t 1 -a 1  Clifford 
+	./bin/Finn_trace_analysis simulation -l 10000000 -k 20 -z -1 -t 1000 -a 1  Clifford 
 
 trace:
 
