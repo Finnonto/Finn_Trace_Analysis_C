@@ -1731,7 +1731,8 @@ int PingLi_est(tree_t *item,trace_info_t *info)
         
         multiplicity += current_node->cnt;
         cardinality++;
-        srand(current_node->data);
+        if (CPingLiSeed == 0)srand(current_node->data);
+        if (CPingLiSeed == 1)srand(current_node->data+hashseed);
 
         for(uint32_t i=0;i<K_Value;i++)
         {

@@ -55,6 +55,8 @@ uint32_t* para_c;
 int  hashseed;
 // change origin clifford srand
 int CCliffordSeed;
+// change origin Pingli srand
+int CPingLiSeed;
 
 uint32_t IC_Entry;
 uint32_t CDF_Table_Entry_list[MAX_TABLE];

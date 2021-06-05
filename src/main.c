@@ -271,6 +271,12 @@ void Checkargument(int  argc, char** argv)
                                 
                                 arg_num++;
                         }
+                        /************flag to indicate change srand item or not********/
+                        else if(strcmp(argv[arg_num],"-CPingliSeed")==0){
+                                CPingLiSeed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
                         /*************raising exception********/
                         else 
                         {
@@ -431,6 +437,12 @@ void Checkargument(int  argc, char** argv)
                         }
                         else if(strcmp(argv[arg_num],"-CCliffordSeed")==0){
                                 CCliffordSeed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /************flag to indicate change srand item or not********/
+                        else if(strcmp(argv[arg_num],"-CPingliSeed")==0){
+                                CPingLiSeed = atoi(argv[++arg_num]);
                                 
                                 arg_num++;
                         }
