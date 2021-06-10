@@ -46,7 +46,11 @@ to make simple test.
 `-tbidx` : choose the number of table which is first to load ,if exceed the table index upper limit will wrap around to 0[positive intger], default to 0  
 `-interth` : gives 2 values,the threshold1 and threshold2 of clifford cdf parallel interpolation algo, is power factor of 2[positive intger],default to 10 and 15 
 `-interspan` : the span size of clifford  cdf parallel interpolation algo[positive intger], default to 4  
-
+`-hseed` : an offset to generate a new hash parameters 
+`-Chash` : an argument to determine if change hash parameters with every stream 
+`-CCliffordSeed` : an argument to determine if change hash parameter of clifford algorithm 
+`-CPingliSeed`: an argument to determine if change hash parameter of pingli algorithm 
+`-mhash` : an argument to determine the variable of clifford parallel m hash algorithm
 
 
 ### Trace:
