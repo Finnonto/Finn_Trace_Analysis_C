@@ -36,7 +36,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 5:
-						fprintf(fp,"Clifford_cdf_opt_entropy,");
+						fprintf(fp,"Clifford_cdf_parallel_mhash_entropy,");
 						break;
 					
 					case 6:
@@ -99,7 +99,7 @@ void Output_write_file(char* Output_filename,int index)
 						break;
 					
 					case 5:
-						fprintf(fp,"%.30lf,",Clifford_cdf_opt_entropy[index][i]);
+						fprintf(fp,"%.30lf,",Clifford_cdf_parallel_mhash_entropy[index][i]);
 						break;
 					
 					case 6:

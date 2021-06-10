@@ -98,7 +98,7 @@ void Simulation_processing()
 	//of these streams
 	// 
 	if(Change_Hash==0){
-			hash_para_gen(100000,para_a,para_c,K_Value);	
+			hash_para_gen(100000,para_a,para_c,K_Value*m_hash);	
 	}
 		
 
@@ -108,7 +108,7 @@ void Simulation_processing()
 	for(int sim =0;sim<sim_times;sim++)
 	{
 		if(Change_Hash){
-			hash_para_gen(hashseed*(sim+1),para_a,para_c,K_Value);
+			hash_para_gen(hashseed*(sim+1),para_a,para_c,K_Value*m_hash);
 		}
 		
 
@@ -144,6 +144,7 @@ void Simulation_processing()
 		exact_entropy[0][sim] = info->entropy;
 		StreamDistinct[0][sim] =info->distinct;
 		StreamLength[0][sim] =info->total_count;
+		
 		//choosing algorithm
 		#ifndef RES_ALLDIFF
 		for(int j=1;j<MAX_ALG;j++)
@@ -184,11 +185,11 @@ void Simulation_processing()
 						break;
 					
 					case 5:
-						if(Clifford_cdf_opt_est(Sim_tree,info)!=0){
+						if(Clifford_cdf_parallel_mhash_est(Sim_tree,info)!=0){
 							fprintf(stderr,"simualtion fail\n");
 							exit(0);
 						}
-						Clifford_cdf_opt_entropy[0][sim] = info->entropy;
+						Clifford_cdf_parallel_mhash_entropy[0][sim] = info->entropy;
 						break;
 					
 					case 6:
@@ -293,7 +294,7 @@ void Simulation_processing()
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_parallel_entropy,0,sim_times);
 					break;
 				case 5:
-					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_opt_entropy,0,sim_times);
+					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_cdf_parallel_mhash_entropy,0,sim_times);
 					break;
 				case 6:
 					MAPE[0][j] = cal_MAPE(*exact_entropy,*Clifford_HT_entropy,0,sim_times);

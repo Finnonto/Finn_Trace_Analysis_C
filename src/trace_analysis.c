@@ -79,11 +79,11 @@ void invoke_algorithms(tree_t *Stream,int index)
 						break;
 					
 					case 5:
-						if(Clifford_cdf_opt_est(Stream,info)!=0){
+						if(Clifford_cdf_parallel_mhash_est(Stream,info)!=0){
 							fprintf(stderr,"simualtion fail\n");
 							exit(0);
 						}
-						Clifford_cdf_opt_entropy[index][ent_cnt] = info->entropy;
+						Clifford_cdf_parallel_mhash_entropy[index][ent_cnt] = info->entropy;
 						break;
 					
 					case 6:

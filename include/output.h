@@ -41,7 +41,7 @@ double Clifford_cdf_entropy[5][ENT_MAX];
 double Clifford_cdf_parallel_entropy[5][ENT_MAX];
 double Clifford_cdf_parallel_interpolation_entropy[5][ENT_MAX];
 double Clifford_cdf_parallel_interpolation_2th_entropy[5][ENT_MAX];
-double Clifford_cdf_opt_entropy[5][ENT_MAX];
+double Clifford_cdf_parallel_mhash_entropy[5][ENT_MAX];
 double Clifford_HT_entropy[5][ENT_MAX];
 double Clifford_HTo_entropy[5][ENT_MAX];
 double Clifford_HTo_65536_entropy[5][ENT_MAX];

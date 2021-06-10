@@ -32,6 +32,7 @@ void Checkargument(int  argc, char** argv)
         Change_Hash = 0;
         hashseed = 1;
         CCliffordSeed = 0;
+        m_hash = 4;
         // optional argument index  start from two
         if (argc < 2) {             
 
@@ -194,7 +195,7 @@ void Checkargument(int  argc, char** argv)
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation_2th")==0){ALG_flag[7]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_mhash_est")==0){ALG_flag[5]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HT")==0){ALG_flag[6]=1;}
@@ -274,6 +275,12 @@ void Checkargument(int  argc, char** argv)
                         /************flag to indicate change srand item or not********/
                         else if(strcmp(argv[arg_num],"-CPingliSeed")==0){
                                 CPingLiSeed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /************m argument for cdf parallel m hash********/
+                        else if(strcmp(argv[arg_num],"-mhash")==0){
+                                m_hash = atoi(argv[++arg_num]);
                                 
                                 arg_num++;
                         }
@@ -368,7 +375,7 @@ void Checkargument(int  argc, char** argv)
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation_2th")==0){ALG_flag[7]=1;}
-                                        else if(strcmp(argv[arg_num],"Clifford_cdf_opt")==0){ALG_flag[5]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_mhash_est")==0){ALG_flag[5]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
                                         else if(strcmp(argv[arg_num],"Clifford_HT")==0){ALG_flag[6]=1;}
@@ -446,6 +453,12 @@ void Checkargument(int  argc, char** argv)
                                 
                                 arg_num++;
                         }
+                        /************m argument for cdf parallel m hash********/
+                        else if(strcmp(argv[arg_num],"-mhash")==0){
+                                m_hash = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
                         else {
                                 fprintf(stderr,"input parameter error check --help");
                                 exit(0);
@@ -470,9 +483,8 @@ int main(int argc, char *argv[])
         Checkargument(argc,argv);
         Output_log();
         // initia hash array
-        para_a = malloc(K_Value*sizeof(u_int32_t));
-        para_c = malloc(K_Value*sizeof(u_int32_t));
-
+        para_a = malloc(K_Value*m_hash*sizeof(u_int32_t));
+        para_c = malloc(K_Value*m_hash*sizeof(u_int32_t));
         // if TRACE flag is enabled ,do tace analysis
         if(TRACE)
         {

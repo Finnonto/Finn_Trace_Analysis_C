@@ -58,6 +58,8 @@ int CCliffordSeed;
 // change origin Pingli srand
 int CPingLiSeed;
 
+
+// CDF parameters
 uint32_t IC_Entry;
 uint32_t CDF_Table_Entry_list[MAX_TABLE];
 //
@@ -69,7 +71,12 @@ typedef struct ICTable_list
 
 ICTable_list Inverse_table[MAX_TABLE];
 
+// CDF parallel m hash parameter
 
+int m_hash;
+
+
+//CDF Stage 50 storage 
 uint32_t CDF_Stage50_Table_Entry_list[MAX_TABLE];
 ICTable_list Inverse_Stage50_table[MAX_TABLE];
 ICTable_list Inverse_Stage50_point[MAX_TABLE];
@@ -78,6 +85,7 @@ uint32_t CDF_Stage100_Table_Entry_list[MAX_TABLE];
 ICTable_list Inverse_Stage100_table[MAX_TABLE];
 ICTable_list Inverse_Stage100_point[MAX_TABLE];
 
+// CDF optimize storage 
 typedef struct ICoptTable_list
 {
     int Table[65536];
@@ -121,6 +129,8 @@ void import_inverse_cdf_single_table(uint32_t index);
 
 void import_HeadTail_table();
 
+
+
 int exact(tree_t *item,trace_info_t *info);
 
 int Clifford_est(tree_t *item,trace_info_t *info);
@@ -132,6 +142,8 @@ int Clifford_cdf_parallel_est(tree_t *item,trace_info_t *info);
 int Clifford_cdf_parallel_interpolation_est(tree_t *item,trace_info_t *info);
 
 int Clifford_cdf_parallel_interpolation_2th_est(tree_t *item,trace_info_t *info);
+
+int Clifford_cdf_parallel_mhash_est(tree_t *item,trace_info_t *info);
 
 int Clifford_cdf_stage50_est(tree_t *item,trace_info_t *info);
 
