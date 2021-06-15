@@ -60,14 +60,17 @@ static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *ha
     uint32_t mod_m = pow(2,31)-1;
     int si = start_index *K_Value;
     memset(hash_result, 0, sizeof(int) * K_Value);
+    long long result = 0;
     for(int i= 0;i<K_Value;i++)
     {
-        
-        hash_result[i] = ( (para_a[si+i]*in_data + para_c[si+i]) & mod_m ) % table_size;
-        
+        result = ((long long)para_a[si+i]*(long long)in_data + (long long)para_c[si+i]);
+        result = ((result >> 31) + result) & mod_m;
+        hash_result[i] = (long)result & (table_size-1);
+        //printf("%ld \n",(long)result& (table_size-1));
         //printf("%d\n",( (para_a[i]*in_data + para_c[i]) % mod_m ) % table_size);
     }
 }
+
 
 static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result_a,uint32_t *hash_result_b)
 {
@@ -441,7 +444,10 @@ int Clifford_cdf_est(tree_t *item,trace_info_t *info){
         }
         current_node = current_node->right;
     }
-
+    for(int i=0; i<K_Value; i++){
+        printf("%g ",k_register[i]);
+    }
+    printf("\n");
     if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     
     for(int i=0;i<K_Value;i++)
@@ -499,6 +505,10 @@ int Clifford_cdf_parallel_est(tree_t *item,trace_info_t *info){
         }
         current_node = current_node->right;
     }
+    for(int i=0; i<K_Value; i++){
+        printf("%g ",k_register[i]);
+    }
+    printf("\n");
     if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
@@ -641,27 +651,33 @@ int Clifford_cdf_parallel_mhash_est(tree_t *item,trace_info_t *info){
         // total cnt
         total_item_cnt += current_node->cnt;
         distinct++;
-        // store k value
+        // store k value  
+
         
         for(int j=0;j<m_hash;j++){
             hash_affine_20para(current_node->data , Table_Size , hash_result,j);
             for(int i=0; i<K_Value; i++)
             {
                 k_register[i] += Inverse_table[i].Table[hash_result[i]] * current_node->cnt;	
+                printf("%g ",Inverse_table[i].Table[hash_result[i]]);
             }
+            printf("\n");
         }
         current_node = current_node->right;
     }
-    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
-    else{
-        for(uint32_t i=0;i<K_Value;i++){
-            k_register[i] /= (double)m_hash;
-            k_register[i] /= (double)total_item_cnt;
-            entropy += exp(k_register[i]);
-        }
-        entropy /= (double)K_Value;
-        entropy = -log(entropy);
+    for(int i=0;i<K_Value;i++){
+        k_register[i] /= (double)m_hash;
+        printf("%g ",k_register[i]);
     }
+    printf("\n");
+    if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
+    for(uint32_t i=0;i<K_Value;i++){
+        k_register[i] /= (double)total_item_cnt;
+        entropy += exp(k_register[i]);
+    }
+    entropy /= (double)K_Value;
+    entropy = -log(entropy);
+
     // set info member
     info->entropy = entropy;
     info->total_count = total_item_cnt;
