@@ -98,7 +98,7 @@ void Simulation_processing()
 	//of these streams
 	// 
 	if(Change_Hash==0){
-			hash_para_gen(100000,para_a,para_c,K_Value*m_hash);	
+			hash_para_gen(hashseed,para_a,para_c,K_Value*m_hash);	
 	}
 		
 

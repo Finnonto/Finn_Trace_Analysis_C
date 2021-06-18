@@ -49,9 +49,23 @@ double cal_MAPE(double* exact,double* est,int index ,int entry)
 void hash_para_gen(int seed,uint32_t* para_a,uint32_t* para_c,int size){
     srand(seed);
     for(int i =0;i< size;++i){
-        para_a[i] = rand();
-        para_c[i] = rand();
+        int tmp = 0;
+        while(tmp < 0xFFFFFF || !(tmp &1) )
+            tmp = rand();
+        para_a[i] = tmp;
+        tmp = rand();
+        while(tmp < 0xFFFFFF)
+            tmp = rand();
+        para_c[i] = tmp;
     }
+    for(int i =0;i< size;++i){
+        printf("%d ",para_a[i]);
+    }
+    printf("\n");
+    for(int i =0;i< size;++i){
+        printf("%d ",para_c[i]);
+    }
+    printf("\n");
 }
 
 // hash to get random number set
@@ -59,7 +73,7 @@ static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *ha
 {
     uint32_t mod_m = pow(2,31)-1;
     int si = start_index *K_Value;
-    memset(hash_result, 0, sizeof(int) * K_Value);
+    memset(hash_result,K_Value ,sizeof(int) );
     long long result = 0;
     for(int i= 0;i<K_Value;i++)
     {
@@ -659,9 +673,7 @@ int Clifford_cdf_parallel_mhash_est(tree_t *item,trace_info_t *info){
             for(int i=0; i<K_Value; i++)
             {
                 k_register[i] += Inverse_table[i].Table[hash_result[i]] * current_node->cnt;	
-                printf("%g ",Inverse_table[i].Table[hash_result[i]]);
             }
-            printf("\n");
         }
         current_node = current_node->right;
     }
