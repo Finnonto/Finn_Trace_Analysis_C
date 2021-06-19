@@ -6,7 +6,10 @@ implement trace analysis method based on libtrace in C
 If there is no output folder:
 ```
 mkdir output
+cd output  
+mkdir Simulation Trace
 ```
+!!Remeber there must be two folde in output directory "Simulation" and "Trace"  
 before you started,recommand you to make clean first.
 
 ## Usage: 
