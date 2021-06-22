@@ -1,4 +1,5 @@
 #include "trace_analysis.h"
+#define TIMESCALE 1000000
 
 
 void libtrace_cleanup(libtrace_t *trace, libtrace_packet_t *packet)
@@ -25,7 +26,7 @@ void trace_analysis_Init()
     DesPort_tree = tree_create();
     PktLen_tree = tree_create();
     // to initialize the interval time
-	
+	initTime = ts.tv_usec;
     next_report_time = ts.tv_sec +intervalTime;
 	ent_cnt = 0;
 }
@@ -257,13 +258,12 @@ void Trace_processing(char* trace_path)
 
 void per_packet(libtrace_packet_t *packet)
 {
-	
-	
-	
-	
-	
 	// get the packet information
 	ts = trace_get_timeval(packet);
+	long timecheck;
+	if(ts.tv_usec-initTime <0)timecheck = ts.tv_sec-1;
+	if(ts.tv_usec-initTime >=0)timecheck = ts.tv_sec;
+
 	payload_len = trace_get_payload_length(packet);
 	trace_get_layer2(packet,&linktype,&rem);
 	
@@ -273,21 +273,20 @@ void per_packet(libtrace_packet_t *packet)
 		trace_analysis_Init();
 	}
 
-	
-	 
-	while(ts.tv_sec >next_report_time)
+	while(timecheck >=next_report_time)
 	{   
+		
 		// when time interval is over ,we do Items processing
 		Items_processing();
 		//to make sure that next_report_time is over ts.tv_sec
-		while(ts.tv_sec>next_report_time)
+		while(timecheck>=next_report_time)
 		{
 			next_report_time += intervalTime;
 		}
 		printf("Progress %d timeinterval\r",ent_cnt);
 		fflush(stdout);
 		ent_cnt ++;
-		trace_packet_cnt= 1;
+		trace_packet_cnt= 0;
 	}
 	
 	// we only apply two types of packet to entropy
@@ -308,17 +307,15 @@ void per_packet(libtrace_packet_t *packet)
 		tree_insert(DesIP_tree,ntohl(ip_addr_tmp.s_addr));
 
 		tree_insert(PktLen_tree,payload_len);
-
+		
 	}
-	else if (linktype == TRACE_TYPE_ETH && analysis_is_ipv4(packet))// condition for IPv4 packet
+	if (linktype == TRACE_TYPE_ETH && analysis_is_ipv4(packet))// condition for IPv4 packet
 	{
 		trace_packet_cnt++;
 		saddr_ptr = trace_get_source_address(packet, (struct sockaddr *)&saddr);
 		daddr_ptr = trace_get_destination_address(packet, (struct sockaddr *)&daddr);
 		sport = trace_get_source_port(packet);
 		dport = trace_get_destination_port(packet);
-
-
 
 		tree_insert(SrcPort_tree,sport);
 		tree_insert(DesPort_tree,dport);
@@ -331,11 +328,6 @@ void per_packet(libtrace_packet_t *packet)
 		struct sockaddr_in *v3 = (struct sockaddr_in *)daddr_ptr;
 		ip_addr_tmp=v3->sin_addr;
 		tree_insert(DesIP_tree,ntohl(ip_addr_tmp.s_addr));
-
-
-	}
-	
-	
-		    
 		
+	}
 }

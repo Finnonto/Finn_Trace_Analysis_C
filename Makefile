@@ -45,7 +45,7 @@ sim_ALLDIFF:
 
 trace:
 
-	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf -a 4  Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation -resolution MAX
+	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf -k 20 -t 10 -it 20 -tbint 0 -tbidx 0 -Tbs 65536 -resolution 14
 
 
 clean:

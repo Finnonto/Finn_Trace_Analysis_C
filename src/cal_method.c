@@ -85,7 +85,6 @@ static void hash_affine_20para(uint32_t in_data,uint32_t table_size,uint32_t *ha
     }
 }
 
-
 static void hash_affine_20_2para(uint32_t in_data,uint32_t table_size,uint32_t *hash_result_a,uint32_t *hash_result_b)
 {
     uint32_t para_a[40]={0x177510d1, 0xda1e0f42, 0x964fbf1e, 0x269df1e6, 0x916cc092,
@@ -458,10 +457,7 @@ int Clifford_cdf_est(tree_t *item,trace_info_t *info){
         }
         current_node = current_node->right;
     }
-    for(int i=0; i<K_Value; i++){
-        printf("%g ",k_register[i]);
-    }
-    printf("\n");
+    
     if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     
     for(int i=0;i<K_Value;i++)

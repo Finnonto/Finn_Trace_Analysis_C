@@ -25,6 +25,7 @@ uint8_t TRACE ;
 
 
 uint32_t intervalTime ;
+uint32_t initTime;
 
 // simulatio
 
