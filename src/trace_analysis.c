@@ -186,6 +186,9 @@ void Trace_processing(char* trace_path)
 {
 	mpd_init(&ctx, 38);
 
+	if(Change_Hash==0){
+			hash_para_gen(hashseed,para_a,para_c,K_Value*m_hash);	
+	}
 
 	if(resolution == 4096 || resolution == 16384||resolution == 65536||resolution == (pow(2,31)-1)){		//import_optimized_cdf_table(it);
 		//import_inverse_cdf_stage50_table(it,50);
@@ -235,7 +238,7 @@ void Trace_processing(char* trace_path)
 	//to make sure that next_report_time is over ts.tv_sec
 
 	
-	printf("Progress %d timeinterval\r",ent_cnt);
+	printf("Progress %d timeinterval\r",ent_cnt+1);
 	fflush(stdout);
 	ent_cnt ++;
 
@@ -275,7 +278,9 @@ void per_packet(libtrace_packet_t *packet)
 
 	while(timecheck >=next_report_time)
 	{   
-		
+		if(Change_Hash){
+			hash_para_gen(hashseed*(ent_cnt+1),para_a,para_c,K_Value*m_hash);
+		}
 		// when time interval is over ,we do Items processing
 		Items_processing();
 		//to make sure that next_report_time is over ts.tv_sec
@@ -283,7 +288,7 @@ void per_packet(libtrace_packet_t *packet)
 		{
 			next_report_time += intervalTime;
 		}
-		printf("Progress %d timeinterval\r",ent_cnt);
+		printf("Progress %d timeinterval\r",ent_cnt+1);
 		fflush(stdout);
 		ent_cnt ++;
 		trace_packet_cnt= 0;

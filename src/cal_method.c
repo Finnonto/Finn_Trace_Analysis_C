@@ -58,6 +58,7 @@ void hash_para_gen(int seed,uint32_t* para_a,uint32_t* para_c,int size){
             tmp = rand();
         para_c[i] = tmp;
     }
+    /*
     for(int i =0;i< size;++i){
         printf("%d ",para_a[i]);
     }
@@ -66,6 +67,7 @@ void hash_para_gen(int seed,uint32_t* para_a,uint32_t* para_c,int size){
         printf("%d ",para_c[i]);
     }
     printf("\n");
+    */
 }
 
 // hash to get random number set
@@ -515,10 +517,12 @@ int Clifford_cdf_parallel_est(tree_t *item,trace_info_t *info){
         }
         current_node = current_node->right;
     }
+    /*
     for(int i=0; i<K_Value; i++){
         printf("%g ",k_register[i]);
     }
     printf("\n");
+    */
     if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     else{
         for(uint32_t i=0;i<K_Value;i++){
@@ -673,11 +677,14 @@ int Clifford_cdf_parallel_mhash_est(tree_t *item,trace_info_t *info){
         }
         current_node = current_node->right;
     }
+    /*
     for(int i=0;i<K_Value;i++){
         k_register[i] /= (double)m_hash;
         printf("%g ",k_register[i]);
     }
+    
     printf("\n");
+    */
     if (total_item_cnt == 0 || total_item_cnt == 1)return 1;
     for(uint32_t i=0;i<K_Value;i++){
         k_register[i] /= (double)total_item_cnt;
