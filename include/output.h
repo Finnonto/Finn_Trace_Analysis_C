@@ -9,6 +9,7 @@
 #include "cal_method.h"
 #include "trace_analysis.h"
 #include "simulation.h"
+#include "pseudo_trace.h"
 
 #define ENT_MAX 3000
 #define CHAR_LEN 200
@@ -64,6 +65,8 @@ void Output_write_file(char* Output_filename,int index);
 void Output_Simulation();
 
 void Output_Trace();
+
+void Output_Pseudo();
 
 void Output_log();
 

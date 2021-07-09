@@ -11,6 +11,7 @@
 #include "libtrace.h"
 #include "trace_analysis.h"
 #include "simulation.h"
+#include "pseudo_trace.h"
 #include <string.h>
 #include <unistd.h> 
 #include <stdio.h>
@@ -26,6 +27,7 @@ void Checkargument(int  argc, char** argv)
         
         TRACE = 0;
         SIMULATION = 0;       
+        PSEUDO_TRACE = 0;
         resolution = RAND_MAX;
         // k value fot algorithm 
         K_Value = 20;
@@ -466,6 +468,166 @@ void Checkargument(int  argc, char** argv)
                 } 
 
         }
+        /******************** psuedo trace analysis mode ****************/ 
+        else if(strcmp(argv[1],"pseudo")==0) {
+                uint16_t arg_num=3;
+                // tace analysis mode parameters default value 
+                sprintf(TraceName,"%s",argv[2]);
+                PSEUDO_TRACE = 1;                        
+
+                // algorithm parameter
+                it = 1;  //inverse table amount 
+                TableIndex = 0 ;//Table index
+                Table_Size = 16384; // inverse table size    
+                TableINT = 0;         
+                alg_cnt = 0; //               
+                pingli_alpha = 0.9;
+                interpolation_threshold = 10;
+                interpolation_threshold2 = 15;
+                interpolation_span = 4;
+                                     
+                
+                while(arg_num<argc){
+                        //--------k_value--------// must be positive integer 
+                        if(strcmp(argv[arg_num],"-k")==0){
+                                K_Value = atoi(argv[arg_num+1]);
+                                if(K_Value<=0)
+                                {
+                                        fprintf(stderr,"K value must be greater than 0\n");
+                                        exit(0);
+                                }
+                                arg_num+=2;
+                        }
+                        //-------table--------// must be greater than 1 ,at least 1 external table 
+                        else if(strcmp(argv[arg_num],"-it")==0){
+                                if(atoi(argv[arg_num+1])<=MAX_TABLE && atoi(argv[arg_num+1])>=0)it = atoi(argv[arg_num+1]);
+                                else {fprintf(stderr, "it_error\n"); exit(0);}
+                                arg_num+=2;
+                        }
+                        /************help********************/
+                        else if(strcmp(argv[arg_num],"-Tbs")==0){
+                                int tmp = atoi(argv[++arg_num]);
+                                if( tmp == 1024 || tmp== 16384 || tmp==65536 || tmp==32768 || tmp==4096 || tmp ==262144 || tmp == 1048576)Table_Size = tmp;
+                                else {fprintf(stderr, "Table size errror 4096 16384 ,65536,32768\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************PingLi alpha ********/
+                        else if(strcmp(argv[arg_num],"-PA")==0){
+                                pingli_alpha = atof(argv[++arg_num]);
+                                if (pingli_alpha>=1){fprintf(stderr, "alpha must be less than 1\n"); exit(0);}
+                                arg_num++;
+                        }
+                        /***************algorithm*****************/
+                        else if(strcmp(argv[arg_num],"-a")==0){
+                                
+                                alg_cnt = atoi(argv[++arg_num]);
+                                
+                                int tmp =  arg_num+alg_cnt;
+                                
+                                
+                                while (arg_num<tmp)
+                                {       
+                                        
+                                        ++arg_num; 
+                                        
+                                        
+                                        if(strcmp(argv[arg_num],"exact")==0){ALG_flag[0]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_65536_interpolation_65536")==0){ALG_flag[10]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_interpolation")==0){ALG_flag[9]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel")==0){ALG_flag[4]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation")==0){ALG_flag[3]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_interpolation_2th")==0){ALG_flag[7]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf_parallel_mhash_est")==0){ALG_flag[5]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_cdf")==0){ALG_flag[2]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HTo_65536")==0){ALG_flag[8]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford_HT")==0){ALG_flag[6]=1;}
+                                        else if(strcmp(argv[arg_num],"Clifford")==0){ALG_flag[1]=1;}
+                                        else if(strcmp(argv[arg_num],"PingLi")==0){ALG_flag[11]=1;}
+                                        else {
+                                                fprintf(stderr, "algorithm name error:%s\n",argv[arg_num]);
+                                                exit(0);}
+                                }       
+                                arg_num++;
+                                
+                             
+                                
+                        }
+                        /*************Resolution bit num ********/
+                        else if(strcmp(argv[arg_num],"-resolution")==0){
+                                
+                                if(strcmp(argv[++arg_num],"MAX")==0){
+                                        resolution = RAND_MAX;        
+                                }
+                                else{
+                                        resolution = pow(2,atoi(argv[arg_num]));
+                                }                
+                                if (resolution<=0){fprintf(stderr, "resolution must be positive integer"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************threshold of interpolation********/
+                        else if(strcmp(argv[arg_num],"-tbidx")==0){
+                                TableIndex = atoi(argv[++arg_num]);
+                                if (TableIndex<0){fprintf(stderr, "Table index must be greater than 0"); exit(0);}
+                                arg_num++;
+                        }
+                        /*************index to choose integer table********/
+                        else if(strcmp(argv[arg_num],"-tbint")==0){
+                                TableINT = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /*************threshold of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interth")==0){
+                                interpolation_threshold = atoi(argv[++arg_num]);
+                                interpolation_threshold2 = atoi(argv[++arg_num]);
+                                if(interpolation_threshold2<interpolation_threshold){
+                                        fprintf(stderr,"threshold2 must be equal or  greater than threshold1\n");
+                                        exit(0);
+                                }
+                                arg_num++;
+                        }
+                        /*************span value of interpolation********/
+                        else if(strcmp(argv[arg_num],"-interspan")==0){
+                                interpolation_span = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /*************seed for hash parameter generation********/
+                        else if(strcmp(argv[arg_num],"-hseed")==0){
+                                hashseed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /************flag to indicate change hash or not********/
+                        else if(strcmp(argv[arg_num],"-Chash")==0){
+                                Change_Hash = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        else if(strcmp(argv[arg_num],"-CCliffordSeed")==0){
+                                CCliffordSeed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /************flag to indicate change srand item or not********/
+                        else if(strcmp(argv[arg_num],"-CPingliSeed")==0){
+                                CPingLiSeed = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        /************m argument for cdf parallel m hash********/
+                        else if(strcmp(argv[arg_num],"-mhash")==0){
+                                m_hash = atoi(argv[++arg_num]);
+                                
+                                arg_num++;
+                        }
+                        else {
+                                fprintf(stderr,"input parameter error check --help");
+                                exit(0);
+                        }
+                } 
+
+        }
         else{
                 fprintf(stderr,"'simulation' or 'trace' ?");
                 exit(0);
@@ -493,7 +655,7 @@ int main(int argc, char *argv[])
                 Trace_processing(argv[2]);
         }
         // if SIMULATION flag is enabled ,do zipf distribution simulation
-        else if(SIMULATION)
+        if(SIMULATION)
         {
                 printf("sim start: k:%d PA:%g z:%g length:%d range:%d offset:%d %dTables sidx:%d tbidx:%d Table Size:%d resolution:%d interth1:%d interth2:%d interspan:%d hseed:%d\n"
                 ,K_Value,pingli_alpha,zipf_par,zipf_slen,zipf_range,zipf_offset,it,sim_start_idx,TableIndex,Table_Size,resolution,interpolation_threshold,interpolation_threshold2,interpolation_span,hashseed);
@@ -501,7 +663,14 @@ int main(int argc, char *argv[])
                 Simulation_processing();
 
         }
+        if(PSEUDO_TRACE)
+        {
+                printf("sim start: k:%d PA:%g %dTables sidx:%d tbidx:%d Table Size:%d resolution:%d interth1:%d interth2:%d interspan:%d hseed:%d\n"
+                ,K_Value,pingli_alpha,it,sim_start_idx,TableIndex,Table_Size,resolution,interpolation_threshold,interpolation_threshold2,interpolation_span,hashseed);
         
+                Pseudo_Trace_processing(argv[2]);
+
+        }
         return 0;
         
 

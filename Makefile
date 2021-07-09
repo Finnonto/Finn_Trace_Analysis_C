@@ -45,9 +45,11 @@ sim_ALLDIFF:
 
 trace:
 
-	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf  -k 20 -t 120 -a 5 exact Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation_2th -it 20 -Tbs 65536 -resolution 14 -interth 10 15 -interspan 4  -mhash 4
+	./bin/Finn_trace_analysis trace /mnt/c/Users/Lab108/Desktop/libtrace_tutorial/traces/2minutes.erf  -k 20 -t 120 -a 4 Clifford  Clifford_cdf  Clifford_cdf_parallel Clifford_cdf_parallel_interpolation_2th -it 20 -Tbs 65536 -resolution 14 -interth 10 15 -interspan 4  -mhash 4
 
+pseudo:
 
+	./bin/Finn_trace_analysis pseudo /mnt/c/Users/Lab108/Desktop/Git_Test/pseudo_trace_test.txt  -k 20  -a 3 Clifford  Clifford_cdf  Clifford_cdf_parallel  -it 20 -Tbs 65536 -resolution 14 
 clean:
 	rm -f all $(DIR_OBJ)/*.o
 	rm -f all $(DIR_BIN)/*

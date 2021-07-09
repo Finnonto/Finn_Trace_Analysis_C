@@ -253,7 +253,14 @@ void create_folder()
             mkdir(Output_FolderName, 0700);
         }
     }    
-    
+    if(PSEUDO_TRACE)
+    {
+        strcpy(Output_FolderName,"./output/Pseudo/");
+        if (stat(Output_FolderName, &st) == -1) 
+        {
+            mkdir(Output_FolderName, 0700);
+        }
+    }  
 }
 
 void Output_Simulation()
@@ -295,6 +302,29 @@ void Output_Trace()
     Output_write_file(Output_PktLenName,4);
 
 }
+
+void Output_Pseudo()
+{
+    
+    create_folder();
+	char *tmp1,*tmp2;
+        
+	tmp1 = strtok(Pseudo_Path,"/");
+	while(tmp2!=NULL)
+	{
+		tmp1 = tmp2;
+		tmp2 = strtok(NULL,"/");
+	}
+	
+	strcat(Output_FolderName,strtok(tmp1,"."));
+    
+	sprintf(filename,"_%g_K%d.csv",pingli_alpha,K_Value);
+	strcat(Output_FolderName,filename);
+    
+    Output_write_file(Output_FolderName,0);
+
+}
+
 
 void Output_log()
 {

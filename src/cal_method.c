@@ -405,11 +405,12 @@ int Clifford_cdf_est(tree_t *item,trace_info_t *info){
     uint32_t total_item_cnt = 0;
     uint32_t distinct = 0;
     node_t *current_node;
-    
+    /*
     int  key_bit = 0;//for exp
     int  key_span = 0;// for span
     double inter_value = 0;
-    double x1,x2,y1,y2;
+    */
+    //double x1,x2,y1,y2;
     
     
    

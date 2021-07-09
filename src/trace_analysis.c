@@ -208,6 +208,7 @@ void Trace_processing(char* trace_path)
 
 	trace = trace_create(trace_path);
 	strcpy(Trace_Path,trace_path);
+	
 	if (trace_is_err(trace)) {
 			trace_perror(trace,"Opening trace file");
 			libtrace_cleanup(trace, packet);
